@@ -14,7 +14,9 @@ internal func ConfigureAppearance() {
     UINavigationBar.appearance().tintColor = .white
     
     if #available(iOS 11.0, *) {
+        UINavigationBar.appearance().prefersLargeTitles = true
         UINavigationBar.appearance().barTintColor = UIColor(named: "NavigationBarTintColor")!
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
     } else {
         UINavigationBar.appearance().barTintColor = .blue
     }

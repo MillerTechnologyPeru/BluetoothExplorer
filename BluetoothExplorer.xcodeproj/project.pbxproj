@@ -24,6 +24,10 @@
 		6E98B69B2059B51000B6F016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E98B6992059B51000B6F016 /* Main.storyboard */; };
 		6E98B69D2059B51000B6F016 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E98B69C2059B51000B6F016 /* Assets.xcassets */; };
 		6E98B6A02059B51000B6F016 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E98B69E2059B51000B6F016 /* LaunchScreen.storyboard */; };
+		6EC0D9BE20DDF871005FB128 /* Bluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9A120DDF5E0005FB128 /* Bluetooth.framework */; };
+		6EC0D9BF20DDF871005FB128 /* Bluetooth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9A120DDF5E0005FB128 /* Bluetooth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EC0D9C220DDF876005FB128 /* GATT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; };
+		6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EDE00C620DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */; };
 		6EDE00C920DB0EB5002E951A /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C820DB0EB5002E951A /* Data.swift */; };
 		6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */; };
@@ -41,6 +45,107 @@
 		6EFD558420D83C76003B75A1 /* CharacteristicManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFD558320D83C76003B75A1 /* CharacteristicManagedObject.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6EC0D99E20DDF5E0005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DB71CAF5C7C00A40C4D;
+			remoteInfo = "Bluetooth-macOS";
+		};
+		6EC0D9A020DDF5E0005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FBD1CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+		6EC0D9A220DDF5E0005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EB2EA1D1CD5A8A7000CF975;
+			remoteInfo = "Bluetooth-watchOS";
+		};
+		6EC0D9A420DDF5E0005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B26520532D45002EA5DC;
+			remoteInfo = "Bluetooth-tvOS";
+		};
+		6EC0D9A620DDF5E0005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DC11CAF5C7C00A40C4D;
+			remoteInfo = BluetoothTests;
+		};
+		6EC0D9B020DDF5E8005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84D841CAF419D00A40C4D;
+			remoteInfo = "GATT-macOS";
+		};
+		6EC0D9B220DDF5E8005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FCF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+		6EC0D9B420DDF5E8005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE9103A1FDE5C17007AD3EA;
+			remoteInfo = "GATT-watchOS";
+		};
+		6EC0D9B620DDF5E8005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B23A20532A94002EA5DC;
+			remoteInfo = "GATT-tvOS";
+		};
+		6EC0D9B820DDF5E8005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E98B6932059B51000B6F016;
+			remoteInfo = BluetoothExplorer;
+		};
+		6EC0D9BA20DDF5F6005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FBF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+		6EC0D9BC20DDF5F6005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FA21CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+		6EC0D9C020DDF871005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FA21CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+		6EC0D9C420DDF877005FB128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FBF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		6EFB3E2C20D3E89200364CA0 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -48,6 +153,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */,
+				6EC0D9BF20DDF871005FB128 /* Bluetooth.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,6 +181,8 @@
 		6E98B69C2059B51000B6F016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E98B69F2059B51000B6F016 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E98B6A12059B51000B6F016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
+		6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
 		6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralCharacteristicDetailViewController.swift; sourceTree = "<group>"; };
 		6EDE00C820DB0EB5002E951A /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BatteryLevelCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -96,6 +205,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EC0D9C220DDF876005FB128 /* GATT.framework in Frameworks */,
+				6EC0D9BE20DDF871005FB128 /* Bluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +251,30 @@
 			path = BluetoothExplorer;
 			sourceTree = "<group>";
 		};
+		6EC0D99720DDF5E0005FB128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6EC0D99F20DDF5E0005FB128 /* Bluetooth.framework */,
+				6EC0D9A120DDF5E0005FB128 /* Bluetooth.framework */,
+				6EC0D9A320DDF5E0005FB128 /* Bluetooth.framework */,
+				6EC0D9A520DDF5E0005FB128 /* Bluetooth.framework */,
+				6EC0D9A720DDF5E0005FB128 /* BluetoothTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6EC0D9A920DDF5E8005FB128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6EC0D9B120DDF5E8005FB128 /* GATT.framework */,
+				6EC0D9B320DDF5E8005FB128 /* GATT.framework */,
+				6EC0D9B520DDF5E8005FB128 /* GATT.framework */,
+				6EC0D9B720DDF5E8005FB128 /* GATT.framework */,
+				6EC0D9B920DDF5E8005FB128 /* BluetoothExplorer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6EDE00C720DB0EA8002E951A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +302,8 @@
 		6EE84D7A1CAF419D00A40C4D = {
 			isa = PBXGroup;
 			children = (
+				6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */,
+				6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */,
 				6E98B6942059B51000B6F016 /* BluetoothExplorer */,
 				6EE84D851CAF419D00A40C4D /* Products */,
 				6EFB3E6720D3EB0600364CA0 /* Frameworks */,
@@ -237,6 +374,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				6EC0D9BD20DDF5F6005FB128 /* PBXTargetDependency */,
+				6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */,
+				6EC0D9C120DDF871005FB128 /* PBXTargetDependency */,
+				6EC0D9C520DDF877005FB128 /* PBXTargetDependency */,
 			);
 			name = BluetoothExplorer;
 			productName = BluetoothExplorer;
@@ -276,12 +417,95 @@
 			mainGroup = 6EE84D7A1CAF419D00A40C4D;
 			productRefGroup = 6EE84D851CAF419D00A40C4D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6EC0D99720DDF5E0005FB128 /* Products */;
+					ProjectRef = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
+				},
+				{
+					ProductGroup = 6EC0D9A920DDF5E8005FB128 /* Products */;
+					ProjectRef = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6E98B6922059B51000B6F016 /* BluetoothExplorer */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6EC0D99F20DDF5E0005FB128 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6EC0D99E20DDF5E0005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9A120DDF5E0005FB128 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6EC0D9A020DDF5E0005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9A320DDF5E0005FB128 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6EC0D9A220DDF5E0005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9A520DDF5E0005FB128 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6EC0D9A420DDF5E0005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9A720DDF5E0005FB128 /* BluetoothTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BluetoothTests.xctest;
+			remoteRef = 6EC0D9A620DDF5E0005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9B120DDF5E8005FB128 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6EC0D9B020DDF5E8005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9B320DDF5E8005FB128 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6EC0D9B220DDF5E8005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9B520DDF5E8005FB128 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6EC0D9B420DDF5E8005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9B720DDF5E8005FB128 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6EC0D9B620DDF5E8005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6EC0D9B920DDF5E8005FB128 /* BluetoothExplorer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = BluetoothExplorer.app;
+			remoteRef = 6EC0D9B820DDF5E8005FB128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6E98B6912059B51000B6F016 /* Resources */ = {
@@ -335,6 +559,29 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GATT-iOS";
+			targetProxy = 6EC0D9BA20DDF5F6005FB128 /* PBXContainerItemProxy */;
+		};
+		6EC0D9BD20DDF5F6005FB128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Bluetooth-iOS";
+			targetProxy = 6EC0D9BC20DDF5F6005FB128 /* PBXContainerItemProxy */;
+		};
+		6EC0D9C120DDF871005FB128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Bluetooth-iOS";
+			targetProxy = 6EC0D9C020DDF871005FB128 /* PBXContainerItemProxy */;
+		};
+		6EC0D9C520DDF877005FB128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GATT-iOS";
+			targetProxy = 6EC0D9C420DDF877005FB128 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		6E98B6992059B51000B6F016 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -358,6 +605,7 @@
 		6E98B6A22059B51000B6F016 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -383,6 +631,7 @@
 		6E98B6A32059B51000B6F016 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

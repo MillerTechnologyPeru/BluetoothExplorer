@@ -209,7 +209,7 @@
                 <navigationController id="oJ6-qI-lSw" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Peripheral" id="fkC-9l-b9b"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="4ao-50-PSn">
-                        <rect key="frame" x="0.0" y="20" width="320" height="96"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="93"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -224,9 +224,9 @@
         <scene sceneID="ZFq-yz-hc7">
             <objects>
                 <navigationController id="KJY-jT-Gia" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Central" id="cwD-04-q1Z"/>
+                    <tabBarItem key="tabBarItem" title="Central" image="Near" selectedImage="NearSelected" id="cwD-04-q1Z"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="rXy-Zp-udl">
-                        <rect key="frame" x="0.0" y="20" width="320" height="96"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="93"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -446,4 +446,8 @@
             <point key="canvasLocation" x="4458.75" y="-253.52112676056339"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Near" width="25" height="25"/>
+        <image name="NearSelected" width="25" height="25"/>
+    </resources>
 </document>

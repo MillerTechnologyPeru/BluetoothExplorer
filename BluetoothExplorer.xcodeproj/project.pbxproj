@@ -28,6 +28,7 @@
 		6EC0D9BF20DDF871005FB128 /* Bluetooth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9A120DDF5E0005FB128 /* Bluetooth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EC0D9C220DDF876005FB128 /* GATT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; };
 		6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0D9C620DE076A005FB128 /* Appearance.swift */; };
 		6EDE00C620DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */; };
 		6EDE00C920DB0EB5002E951A /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C820DB0EB5002E951A /* Data.swift */; };
 		6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */; };
@@ -183,6 +184,7 @@
 		6E98B6A12059B51000B6F016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
 		6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
+		6EC0D9C620DE076A005FB128 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralCharacteristicDetailViewController.swift; sourceTree = "<group>"; };
 		6EDE00C820DB0EB5002E951A /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BatteryLevelCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 		6EDE00D020DB47C6002E951A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6EC0D9C620DE076A005FB128 /* Appearance.swift */,
 				6EDE00D120DB47FD002E951A /* CustomButton.swift */,
 			);
 			path = View;
@@ -535,6 +538,7 @@
 				6EDE00C920DB0EB5002E951A /* Data.swift in Sources */,
 				6EFB3E2520D3E5A600364CA0 /* DeviceStore.swift in Sources */,
 				6E8C68EA20DA02DA00232169 /* UIAlertAction.swift in Sources */,
+				6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */,
 				6EFB3E9720D3F0D700364CA0 /* CentralManagedObject.swift in Sources */,
 				6EFD558420D83C76003B75A1 /* CharacteristicManagedObject.swift in Sources */,
 				6EDE00D520DB53B4002E951A /* BatteryLevelCharacteristicViewController.swift in Sources */,

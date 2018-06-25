@@ -426,20 +426,41 @@ public final class DeviceStore {
             mainContext.mergeChanges(fromContextDidSave: notification)
             
             // iOS 9 fixes
-            // BUG FIX: When the notification is merged it only updates objects which are already registered in the context.
-            // If the predicate for a NSFetchedResultsController matches an updated object but the object is not registered
-            // in the FRC's context then the FRC will fail to include the updated object. The fix is to force all updated
-            // objects to be refreshed in the context thus making them available to the FRC.
-            // Note that we have to be very careful about which methods we call on the managed objects in the notifications userInfo.
-            // https://stackoverflow.com/a/16296365/1793261
+            // http://openradar.appspot.com/15552115
             if shouldPatchCoreData {
                 
-                let updatedObjects = notification.userInfo?[NSUpdatedObjectsKey] as? [NSManagedObject] ?? []
+                var userInfo = [String: [NSManagedObject]]()
                 
-                // Force the refresh of updated objects which may not have been registered in this context.
-                updatedObjects
-                    .map { try! mainContext.existingObject(with: $0.objectID) }
-                    .forEach { mainContext.refresh($0, mergeChanges: true) }
+                func updateMainContext(for userInfoKey: String) {
+                    
+                    let privateQueueObjects = notification.userInfo?[userInfoKey] as! Set<NSManagedObject>
+                    
+                    // Force the refresh of updated objects which may not have been registered in this context.
+                    let mainContextObjects = privateQueueObjects.flatMap {
+                        try? mainContext.existingObject(with: $0.objectID)
+                            ?? mainContext.object(with: $0.objectID)
+                    }
+                    
+                    mainContextObjects.forEach {
+                        mainContext.refresh($0, mergeChanges: true)
+                        $0.willAccessValue(forKey: nil)
+                    }
+                    
+                    userInfo[userInfoKey] = mainContextObjects
+                }
+                
+                updateMainContext(for: NSUpdatedObjectsKey)
+                updateMainContext(for: NSInsertedObjectsKey)
+                
+                mainContext.processPendingChanges()
+                
+                
+                
+                let notification = Notification(name: .NSManagedObjectContextDidSave,
+                                                object: mainContext,
+                                                userInfo: userInfo)
+                
+                NotificationCenter.default.post(notification)
             }
         }
     }

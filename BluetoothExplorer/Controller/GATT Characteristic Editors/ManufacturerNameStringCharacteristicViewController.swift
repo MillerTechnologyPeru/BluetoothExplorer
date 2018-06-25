@@ -25,6 +25,8 @@ final class ManufacturerNameStringCharacteristicViewController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureView()
     }
     
     // MARK: - Actions
@@ -36,6 +38,20 @@ final class ManufacturerNameStringCharacteristicViewController: UIViewController
         
         value = GATTManufacturerNameString(rawValue: text)
         valueDidChange?(value)
+    }
+    
+    // MARK: - Methods
+    
+    func configureView() {
+        
+        guard isViewLoaded else { return }
+        
+        updateText()
+    }
+    
+    func updateText() {
+        
+        manufacturerNameTextField.text = value.rawValue
     }
 }
 

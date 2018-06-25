@@ -13,8 +13,6 @@ final class ModelNumberCharacteristicViewController: UIViewController {
     
     // MARK: - IB Outlets
     
-    @IBOutlet private(set) var textLabel: UILabel!
-    
     @IBOutlet private(set) var modelTextField: UITextField!
     
     // MARK: - Properties

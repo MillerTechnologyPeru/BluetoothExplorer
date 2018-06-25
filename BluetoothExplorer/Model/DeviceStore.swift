@@ -81,13 +81,6 @@ public final class DeviceStore {
         // configure CoreData backing store
         self.persistentStore = try createPersistentStore(persistentStoreCoordinator)
         
-        // iOS 9 fixes
-        if shouldPatchCoreData {
-            
-            self.privateQueueManagedObjectContext.stalenessInterval = 0
-            self.managedObjectContext.stalenessInterval = 0
-        }
-        
         // listen for notifications (for merging changes)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(mergeChangesFromContextDidSaveNotification),
@@ -429,43 +422,21 @@ public final class DeviceStore {
             // http://openradar.appspot.com/15552115
             if shouldPatchCoreData {
                 
-                var userInfo = [String: [NSManagedObject]]()
+                let privateQueueObjects = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject> ?? []
                 
-                func updateMainContext(for userInfoKey: String) {
-                    
-                    let privateQueueObjects = notification.userInfo?[userInfoKey] as! Set<NSManagedObject>
-                    
-                    // Force the refresh of updated objects which may not have been registered in this context.
-                    let mainContextObjects = privateQueueObjects.flatMap {
-                        try? mainContext.existingObject(with: $0.objectID)
-                            ?? mainContext.object(with: $0.objectID)
-                    }
-                    
-                    mainContextObjects.forEach {
-                        mainContext.refresh($0, mergeChanges: true)
-                        $0.willAccessValue(forKey: nil)
-                    }
-                    
-                    userInfo[userInfoKey] = mainContextObjects
+                // Force the refresh of updated objects which may not have been registered in this context.
+                let mainContextObjects = privateQueueObjects.map {
+                    (try? mainContext.existingObject(with: $0.objectID)) ?? mainContext.object(with: $0.objectID)
                 }
                 
-                updateMainContext(for: NSUpdatedObjectsKey)
-                updateMainContext(for: NSInsertedObjectsKey)
-                
-                mainContext.processPendingChanges()
-                
-                
-                
-                let notification = Notification(name: .NSManagedObjectContextDidSave,
-                                                object: mainContext,
-                                                userInfo: userInfo)
-                
-                NotificationCenter.default.post(notification)
+                mainContextObjects.forEach {
+                    mainContext.refresh($0, mergeChanges: true)
+                    $0.willAccessValue(forKey: nil)
+                }
             }
         }
     }
 }
-
 
 // MARK: - Extensions
 

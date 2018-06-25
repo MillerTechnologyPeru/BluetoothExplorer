@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Software-->
+        <!--Manufacturer Name String-->
         <scene sceneID="2YU-mk-Dtt">
             <objects>
-                <viewController title="Software" id="oms-Lo-Dm1" customClass="SoftwareRevisionStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Manufacturer Name String" id="oms-Lo-Dm1" customClass="ManufacturerNameStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7jE-rP-ytQ"/>
                         <viewControllerLayoutGuide type="bottom" id="zyZ-Rc-zfR"/>
@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Software Revision String" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VcP-tC-U7U" userLabel="Software Text Field">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Manufacturer Name String" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VcP-tC-U7U" userLabel="Manufacturer Name Text field">
                                 <rect key="frame" x="40" y="316" width="295" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="9QA-CU-Rh9"/>
@@ -42,10 +42,11 @@
                             <constraint firstItem="VcP-tC-U7U" firstAttribute="centerY" secondItem="B9k-vm-gSb" secondAttribute="centerY" id="px1-le-6yj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Software Revision String" id="ghX-3q-eWE"/>
+                    <navigationItem key="navigationItem" title="Manufacturer Name String" id="ghX-3q-eWE"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="firmwareTextField" destination="VcP-tC-U7U" id="TXq-40-nE4"/>
+                        <outlet property="manufacturerNameTextField" destination="VcP-tC-U7U" id="Gr6-I8-GFr"/>
                         <outlet property="softwareTextField" destination="VcP-tC-U7U" id="r0u-AR-Wtj"/>
                     </connections>
                 </viewController>

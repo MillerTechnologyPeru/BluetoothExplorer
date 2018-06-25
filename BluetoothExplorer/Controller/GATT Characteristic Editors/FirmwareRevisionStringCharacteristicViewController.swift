@@ -52,4 +52,3 @@ extension FirmwareRevisionStringCharacteristicViewController: CharacteristicView
         return viewController
     }
 }
-

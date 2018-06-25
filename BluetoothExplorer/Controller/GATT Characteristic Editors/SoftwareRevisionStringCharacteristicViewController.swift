@@ -52,5 +52,3 @@ extension SoftwareRevisionStringCharacteristicViewController: CharacteristicView
         return viewController
     }
 }
-
-

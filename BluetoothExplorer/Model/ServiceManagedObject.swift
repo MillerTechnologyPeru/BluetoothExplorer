@@ -107,7 +107,7 @@ extension ServiceManagedObject {
         } else {
             
             // create a new entity
-            let newManagedObject = ServiceManagedObject(context: context)
+            let newManagedObject = ServiceManagedObject(managedObjectContext: context)
             
             // set identifier
             newManagedObject.uuid = uuid.rawValue

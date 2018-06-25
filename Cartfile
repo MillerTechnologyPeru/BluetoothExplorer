@@ -1,2 +1,3 @@
 github "PureSwift/Bluetooth" "master"
 github "PureSwift/GATT" "master"
+github "MillerTechnologyPeru/FDStackView" "master"

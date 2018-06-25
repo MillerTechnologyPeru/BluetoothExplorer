@@ -37,7 +37,7 @@ public final class ScanDataManagedObject: NSManagedObject {
             else { fatalError("Missing NSManagedObjectContext") }
         
         self.date = Date()
-        self.advertisementData = AdvertisementDataManagedObject(context: context)
+        self.advertisementData = AdvertisementDataManagedObject(managedObjectContext: context)
     }
 }
 

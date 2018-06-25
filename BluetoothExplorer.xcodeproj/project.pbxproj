@@ -29,6 +29,14 @@
 		6EC0D9C220DDF876005FB128 /* GATT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; };
 		6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC0D9B320DDF5E8005FB128 /* GATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0D9C620DE076A005FB128 /* Appearance.swift */; };
+		6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC5D20E091060054663C /* FDTransformLayer.m */; };
+		6ECCCC6D20E091070054663C /* FDLayoutSpacer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC5E20E091060054663C /* FDLayoutSpacer.m */; };
+		6ECCCC6E20E091070054663C /* FDStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6120E091060054663C /* FDStackView.m */; };
+		6ECCCC6F20E091070054663C /* FDStackViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6320E091060054663C /* FDStackViewExtensions.m */; };
+		6ECCCC7020E091070054663C /* FDStackViewAlignmentLayoutArrangement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6520E091060054663C /* FDStackViewAlignmentLayoutArrangement.m */; };
+		6ECCCC7120E091070054663C /* FDStackViewDistributionLayoutArrangement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6620E091060054663C /* FDStackViewDistributionLayoutArrangement.m */; };
+		6ECCCC7220E091070054663C /* FDStackViewLayoutArrangement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6820E091060054663C /* FDStackViewLayoutArrangement.m */; };
+		6ECCCC7320E091070054663C /* FDGapLayoutGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECCCC6920E091060054663C /* FDGapLayoutGuide.m */; };
 		6EDE00C620DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */; };
 		6EDE00C920DB0EB5002E951A /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE00C820DB0EB5002E951A /* Data.swift */; };
 		6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */; };
@@ -110,13 +118,6 @@
 			remoteGlobalIDString = 6E49B23A20532A94002EA5DC;
 			remoteInfo = "GATT-tvOS";
 		};
-		6EC0D9B820DDF5E8005FB128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6E98B6932059B51000B6F016;
-			remoteInfo = BluetoothExplorer;
-		};
 		6EC0D9BA20DDF5F6005FB128 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
@@ -185,6 +186,23 @@
 		6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
 		6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
 		6EC0D9C620DE076A005FB128 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		6ECCCC5A20E0866E0054663C /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		6ECCCC5C20E091060054663C /* FDStackViewAlignmentLayoutArrangement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStackViewAlignmentLayoutArrangement.h; sourceTree = "<group>"; };
+		6ECCCC5D20E091060054663C /* FDTransformLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTransformLayer.m; sourceTree = "<group>"; };
+		6ECCCC5E20E091060054663C /* FDLayoutSpacer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDLayoutSpacer.m; sourceTree = "<group>"; };
+		6ECCCC5F20E091060054663C /* FDStackViewLayoutArrangement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStackViewLayoutArrangement.h; sourceTree = "<group>"; };
+		6ECCCC6020E091060054663C /* FDStackViewDistributionLayoutArrangement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStackViewDistributionLayoutArrangement.h; sourceTree = "<group>"; };
+		6ECCCC6120E091060054663C /* FDStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStackView.m; sourceTree = "<group>"; };
+		6ECCCC6220E091060054663C /* FDGapLayoutGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGapLayoutGuide.h; sourceTree = "<group>"; };
+		6ECCCC6320E091060054663C /* FDStackViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStackViewExtensions.m; sourceTree = "<group>"; };
+		6ECCCC6420E091060054663C /* FDTransformLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTransformLayer.h; sourceTree = "<group>"; };
+		6ECCCC6520E091060054663C /* FDStackViewAlignmentLayoutArrangement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStackViewAlignmentLayoutArrangement.m; sourceTree = "<group>"; };
+		6ECCCC6620E091060054663C /* FDStackViewDistributionLayoutArrangement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStackViewDistributionLayoutArrangement.m; sourceTree = "<group>"; };
+		6ECCCC6720E091060054663C /* FDLayoutSpacer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDLayoutSpacer.h; sourceTree = "<group>"; };
+		6ECCCC6820E091060054663C /* FDStackViewLayoutArrangement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStackViewLayoutArrangement.m; sourceTree = "<group>"; };
+		6ECCCC6920E091060054663C /* FDGapLayoutGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGapLayoutGuide.m; sourceTree = "<group>"; };
+		6ECCCC6A20E091060054663C /* FDStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStackView.h; sourceTree = "<group>"; };
+		6ECCCC6B20E091060054663C /* FDStackViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStackViewExtensions.h; sourceTree = "<group>"; };
 		6EDE00C520DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralCharacteristicDetailViewController.swift; sourceTree = "<group>"; };
 		6EDE00C820DB0EB5002E951A /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BatteryLevelCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -239,10 +257,10 @@
 			isa = PBXGroup;
 			children = (
 				6E98B6952059B51000B6F016 /* AppDelegate.swift */,
+				6E98B69E2059B51000B6F016 /* LaunchScreen.storyboard */,
 				6E98B6992059B51000B6F016 /* Main.storyboard */,
 				6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */,
 				6E98B69C2059B51000B6F016 /* Assets.xcassets */,
-				6E98B69E2059B51000B6F016 /* LaunchScreen.storyboard */,
 				6E98B6A12059B51000B6F016 /* Info.plist */,
 				6E8C68EF20DA04D400232169 /* Async.swift */,
 				6EDE00C720DB0EA8002E951A /* Extensions */,
@@ -272,9 +290,32 @@
 				6EC0D9B320DDF5E8005FB128 /* GATT.framework */,
 				6EC0D9B520DDF5E8005FB128 /* GATT.framework */,
 				6EC0D9B720DDF5E8005FB128 /* GATT.framework */,
-				6EC0D9B920DDF5E8005FB128 /* BluetoothExplorer.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6ECCCC5B20E091060054663C /* FDStackView */ = {
+			isa = PBXGroup;
+			children = (
+				6ECCCC5C20E091060054663C /* FDStackViewAlignmentLayoutArrangement.h */,
+				6ECCCC5D20E091060054663C /* FDTransformLayer.m */,
+				6ECCCC5E20E091060054663C /* FDLayoutSpacer.m */,
+				6ECCCC5F20E091060054663C /* FDStackViewLayoutArrangement.h */,
+				6ECCCC6020E091060054663C /* FDStackViewDistributionLayoutArrangement.h */,
+				6ECCCC6120E091060054663C /* FDStackView.m */,
+				6ECCCC6220E091060054663C /* FDGapLayoutGuide.h */,
+				6ECCCC6320E091060054663C /* FDStackViewExtensions.m */,
+				6ECCCC6420E091060054663C /* FDTransformLayer.h */,
+				6ECCCC6520E091060054663C /* FDStackViewAlignmentLayoutArrangement.m */,
+				6ECCCC6620E091060054663C /* FDStackViewDistributionLayoutArrangement.m */,
+				6ECCCC6720E091060054663C /* FDLayoutSpacer.h */,
+				6ECCCC6820E091060054663C /* FDStackViewLayoutArrangement.m */,
+				6ECCCC6920E091060054663C /* FDGapLayoutGuide.m */,
+				6ECCCC6A20E091060054663C /* FDStackView.h */,
+				6ECCCC6B20E091060054663C /* FDStackViewExtensions.h */,
+			);
+			name = FDStackView;
+			path = Carthage/Checkouts/FDStackView/FDStackView;
 			sourceTree = "<group>";
 		};
 		6EDE00C720DB0EA8002E951A /* Extensions */ = {
@@ -305,6 +346,8 @@
 		6EE84D7A1CAF419D00A40C4D = {
 			isa = PBXGroup;
 			children = (
+				6ECCCC5A20E0866E0054663C /* Cartfile */,
+				6ECCCC5B20E091060054663C /* FDStackView */,
 				6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */,
 				6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */,
 				6E98B6942059B51000B6F016 /* BluetoothExplorer */,
@@ -373,6 +416,7 @@
 				6E98B6902059B51000B6F016 /* Frameworks */,
 				6E98B6912059B51000B6F016 /* Resources */,
 				6EFB3E2C20D3E89200364CA0 /* Embed Frameworks */,
+				6ECCCC5920E078F10054663C /* Increment Build */,
 			);
 			buildRules = (
 			);
@@ -501,13 +545,6 @@
 			remoteRef = 6EC0D9B620DDF5E8005FB128 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		6EC0D9B920DDF5E8005FB128 /* BluetoothExplorer.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = BluetoothExplorer.app;
-			remoteRef = 6EC0D9B820DDF5E8005FB128 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -524,6 +561,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6ECCCC5920E078F10054663C /* Increment Build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Increment Build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6E98B68F2059B51000B6F016 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -532,11 +586,14 @@
 				6E13E8CC20D9C7270007111B /* AdvertisementDataManagedObject.swift in Sources */,
 				6E8C68E920DA02DA00232169 /* PresentPopover.swift in Sources */,
 				6EFB3E9520D3EFFB00364CA0 /* PeripheralManagedObject.swift in Sources */,
+				6ECCCC6E20E091070054663C /* FDStackView.m in Sources */,
 				6E8C68F220DA340C00232169 /* PeripheralServicesViewController.swift in Sources */,
 				6E98B6982059B51000B6F016 /* PeripheralsViewController.swift in Sources */,
+				6ECCCC6D20E091070054663C /* FDLayoutSpacer.m in Sources */,
 				6EFD557E20D83B8F003B75A1 /* ServiceManagedObject.swift in Sources */,
 				6EDE00C920DB0EB5002E951A /* Data.swift in Sources */,
 				6EFB3E2520D3E5A600364CA0 /* DeviceStore.swift in Sources */,
+				6ECCCC7320E091070054663C /* FDGapLayoutGuide.m in Sources */,
 				6E8C68EA20DA02DA00232169 /* UIAlertAction.swift in Sources */,
 				6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */,
 				6EFB3E9720D3F0D700364CA0 /* CentralManagedObject.swift in Sources */,
@@ -550,9 +607,14 @@
 				6EFB3E9120D3EF6C00364CA0 /* CoreDataExtensions.swift in Sources */,
 				6EFB3E9B20D40F2000364CA0 /* PeripheralModel.swift in Sources */,
 				6E8C68ED20DA030A00232169 /* ActivityIndicatorViewController.swift in Sources */,
+				6ECCCC7120E091070054663C /* FDStackViewDistributionLayoutArrangement.m in Sources */,
+				6ECCCC6F20E091070054663C /* FDStackViewExtensions.m in Sources */,
 				6EFB3E9320D3EF9A00364CA0 /* ScanDataManagedObject.swift in Sources */,
+				6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */,
 				6E98B6962059B51000B6F016 /* AppDelegate.swift in Sources */,
 				6E8C68E520DA02B600232169 /* ErrorAlert.swift in Sources */,
+				6ECCCC7020E091070054663C /* FDStackViewAlignmentLayoutArrangement.m in Sources */,
+				6ECCCC7220E091070054663C /* FDStackViewLayoutArrangement.m in Sources */,
 				6E8C68EB20DA02DA00232169 /* AdaptiveNavigation.swift in Sources */,
 				6E13E8E320D9D8290007111B /* TableViewController.swift in Sources */,
 				6EDE00D720DB60D9002E951A /* CharacteristicViewController.swift in Sources */,
@@ -621,7 +683,6 @@
 				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pureswift.BluetoothExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -647,7 +708,6 @@
 				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pureswift.BluetoothExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";

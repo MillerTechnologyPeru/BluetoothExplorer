@@ -131,8 +131,8 @@ public final class DeviceStore {
         
         var oldPeripherals: [NSManagedObjectID] = updateCache {
             
-            let fetchRequest = PeripheralManagedObject.fetchRequest()
-            
+            let fetchRequest = NSFetchRequest<NSManagedObjectID>()
+            fetchRequest.entity = PeripheralManagedObject.entity(in: $0)
             fetchRequest.predicate = NSPredicate(format: "%K == %@",
                                                  #keyPath(PeripheralManagedObject.isAvailible),
                                                  true as NSNumber)
@@ -141,7 +141,7 @@ public final class DeviceStore {
             fetchRequest.returnsObjectsAsFaults = true
             fetchRequest.resultType = .managedObjectIDResultType
             
-            return try $0.fetch(fetchRequest) as! [NSManagedObjectID]
+            return try $0.fetch(fetchRequest)
         }
         
         try centralManager.scan(filterDuplicates: filterDuplicates, shouldContinueScanning: { Date() < end }, foundDevice: { [unowned self] (scanData) in

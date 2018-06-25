@@ -18,6 +18,6 @@ internal func ConfigureAppearance() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "NavigationBarTintColor")!
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
     } else {
-        UINavigationBar.appearance().barTintColor = .blue
+        UINavigationBar.appearance().barTintColor = UIColor(red: 0.386, green: 0.707, blue: 1.000, alpha: 1.0)
     }
 }

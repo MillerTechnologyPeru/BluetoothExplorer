@@ -40,7 +40,7 @@ public final class PeripheralManagedObject: NSManagedObject {
         guard let context = self.managedObjectContext
             else { fatalError("Missing \(NSManagedObjectContext.self)") }
         
-        self.scanData = ScanDataManagedObject(context: context)
+        self.scanData = ScanDataManagedObject(managedObjectContext: context)
     }
 }
 

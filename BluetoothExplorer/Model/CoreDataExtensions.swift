@@ -48,7 +48,8 @@ internal extension NSManagedObjectContext {
     
     func all <T: NSManagedObject> (_ managedObjectType: T.Type) throws -> [T] {
         
-        let fetchRequest = T.fetchRequest()
+        let fetchRequest = NSFetchRequest<T>()
+        fetchRequest.entity = T.entity(in: self)
         fetchRequest.includesSubentities = false
         fetchRequest.returnsObjectsAsFaults = true
         
@@ -97,6 +98,18 @@ internal extension NSManagedObject {
         Cache.entities[className] = entity
         
         return entity
+    }
+    
+    convenience init(managedObjectContext context: NSManagedObjectContext) {
+        
+        if #available(iOS 10.0, *) {
+            
+            self.init(context: context)
+            
+        } else {
+            
+            self.init(entity: type(of: self).entity(in: context), insertInto: context)
+        }
     }
 }
 

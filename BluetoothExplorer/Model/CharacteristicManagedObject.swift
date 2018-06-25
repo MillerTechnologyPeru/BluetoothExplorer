@@ -92,7 +92,7 @@ extension CharacteristicManagedObject {
         } else {
             
             // create a new entity
-            let newManagedObject = CharacteristicManagedObject(context: context)
+            let newManagedObject = CharacteristicManagedObject(managedObjectContext: context)
             
             // set identifier
             newManagedObject.uuid = uuid.rawValue

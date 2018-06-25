@@ -1,2 +1,3 @@
+github "MillerTechnologyPeru/FDStackView" "d507a47d185de1cb0cdd35cdeb28fcdd827d9859"
 github "PureSwift/Bluetooth" "ce480b4bc865daab9dee396e31eb185718ba91fa"
-github "PureSwift/GATT" "f4c18c95cbbdcc5cc9b05ec62f57acea15d93f35"
+github "PureSwift/GATT" "1205b62693725d2c1131f8695cfdf0b29b1c3299"

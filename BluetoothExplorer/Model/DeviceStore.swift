@@ -38,6 +38,8 @@ public final class DeviceStore {
     /// The managed object context running on a background thread for asyncronous caching.
     private let privateQueueManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
+    private lazy var shouldPatchCoreData: Bool = ProcessInfo().isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 10, minorVersion: 0, patchVersion: 0)) == false
+    
     private lazy var centralIdentifier: String = {
         
         return self.centralManager.identifier ?? "org.pureswift.GATT.CentralManager.default"
@@ -79,10 +81,17 @@ public final class DeviceStore {
         // configure CoreData backing store
         self.persistentStore = try createPersistentStore(persistentStoreCoordinator)
         
+        // iOS 9 fixes
+        if shouldPatchCoreData {
+            
+            self.privateQueueManagedObjectContext.stalenessInterval = 0
+            self.managedObjectContext.stalenessInterval = 0
+        }
+        
         // listen for notifications (for merging changes)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(DeviceStore.mergeChangesFromContextDidSaveNotification(_:)),
-                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                               selector: #selector(mergeChangesFromContextDidSaveNotification),
+                                               name: .NSManagedObjectContextDidSave,
                                                object: self.privateQueueManagedObjectContext)
         
         // update cache
@@ -401,14 +410,37 @@ public final class DeviceStore {
     
     @objc private func mergeChangesFromContextDidSaveNotification(_ notification: Notification) {
         
-        self.managedObjectContext.performAndWait {
+        let mainContext = self.managedObjectContext
+        
+        let shouldPatchCoreData = self.shouldPatchCoreData
+        
+        guard let savedContext = notification.object as? NSManagedObjectContext
+            else { assertionFailure("Invalid notification \(notification)"); return }
+        
+        // only merge non-main thread context
+        guard savedContext !== mainContext
+            else { return }
+        
+        DispatchQueue.main.async {
             
-            self.managedObjectContext.mergeChanges(fromContextDidSave: notification)
+            mainContext.mergeChanges(fromContextDidSave: notification)
             
-            // manually send notification
-            NotificationCenter.default.post(name: .NSManagedObjectContextObjectsDidChange,
-                                            object: self.managedObjectContext,
-                                            userInfo: notification.userInfo)
+            // iOS 9 fixes
+            // BUG FIX: When the notification is merged it only updates objects which are already registered in the context.
+            // If the predicate for a NSFetchedResultsController matches an updated object but the object is not registered
+            // in the FRC's context then the FRC will fail to include the updated object. The fix is to force all updated
+            // objects to be refreshed in the context thus making them available to the FRC.
+            // Note that we have to be very careful about which methods we call on the managed objects in the notifications userInfo.
+            // https://stackoverflow.com/a/16296365/1793261
+            if shouldPatchCoreData {
+                
+                let updatedObjects = notification.userInfo?[NSUpdatedObjectsKey] as? [NSManagedObject] ?? []
+                
+                // Force the refresh of updated objects which may not have been registered in this context.
+                updatedObjects
+                    .map { try! mainContext.existingObject(with: $0.objectID) }
+                    .forEach { mainContext.refresh($0, mergeChanges: true) }
+            }
         }
     }
 }

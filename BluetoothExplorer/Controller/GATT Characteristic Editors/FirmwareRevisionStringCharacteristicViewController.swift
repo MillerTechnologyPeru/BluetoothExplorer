@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class FirmareRevisionStringCharacteristicViewController: UIViewController {
+final class FirmwareRevisionStringCharacteristicViewController: UIViewController {
     
     // MARK: - IB Outlets
     
@@ -41,13 +41,13 @@ final class FirmareRevisionStringCharacteristicViewController: UIViewController 
 
 // MARK: - CharacteristicViewController
 
-extension FirmareRevisionStringCharacteristicViewController: CharacteristicViewController {
+extension FirmwareRevisionStringCharacteristicViewController: CharacteristicViewController {
     
-    static func fromStoryboard() -> FirmareRevisionStringCharacteristicViewController {
+    static func fromStoryboard() -> FirmwareRevisionStringCharacteristicViewController {
         
-        let storyboard = UIStoryboard(name: "FirmareRevisionStringCharacteristic", bundle: .main)
+        let storyboard = UIStoryboard(name: "FirmwareRevisionStringCharacteristic", bundle: .main)
         
-        let viewController = storyboard.instantiateInitialViewController() as! FirmareRevisionStringCharacteristicViewController
+        let viewController = storyboard.instantiateInitialViewController() as! FirmwareRevisionStringCharacteristicViewController
         
         return viewController
     }

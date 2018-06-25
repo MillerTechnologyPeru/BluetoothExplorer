@@ -168,6 +168,12 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case ModelNumberCharacteristicViewController.uuid:
             viewController = load(ModelNumberCharacteristicViewController.self)
             
+        case FirmwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(FirmwareRevisionStringCharacteristicViewController.self)
+            
+        case SoftwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(SoftwareRevisionStringCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

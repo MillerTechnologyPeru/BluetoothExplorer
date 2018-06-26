@@ -12,7 +12,7 @@ import CoreData
 import Bluetooth
 import GATT
 
-final class DateTimeCharacteristicViewController: UIViewController {
+final class DateTimeCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -26,34 +26,47 @@ final class DateTimeCharacteristicViewController: UIViewController {
     
     var valueDidChange: ((GATTDateTime) -> ())?
     
-    var minimumDate: Date? {
+    private lazy var minimumDate: Date = {
         
         var dateComponents = DateComponents()
         dateComponents.year = Int(GATTDateTime.Year.min.rawValue)
         dateComponents.timeZone = TimeZone(identifier: "UTC")
         
-        return Calendar.current.date(from: dateComponents)
-    }
+        guard let minimumDate = calendar.date(from: dateComponents)
+            else { fatalError("Couldn't create minimumDate") }
+        
+        return minimumDate
+    }()
     
-    var maximumDate: Date? {
+    private lazy var maximumDate: Date = {
         
         var dateComponents = DateComponents()
         dateComponents.year = Int(GATTDateTime.Year.max.rawValue)
         dateComponents.timeZone = TimeZone(identifier: "UTC")
         
-        return Calendar.current.date(from: dateComponents)
-    }
+        guard let maximumDate = calendar.date(from: dateComponents)
+            else { fatalError("Couldn't create maximumDate") }
+        
+        return maximumDate
+    }()
+    
+    private lazy var calendar: Calendar = {
+        
+        return Calendar(identifier: .gregorian)
+    }()
+    
+    private lazy var timeZone: TimeZone = {
+        
+        guard let timezone = TimeZone(identifier: "UTC")
+            else { fatalError("Couldn't create timezone") }
+        
+        return timezone
+    }()
     
     // MARK: - Loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let minimumDate = minimumDate
-            else { assertionFailure("Couldn't create minimumDate"); return }
-        
-        guard let maximumDate = maximumDate
-            else { assertionFailure("Couldn't create maximumDate"); return }
         
         datePicker.minimumDate = minimumDate
         datePicker.maximumDate = maximumDate
@@ -65,17 +78,10 @@ final class DateTimeCharacteristicViewController: UIViewController {
     
     @IBAction func datePickerChanged(_ sender: Any) {
         
-        let strDate = CustomDateFormatter.default.string(from: datePicker.date)
-        dateTimeLabel.text = strDate
+        let dateString = CustomDateFormatter.default.string(from: datePicker.date)
+        dateTimeLabel.text = dateString
         
-        let dateComponents = Calendar.current.dateComponents(in: TimeZone(identifier: "UTC")!, from: datePicker.date)
-        
-        let datetime = GATTDateTime(dateComponents: dateComponents)
-        
-        guard let value = datetime
-            else { assertionFailure("Couldn't create GATTDateTime from components"); return }
-        
-        self.value = value
+        self.value = GATTDateTime(date: datePicker.date)
         valueDidChange?(value)
     }
     
@@ -90,26 +96,13 @@ final class DateTimeCharacteristicViewController: UIViewController {
     
     func updateDatePicker() {
         
-        if let date = value.dateComponents.date {
-            dateTimeLabel.text = CustomDateFormatter.default.string(from: date)
-            datePicker.date = date
-        }
+        guard let date = value.dateComponents.date
+            else { return }
+        
+        dateTimeLabel.text = CustomDateFormatter.default.string(from: date)
+        datePicker.date = date
     }
     
-}
-
-// MARK: - CharacteristicViewController
-
-extension DateTimeCharacteristicViewController: CharacteristicViewController {
-    
-    static func fromStoryboard() -> DateTimeCharacteristicViewController {
-        
-        let storyboard = UIStoryboard(name: "DateTimeCharacteristic", bundle: .main)
-        
-        let viewController = storyboard.instantiateInitialViewController() as! DateTimeCharacteristicViewController
-        
-        return viewController
-    }
 }
 
 extension DateTimeCharacteristicViewController {

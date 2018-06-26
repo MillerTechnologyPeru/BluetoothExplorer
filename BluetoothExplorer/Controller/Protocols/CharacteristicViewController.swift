@@ -15,9 +15,6 @@ protocol CharacteristicViewController: class {
     /// The GATT Characteristic type this view controller can edit.
     associatedtype CharacteristicValue: GATTCharacteristic
     
-    /// Initialize and load from storyboard.
-    static func fromStoryboard() -> Self
-    
     var view: UIView! { get }
     
     /// The current value.

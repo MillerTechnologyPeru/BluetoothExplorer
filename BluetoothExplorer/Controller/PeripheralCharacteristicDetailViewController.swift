@@ -141,9 +141,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         let canWrite = characteristic.properties.contains(.write)
             || characteristic.properties.contains(.writeWithoutResponse)
         
-        func load <T: CharacteristicViewController & UIViewController> (_ type: T.Type) -> T {
+        func load <T: CharacteristicViewController & UIViewController & InstantiableViewController> (_ type: T.Type) -> T {
             
-            let viewController = T.fromStoryboard()
+            let viewController: T = .instantiate()
             
             if let data = self.value, let value = T.CharacteristicValue(data: data) {
                 

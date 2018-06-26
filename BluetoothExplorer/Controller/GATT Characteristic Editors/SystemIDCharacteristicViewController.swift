@@ -45,9 +45,12 @@ final class SystemIDCharacteristicViewController: UIViewController {
         guard let organizationallyUniqueIdentifier = UInt32(organizationallyUniqueIdentifierText)
             else { return }
         
-        value = GATTSystemID(manufacturerIdentifier: manufacturerIdentifier,
-                             organizationallyUniqueIdentifier: organizationallyUniqueIdentifier)!
-//        valueDidChange?(value)
+        guard let systemID = GATTSystemID(manufacturerIdentifier: manufacturerIdentifier,
+                                          organizationallyUniqueIdentifier: organizationallyUniqueIdentifier)
+            else { return }
+        
+        value = systemID
+        valueDidChange?(value)
     }
 }
 

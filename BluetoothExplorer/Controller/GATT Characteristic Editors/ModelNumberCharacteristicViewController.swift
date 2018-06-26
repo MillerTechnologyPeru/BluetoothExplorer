@@ -31,7 +31,7 @@ final class ModelNumberCharacteristicViewController: UIViewController {
     
     // MARK: - Actions
     
-    @IBAction func textFieldEditingChanged(_ sender: Any) {
+    @IBAction func textFieldEditingChanged(_ sender: UITextField) {
         
         guard let text = modelTextField.text
             else { return }
@@ -49,8 +49,9 @@ final class ModelNumberCharacteristicViewController: UIViewController {
         updateText()
     }
     
-    func updateText() {
+    private func updateText() {
         
+        modelTextField.isEnabled = valueDidChange != nil
         modelTextField.text = value.rawValue
     }
 }

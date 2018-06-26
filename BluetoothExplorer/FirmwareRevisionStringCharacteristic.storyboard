@@ -12,7 +12,7 @@
         <!--Firmware Revision String-->
         <scene sceneID="2YU-mk-Dtt">
             <objects>
-                <viewController title="Firmware Revision String" id="oms-Lo-Dm1" customClass="FirmwareRevisionStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FirmwareRevisionStringCharacteristicViewController" title="Firmware Revision String" id="oms-Lo-Dm1" customClass="FirmwareRevisionStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7jE-rP-ytQ"/>
                         <viewControllerLayoutGuide type="bottom" id="zyZ-Rc-zfR"/>

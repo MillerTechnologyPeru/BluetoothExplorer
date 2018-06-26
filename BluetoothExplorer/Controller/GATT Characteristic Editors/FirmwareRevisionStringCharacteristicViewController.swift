@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class FirmwareRevisionStringCharacteristicViewController: UIViewController {
+final class FirmwareRevisionStringCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -25,6 +25,8 @@ final class FirmwareRevisionStringCharacteristicViewController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureView()
     }
     
     // MARK: - Actions
@@ -37,18 +39,19 @@ final class FirmwareRevisionStringCharacteristicViewController: UIViewController
         value = GATTFirmwareRevisionString(rawValue: text)
         valueDidChange?(value)
     }
-}
-
-// MARK: - CharacteristicViewController
-
-extension FirmwareRevisionStringCharacteristicViewController: CharacteristicViewController {
     
-    static func fromStoryboard() -> FirmwareRevisionStringCharacteristicViewController {
+    // MARK: - Methods
+    
+    func configureView() {
         
-        let storyboard = UIStoryboard(name: "FirmwareRevisionStringCharacteristic", bundle: .main)
+        guard isViewLoaded else { return }
         
-        let viewController = storyboard.instantiateInitialViewController() as! FirmwareRevisionStringCharacteristicViewController
+        updateText()
+    }
+    
+    private func updateText() {
         
-        return viewController
+        firmwareTextField.isEnabled = valueDidChange != nil
+        firmwareTextField.text = value.rawValue
     }
 }

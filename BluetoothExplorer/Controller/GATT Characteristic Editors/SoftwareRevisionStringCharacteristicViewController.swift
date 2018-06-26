@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class SoftwareRevisionStringCharacteristicViewController: UIViewController {
+final class SoftwareRevisionStringCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -25,6 +25,8 @@ final class SoftwareRevisionStringCharacteristicViewController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureView()
     }
     
     // MARK: - Actions
@@ -37,18 +39,19 @@ final class SoftwareRevisionStringCharacteristicViewController: UIViewController
         value = GATTSoftwareRevisionString(rawValue: text)
         valueDidChange?(value)
     }
-}
-
-// MARK: - CharacteristicViewController
-
-extension SoftwareRevisionStringCharacteristicViewController: CharacteristicViewController {
     
-    static func fromStoryboard() -> SoftwareRevisionStringCharacteristicViewController {
+    // MARK: - Methods
+    
+    func configureView() {
         
-        let storyboard = UIStoryboard(name: "SoftwareRevisionStringCharacteristic", bundle: .main)
+        guard isViewLoaded else { return }
         
-        let viewController = storyboard.instantiateInitialViewController() as! SoftwareRevisionStringCharacteristicViewController
+        updateText()
+    }
+    
+    private func updateText() {
         
-        return viewController
+        softwareTextField.isEnabled = valueDidChange != nil
+        softwareTextField.text = value.rawValue
     }
 }

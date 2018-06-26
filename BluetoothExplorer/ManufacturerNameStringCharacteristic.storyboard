@@ -12,7 +12,7 @@
         <!--Manufacturer Name String-->
         <scene sceneID="2YU-mk-Dtt">
             <objects>
-                <viewController title="Manufacturer Name String" id="oms-Lo-Dm1" customClass="ManufacturerNameStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ManufacturerNameStringCharacteristicViewController" title="Manufacturer Name String" id="oms-Lo-Dm1" customClass="ManufacturerNameStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7jE-rP-ytQ"/>
                         <viewControllerLayoutGuide type="bottom" id="zyZ-Rc-zfR"/>

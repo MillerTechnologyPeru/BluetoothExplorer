@@ -12,7 +12,7 @@
         <!--Model Number-->
         <scene sceneID="2YU-mk-Dtt">
             <objects>
-                <viewController title="Model Number" id="oms-Lo-Dm1" customClass="ModelNumberCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ModelNumberCharacteristicViewController" title="Model Number" id="oms-Lo-Dm1" customClass="ModelNumberCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7jE-rP-ytQ"/>
                         <viewControllerLayoutGuide type="bottom" id="zyZ-Rc-zfR"/>

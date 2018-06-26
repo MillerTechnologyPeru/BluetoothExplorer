@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class ManufacturerNameStringCharacteristicViewController: UIViewController {
+final class ManufacturerNameStringCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -52,19 +52,5 @@ final class ManufacturerNameStringCharacteristicViewController: UIViewController
     func updateText() {
         
         manufacturerNameTextField.text = value.rawValue
-    }
-}
-
-// MARK: - CharacteristicViewController
-
-extension ManufacturerNameStringCharacteristicViewController: CharacteristicViewController {
-    
-    static func fromStoryboard() -> ManufacturerNameStringCharacteristicViewController {
-        
-        let storyboard = UIStoryboard(name: "ManufacturerNameStringCharacteristic", bundle: .main)
-        
-        let viewController = storyboard.instantiateInitialViewController() as! ManufacturerNameStringCharacteristicViewController
-        
-        return viewController
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class ModelNumberCharacteristicViewController: UIViewController {
+final class ModelNumberCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -53,19 +53,5 @@ final class ModelNumberCharacteristicViewController: UIViewController {
         
         modelTextField.isEnabled = valueDidChange != nil
         modelTextField.text = value.rawValue
-    }
-}
-
-// MARK: - CharacteristicViewController
-
-extension ModelNumberCharacteristicViewController: CharacteristicViewController {
-    
-    static func fromStoryboard() -> ModelNumberCharacteristicViewController {
-        
-        let storyboard = UIStoryboard(name: "ModelNumberCharacteristic", bundle: .main)
-        
-        let viewController = storyboard.instantiateInitialViewController() as! ModelNumberCharacteristicViewController
-        
-        return viewController
     }
 }

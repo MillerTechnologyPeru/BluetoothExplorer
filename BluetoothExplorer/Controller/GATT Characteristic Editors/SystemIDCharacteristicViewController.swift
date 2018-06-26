@@ -9,7 +9,7 @@
 import UIKit
 import Bluetooth
 
-final class SystemIDCharacteristicViewController: UIViewController {
+final class SystemIDCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -27,6 +27,8 @@ final class SystemIDCharacteristicViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureView()
     }
     
     // MARK: - Actions
@@ -52,18 +54,22 @@ final class SystemIDCharacteristicViewController: UIViewController {
         value = systemID
         valueDidChange?(value)
     }
-}
-
-// MARK: - CharacteristicViewController
-
-extension SystemIDCharacteristicViewController: CharacteristicViewController {
     
-    static func fromStoryboard() -> SystemIDCharacteristicViewController {
+    // MARK: - Methods
+    
+    func configureView() {
         
-        let storyboard = UIStoryboard(name: "SystemIDStringCharacteristic", bundle: .main)
+        guard isViewLoaded else { return }
         
-        let viewController = storyboard.instantiateInitialViewController() as! SystemIDCharacteristicViewController
+        updateText()
+    }
+    
+    private func updateText() {
         
-        return viewController
+        manufacturerIdentifierTextField.isEnabled = valueDidChange != nil
+        organizationallyUniqueIdentifierTextField.isEnabled = valueDidChange != nil
+        
+        manufacturerIdentifierTextField.text = "\(value.manufacturerIdentifier)"
+        organizationallyUniqueIdentifierTextField.text = "\(value.organizationallyUniqueIdentifier)"
     }
 }

@@ -37,5 +37,7 @@ let supportedCharacteristicViewControllers: [BluetoothUUID] = [
     .batteryLevel,
     .manufacturerNameString,
     .modelNumberString,
-    .dateTime
+    .dateTime,
+    .firmwareRevisionString,
+    .softwareRevisionString
 ]

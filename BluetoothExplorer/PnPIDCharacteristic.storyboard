@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--PnP ID-->
+        <scene sceneID="Xip-Sx-1UG">
+            <objects>
+                <viewController storyboardIdentifier="PnPIDCharacteristicViewController" title="System ID" id="p3U-do-pXC" userLabel="PnP ID" customClass="PnPIDCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="KoM-u3-hpO"/>
+                        <viewControllerLayoutGuide type="bottom" id="aku-he-5yT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bIQ-ZR-rA4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18s-im-kHK">
+                                <rect key="frame" x="16" y="241" width="343" height="185"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Vendor ID Source" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W7m-wn-yjF" userLabel="Manufacturer Name Text field">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="JiV-jV-L9I"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Vendor ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J95-eo-S9N" userLabel="Organizational Identifier Text field">
+                                        <rect key="frame" x="0.0" y="50" width="343" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="Ywa-FK-mZA"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Product Version" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kjn-Ac-wbs" userLabel="Organizational Identifier Text field">
+                                        <rect key="frame" x="0.0" y="150" width="343" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="rOD-wg-FkW"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Product ID" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BGA-bL-WJe" userLabel="Organizational Identifier Text field">
+                                        <rect key="frame" x="0.0" y="100" width="343" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="j2Y-4u-sIx"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="W7m-wn-yjF" firstAttribute="leading" secondItem="18s-im-kHK" secondAttribute="leading" id="6Ts-O0-2if"/>
+                                    <constraint firstItem="W7m-wn-yjF" firstAttribute="leading" secondItem="J95-eo-S9N" secondAttribute="leading" id="Hyf-6J-c7s"/>
+                                    <constraint firstItem="BGA-bL-WJe" firstAttribute="top" secondItem="J95-eo-S9N" secondAttribute="bottom" constant="15" id="IEC-Q0-mKf"/>
+                                    <constraint firstAttribute="bottom" secondItem="kjn-Ac-wbs" secondAttribute="bottom" id="Ol7-KC-dLk"/>
+                                    <constraint firstItem="W7m-wn-yjF" firstAttribute="top" secondItem="18s-im-kHK" secondAttribute="top" id="RcF-SS-G84"/>
+                                    <constraint firstItem="J95-eo-S9N" firstAttribute="top" secondItem="W7m-wn-yjF" secondAttribute="bottom" constant="15" id="Uve-MW-Hni"/>
+                                    <constraint firstItem="W7m-wn-yjF" firstAttribute="trailing" secondItem="J95-eo-S9N" secondAttribute="trailing" id="eiM-rd-CFg"/>
+                                    <constraint firstItem="kjn-Ac-wbs" firstAttribute="top" secondItem="BGA-bL-WJe" secondAttribute="bottom" constant="15" id="f86-FK-Odt"/>
+                                    <constraint firstItem="BGA-bL-WJe" firstAttribute="trailing" secondItem="J95-eo-S9N" secondAttribute="trailing" id="kNv-ng-5y8"/>
+                                    <constraint firstItem="BGA-bL-WJe" firstAttribute="leading" secondItem="J95-eo-S9N" secondAttribute="leading" id="skM-Oc-d5p"/>
+                                    <constraint firstItem="kjn-Ac-wbs" firstAttribute="trailing" secondItem="BGA-bL-WJe" secondAttribute="trailing" id="xGN-92-FJ0"/>
+                                    <constraint firstItem="kjn-Ac-wbs" firstAttribute="leading" secondItem="BGA-bL-WJe" secondAttribute="leading" id="xRY-ej-HZ7"/>
+                                    <constraint firstAttribute="trailing" secondItem="W7m-wn-yjF" secondAttribute="trailing" id="y9N-VQ-kN1"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="18s-im-kHK" firstAttribute="leading" secondItem="bIQ-ZR-rA4" secondAttribute="leadingMargin" id="Wk2-Az-Nni"/>
+                            <constraint firstItem="18s-im-kHK" firstAttribute="centerY" secondItem="bIQ-ZR-rA4" secondAttribute="centerY" id="kEJ-uW-YYW"/>
+                            <constraint firstItem="18s-im-kHK" firstAttribute="trailing" secondItem="bIQ-ZR-rA4" secondAttribute="trailingMargin" id="zBI-Xa-7hI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="PnP ID" id="qc4-YI-BDQ"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="productIDTextField" destination="BGA-bL-WJe" id="KuH-vh-izx"/>
+                        <outlet property="productVersionTextField" destination="kjn-Ac-wbs" id="W07-sj-JlG"/>
+                        <outlet property="vendorIDSourceTextField" destination="W7m-wn-yjF" id="MXy-ix-B60"/>
+                        <outlet property="vendorIDTextField" destination="J95-eo-S9N" id="3Z1-4R-PWa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vn1-MQ-ltx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="90.400000000000006" y="61.619190404797607"/>
+        </scene>
+    </scenes>
+</document>

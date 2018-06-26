@@ -180,6 +180,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case DateTimeCharacteristicViewController.uuid:
             viewController = load(DateTimeCharacteristicViewController.self)
             
+        case SystemIDCharacteristicViewController.uuid:
+            viewController = load(SystemIDCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

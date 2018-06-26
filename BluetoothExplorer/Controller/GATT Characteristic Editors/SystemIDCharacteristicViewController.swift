@@ -19,7 +19,7 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
     
     // MARK: - Properties
     
-    var value: GATTSystemID = GATTSystemID(manufacturerIdentifier: 0, organizationallyUniqueIdentifier: 0)!
+    var value = GATTSystemID(manufacturerIdentifier: 0, organizationallyUniqueIdentifier: 0)!
     
     var valueDidChange: ((GATTSystemID) -> ())?
     
@@ -36,16 +36,16 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
     @IBAction func textFieldEditingChanged(_ sender: Any) {
         
         guard let manufacturerIdentifierText = manufacturerIdentifierTextField.text
-            else { return }
+            else { showErrorAlert("Manufacturer Identifier is mandatory"); return }
         
         guard let organizationallyUniqueIdentifierText = organizationallyUniqueIdentifierTextField.text
-            else { return }
+            else { showErrorAlert("Organization Identifier is mandatory"); return }
         
         guard let manufacturerIdentifier = UInt64(manufacturerIdentifierText)
-            else { return }
+            else { showErrorAlert("The entered number is too long"); return }
         
         guard let organizationallyUniqueIdentifier = UInt32(organizationallyUniqueIdentifierText)
-            else { return }
+            else { showErrorAlert("The entered number is too long"); return }
         
         guard let systemID = GATTSystemID(manufacturerIdentifier: manufacturerIdentifier,
                                           organizationallyUniqueIdentifier: organizationallyUniqueIdentifier)
@@ -62,6 +62,9 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
         guard isViewLoaded else { return }
         
         updateText()
+        
+        manufacturerIdentifierTextField.keyboardType = .numberPad
+        organizationallyUniqueIdentifierTextField.keyboardType = .numberPad
     }
     
     private func updateText() {

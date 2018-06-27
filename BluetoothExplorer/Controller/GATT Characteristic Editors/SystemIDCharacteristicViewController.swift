@@ -13,9 +13,9 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
     
     // MARK: - IB Outlets
     
-    @IBOutlet private(set) var manufacturerIdentifierTextField: UITextField!
+    @IBOutlet weak var menufacturerIdentifierInputText: InputTextView!
     
-    @IBOutlet private(set) var organizationallyUniqueIdentifierTextField: UITextField!
+    @IBOutlet weak var organizationIdentifierInputText: InputTextView!
     
     // MARK: - Properties
     
@@ -29,30 +29,30 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
         super.viewDidLoad()
         
         configureView()
-    }
-    
-    // MARK: - Actions
-    
-    @IBAction func textFieldEditingChanged(_ sender: Any) {
         
-        guard let manufacturerIdentifierText = manufacturerIdentifierTextField.text
-            else { showErrorAlert("Manufacturer Identifier is mandatory"); return }
+        menufacturerIdentifierInputText.validator = { value in
+            
+            guard value.trim() != ""
+                else { return .none }
+            
+            // TODO: Use Bluetooth max value
+            guard let manufacturerIdValue = UInt64(value), manufacturerIdValue <= 1099511627775
+                else { return .error("Maximum value is \(1099511627775)") }
+            
+            return .none
+        }
         
-        guard let organizationallyUniqueIdentifierText = organizationallyUniqueIdentifierTextField.text
-            else { showErrorAlert("Organization Identifier is mandatory"); return }
-        
-        guard let manufacturerIdentifier = UInt64(manufacturerIdentifierText)
-            else { showErrorAlert("The entered number is too long"); return }
-        
-        guard let organizationallyUniqueIdentifier = UInt32(organizationallyUniqueIdentifierText)
-            else { showErrorAlert("The entered number is too long"); return }
-        
-        guard let systemID = GATTSystemID(manufacturerIdentifier: manufacturerIdentifier,
-                                          organizationallyUniqueIdentifier: organizationallyUniqueIdentifier)
-            else { return }
-        
-        value = systemID
-        valueDidChange?(value)
+        organizationIdentifierInputText.validator = { value in
+            
+            guard value.trim() != ""
+                else { return .none }
+            
+            // TODO: Use Bluetooth max value
+            guard let organizationIdvalue = UInt32(value), organizationIdvalue <= 16777215
+                else { return .error("Maximum value is \(16777215)") }
+            
+            return .none
+        }
     }
     
     // MARK: - Methods
@@ -63,16 +63,16 @@ final class SystemIDCharacteristicViewController: UIViewController, Characterist
         
         updateText()
         
-        manufacturerIdentifierTextField.keyboardType = .numberPad
-        organizationallyUniqueIdentifierTextField.keyboardType = .numberPad
+        menufacturerIdentifierInputText.keyboardType = .numberPad
+        organizationIdentifierInputText.keyboardType = .numberPad
     }
     
     private func updateText() {
         
-        manufacturerIdentifierTextField.isEnabled = valueDidChange != nil
-        organizationallyUniqueIdentifierTextField.isEnabled = valueDidChange != nil
-        
-        manufacturerIdentifierTextField.text = "\(value.manufacturerIdentifier)"
-        organizationallyUniqueIdentifierTextField.text = "\(value.organizationallyUniqueIdentifier)"
+        menufacturerIdentifierInputText.isEnabled = valueDidChange != nil
+        organizationIdentifierInputText.isEnabled = valueDidChange != nil
+
+        menufacturerIdentifierInputText.value = "\(value.manufacturerIdentifier)"
+        organizationIdentifierInputText.value = "\(value.organizationallyUniqueIdentifier)"
     }
 }

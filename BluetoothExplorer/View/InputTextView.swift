@@ -17,7 +17,7 @@ class InputTextView: NibDesignableView {
     // MARK: - Properties
     
     @IBOutlet weak var fieldLabel: UILabel!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField: InputTextField!
     @IBOutlet weak var messageLabel: UILabel!
     
     @IBInspectable

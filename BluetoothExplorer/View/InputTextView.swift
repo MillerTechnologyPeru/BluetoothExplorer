@@ -53,6 +53,12 @@ class InputTextView: NibDesignableView {
         set { textField.isEnabled = newValue }
     }
     
+    public var posibleInputValues: [String] {
+        
+        get { return textField.posibleValues }
+        set { textField.posibleValues = newValue; }
+    }
+    
     private var validation: Validation = .none {
         didSet { updateView() }
     }

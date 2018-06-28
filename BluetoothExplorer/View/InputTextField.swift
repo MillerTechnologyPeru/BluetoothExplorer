@@ -11,6 +11,22 @@ import UIKit
 
 class InputTextField: UITextField {
     
+    // MARK: - Properties
+    
+    var posibleValues = [String]() {
+        didSet {
+            inputView = (posibleValues.count == 0) ? nil : pickerView
+        }
+    }
+    
+    private lazy var pickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.delegate = self
+        return picker
+    }()
+    
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addToolbar()
@@ -21,7 +37,9 @@ class InputTextField: UITextField {
         addToolbar()
     }
     
-    func addToolbar() {
+    // MARK: - Methods
+    
+    private func addToolbar() {
         
         let toolbar = UIToolbar()
         toolbar.isTranslucent = true
@@ -38,6 +56,34 @@ class InputTextField: UITextField {
     @objc func doneAction() {
         
         self.resignFirstResponder()
+    }
+    
+}
+
+extension InputTextField: UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return posibleValues.count
+    }
+    
+}
+
+extension InputTextField: UIPickerViewDelegate {
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return posibleValues[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        text = posibleValues[row]
     }
     
 }

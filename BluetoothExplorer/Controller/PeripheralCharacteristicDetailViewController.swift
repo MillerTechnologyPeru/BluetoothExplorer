@@ -186,6 +186,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case PnPIDCharacteristicViewController.uuid:
             viewController = load(PnPIDCharacteristicViewController.self)
             
+        case HardwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(HardwareRevisionStringCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

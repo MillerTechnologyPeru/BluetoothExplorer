@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */; };
+		35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */; };
 		35335A0520E1316F006ABD4D /* ModelNumberCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */; };
 		35335A0720E13203006ABD4D /* ModelNumberCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A0620E13203006ABD4D /* ModelNumberCharacteristicViewController.swift */; };
 		35335A1220E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */; };
@@ -186,6 +188,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HardwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ModelNumberCharacteristic.storyboard; sourceTree = "<group>"; };
 		35335A0620E13203006ABD4D /* ModelNumberCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelNumberCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FirmwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -312,6 +316,7 @@
 				35335A1D20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard */,
 				35335A2320E16D4F006ABD4D /* DateTimeCharacteristic.storyboard */,
 				353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */,
+				35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */,
 				6E98B69C2059B51000B6F016 /* Assets.xcassets */,
 				6E98B6A12059B51000B6F016 /* Info.plist */,
 				6E8C68EF20DA04D400232169 /* Async.swift */,
@@ -405,6 +410,7 @@
 				35335A2C20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift */,
 				353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */,
 				35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */,
+				35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */,
 			);
 			path = "GATT Characteristic Editors";
 			sourceTree = "<group>";
@@ -621,6 +627,7 @@
 				6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */,
 				6E98B6A02059B51000B6F016 /* LaunchScreen.storyboard in Resources */,
 				35335A0520E1316F006ABD4D /* ModelNumberCharacteristic.storyboard in Resources */,
+				35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */,
 				6E98B69D2059B51000B6F016 /* Assets.xcassets in Resources */,
 				6E98B69B2059B51000B6F016 /* Main.storyboard in Resources */,
 				35335A1E20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard in Resources */,
@@ -705,6 +712,7 @@
 				6E13E8E320D9D8290007111B /* TableViewController.swift in Sources */,
 				35335A1820E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift in Sources */,
 				35335A2D20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift in Sources */,
+				35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */,
 				6EDE00D720DB60D9002E951A /* CharacteristicViewController.swift in Sources */,
 				6EDE00C620DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift in Sources */,
 				6EFB3E8D20D3ECF200364CA0 /* Model.xcdatamodeld in Sources */,

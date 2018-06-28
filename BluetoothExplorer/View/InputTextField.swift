@@ -37,6 +37,12 @@ class InputTextField: UITextField {
         addToolbar()
     }
     
+    // MARK: - Overrides
+    
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return posibleValues.count == 0
+    }
+    
     // MARK: - Methods
     
     private func addToolbar() {

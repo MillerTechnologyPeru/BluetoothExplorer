@@ -12,7 +12,7 @@ import CoreData
 import Bluetooth
 import GATT
 
-final class BatteryLevelCharacteristicViewController: UIViewController {
+final class BatteryLevelCharacteristicViewController: UIViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - IB Outlets
     
@@ -65,19 +65,5 @@ final class BatteryLevelCharacteristicViewController: UIViewController {
     func updatePercentageText() {
         
         textLabel.text = value.description
-    }
-}
-
-// MARK: - CharacteristicViewController
-
-extension BatteryLevelCharacteristicViewController: CharacteristicViewController {
-    
-    static func fromStoryboard() -> BatteryLevelCharacteristicViewController {
-        
-        let storyboard = UIStoryboard(name: "BatteryLevelCharacteristic", bundle: .main)
-        
-        let viewController = storyboard.instantiateInitialViewController() as! BatteryLevelCharacteristicViewController
-        
-        return viewController
     }
 }

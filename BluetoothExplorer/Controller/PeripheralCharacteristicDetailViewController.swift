@@ -165,8 +165,35 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case BatteryLevelCharacteristicViewController.uuid:
             viewController = load(BatteryLevelCharacteristicViewController.self)
             
+        case ModelNumberCharacteristicViewController.uuid:
+            viewController = load(ModelNumberCharacteristicViewController.self)
+            
+        case FirmwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(FirmwareRevisionStringCharacteristicViewController.self)
+            
+        case SoftwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(SoftwareRevisionStringCharacteristicViewController.self)
+            
+        case ManufacturerNameStringCharacteristicViewController.uuid:
+            viewController = load(ManufacturerNameStringCharacteristicViewController.self)
+
         case DateTimeCharacteristicViewController.uuid:
             viewController = load(DateTimeCharacteristicViewController.self)
+            
+        case SystemIDCharacteristicViewController.uuid:
+            viewController = load(SystemIDCharacteristicViewController.self)
+            
+        case PnPIDCharacteristicViewController.uuid:
+            viewController = load(PnPIDCharacteristicViewController.self)
+            
+        case HardwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(HardwareRevisionStringCharacteristicViewController.self)
+            
+        case SerialNumberStringCharacteristicViewController.uuid:
+            viewController = load(SerialNumberStringCharacteristicViewController.self)
+            
+        case AlertCategoryCharacteristicViewController.uuid:
+            viewController = load(AlertCategoryCharacteristicViewController.self)
             
         default:
             viewController = nil

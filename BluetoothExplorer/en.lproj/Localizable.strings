@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  BluetoothExplorer
+
+  Created by Carlos Duclos on 6/28/18.
+  Copyright © 2018 PureSwift. All rights reserved.
+*/
+
+"gattAlertCategorySimpleAlert" = "Simple Alert";
+"gattAlertCategoryEmail" = "Email";
+"gattAlertCategoryNews" = "News";
+"gattAlertCategoryCall" = "Call";
+"gattAlertCategoryMissedCall" = "Missed Call";
+"gattAlertCategorySMS" = "SMS";
+"gattAlertCategoryVoiceMail" = "Voice Mail";
+"gattAlertCategorySchedule" = "Schedule";
+"gattAlertCategoryHighPrioritized" = "High Prioritized Alert";
+"gattAlertCategoryInstantMessage" = "Instant Message";
+

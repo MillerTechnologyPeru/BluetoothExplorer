@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Hardware Revision String Characteristic View Controller-->
+        <scene sceneID="6cS-WH-OpN">
+            <objects>
+                <viewController storyboardIdentifier="HardwareRevisionStringCharacteristicViewController" id="hwq-Ei-mvG" customClass="HardwareRevisionStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0mg-E1-MtD"/>
+                        <viewControllerLayoutGuide type="bottom" id="BZZ-aO-RG5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KoJ-CS-B9C">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Hardware Revision String" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z5D-ge-CGb" userLabel="Hardware Revision String">
+                                <rect key="frame" x="16" y="36" width="343" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="KkH-sC-ZWu"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textFieldEditingChanged:" destination="hwq-Ei-mvG" eventType="editingChanged" id="J6r-rw-s1N"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="z5D-ge-CGb" firstAttribute="leading" secondItem="KoJ-CS-B9C" secondAttribute="leading" constant="16" id="0yB-PO-ztd"/>
+                            <constraint firstItem="z5D-ge-CGb" firstAttribute="top" secondItem="0mg-E1-MtD" secondAttribute="bottom" constant="16" id="FK8-Pw-U3s"/>
+                            <constraint firstAttribute="trailing" secondItem="z5D-ge-CGb" secondAttribute="trailing" constant="16" id="Peu-cE-hL1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="hardwareTextField" destination="z5D-ge-CGb" id="9X9-hZ-rxW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T96-ZU-Taw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="234" y="-259"/>
+        </scene>
+    </scenes>
+</document>

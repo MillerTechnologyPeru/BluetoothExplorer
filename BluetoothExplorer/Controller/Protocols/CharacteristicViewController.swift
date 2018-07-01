@@ -35,5 +35,14 @@ extension CharacteristicViewController {
 
 let supportedCharacteristicViewControllers: [BluetoothUUID] = [
     .batteryLevel,
-    .dateTime
+    .manufacturerNameString,
+    .modelNumberString,
+    .dateTime,
+    .firmwareRevisionString,
+    .softwareRevisionString,
+    .hardwareRevisionString,
+    .serialNumberString,
+    .systemId,
+    .pnpId,
+    .alertCategoryId
 ]

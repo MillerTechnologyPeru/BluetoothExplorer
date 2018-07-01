@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="D6t-t0-huC">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Serial Number String-->
+        <scene sceneID="PkM-MD-Pe3">
+            <objects>
+                <viewController storyboardIdentifier="SerialNumberStringCharacteristicViewController" title="Serial Number String" id="D6t-t0-huC" customClass="SerialNumberStringCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WZE-Xa-6dP"/>
+                        <viewControllerLayoutGuide type="bottom" id="936-2K-4e4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bX2-mY-Cpf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Serial Number String" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="odc-Sh-AcG" userLabel="Serial Number String">
+                                <rect key="frame" x="16" y="36" width="343" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="MSw-nJ-QkX"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textFieldEditingChanged:" destination="D6t-t0-huC" eventType="editingChanged" id="epF-CX-YZ0"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="odc-Sh-AcG" secondAttribute="trailing" constant="16" id="5cM-Zh-DjO"/>
+                            <constraint firstItem="odc-Sh-AcG" firstAttribute="leading" secondItem="bX2-mY-Cpf" secondAttribute="leading" constant="16" id="Hqu-E0-qez"/>
+                            <constraint firstItem="odc-Sh-AcG" firstAttribute="top" secondItem="WZE-Xa-6dP" secondAttribute="bottom" constant="16" id="Igu-xq-BXv"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="serialNumberTextField" destination="odc-Sh-AcG" id="hba-bg-JuV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n7g-1A-1Hu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="234" y="-259"/>
+        </scene>
+    </scenes>
+</document>

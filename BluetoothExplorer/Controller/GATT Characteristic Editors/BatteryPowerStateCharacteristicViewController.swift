@@ -1,19 +1,20 @@
 //
-//  BatteryPowerStateCharacteristicViewController.swift
+//  PnPIDCharacteristicViewController.swift
 //  BluetoothExplorer
 //
-//  Created by Carlos Duclos on 7/2/18.
+//  Created by Carlos Duclos on 6/26/18.
 //  Copyright © 2018 PureSwift. All rights reserved.
 //
-
-import Foundation
 
 import UIKit
 import Bluetooth
 
-final class PnPIDCharacteristicViewController: UITableViewController, CharacteristicViewController, InstantiableViewController {
+final class BatteryPowerStateCharacteristicViewController: UITableViewController, CharacteristicViewController, InstantiableViewController {
     
-    typealias VendorIDSource = GATTPnPID.VendorIDSource
+    typealias BatteryPresentState = GATTBatteryPowerState.BatteryPresentState
+    typealias BatteryDischargeState = GATTBatteryPowerState.BatteryDischargeState
+    typealias BatteryChargeState = GATTBatteryPowerState.BatteryChargeState
+    typealias BatteryLevelState = GATTBatteryPowerState.BatteryLevelState
     
     // MARK: - Properties
     
@@ -21,19 +22,19 @@ final class PnPIDCharacteristicViewController: UITableViewController, Characteri
     
     private var fields = [Field]()
     
-    var value = GATTPnPID(vendorIdSource: .fromAssignedNumbersDocument, vendorId: 0, productId: 0, productVersion: 0)
+    var value = GATTBatteryPowerState(presentState: .unknown, dischargeState: .unknown, chargeState: .unknown, levelState: .unknown)
     
-    var valueDidChange: ((GATTPnPID) -> ())?
+    var valueDidChange: ((GATTBatteryPowerState) -> ())?
     
     // MARK: - Loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fields = [.vendorIdSource("\(value.vendorIdSource)"),
-                  .vendorId("\(value.vendorId)"),
-                  .productId("\(value.productId)"),
-                  .productVersionId("\(value.productVersion)"),]
+        fields = [.present("\(value.presentState.rawValue)"),
+                  .discharge("\(value.dischargeState.rawValue)"),
+                  .charge("\(value.chargeState.rawValue)"),
+                  .level("\(value.levelState.rawValue)")]
         
         tableView.register(UINib(nibName: cellIdentifier, bundle: nil), forCellReuseIdentifier: cellIdentifier)
         tableView.separatorStyle = .none
@@ -68,101 +69,72 @@ final class PnPIDCharacteristicViewController: UITableViewController, Characteri
         
         cell.inputTextView.value = field.bluetoothValue
         cell.inputTextView.posibleInputValues = field.posibleValues
-//        cell.inputTextView.isEnabled = valueDidChange != nil
+        cell.inputTextView.isEnabled = valueDidChange != nil
         cell.inputTextView.keyboardType = field.keyboardType
         cell.inputTextView.fieldLabelText = field.title
         cell.inputTextView.placeholder = field.title
-        cell.inputTextView.validator = { value in
-            
-            guard value.trim() != ""
-                else { return .none }
-            
-            switch field {
-            case .vendorId(let value):
-                
-                guard let _ = UInt16(value)
-                    else { return .error("Maximum value is 0xFFFF)") }
-                
-            case .productId(let value):
-                
-                guard let _ = UInt16(value)
-                    else { return .error("Maximum value is 0xFFFF)") }
-                
-            case .productVersionId(let value):
-                
-                guard let _ = UInt16(value)
-                    else { return .error("Maximum value is 0xFFFF)") }
-                
-            default:
-                break
-            }
-            
-            return .none
-        }
     }
 }
 
-extension PnPIDCharacteristicViewController {
+extension BatteryPowerStateCharacteristicViewController {
     
     enum Field {
         
-        case vendorIdSource(String)
-        case vendorId(String)
-        case productId(String)
-        case productVersionId(String)
+        case present(String)
+        case discharge(String)
+        case charge(String)
+        case level(String)
         
         var title: String {
             
             switch self {
-            case .vendorIdSource:
-                return "Vendor ID Source"
-                
-            case .vendorId:
-                return "Vendor ID"
-                
-            case .productId:
-                return "Product ID"
-                
-            case .productVersionId:
-                return "Product Version ID"
+            case .present: return "Present State"
+            case .discharge: return "Discharge State"
+            case .charge: return "Charge State"
+            case .level: return "Level State"
             }
         }
         
         var bluetoothValue: String {
+            
             switch self {
-            case .vendorIdSource(let value):
-                return value
-                
-            case .vendorId(let value):
-                return value
-                
-            case .productId(let value):
-                return value
-                
-            case .productVersionId(let value):
-                return value
+            case .present(let value): return value
+            case .discharge(let value): return value
+            case .charge(let value): return value
+            case .level(let value): return value
             }
         }
         
         var posibleValues: [String] {
             switch self {
-            case .vendorIdSource:
-                return [VendorIDSource.fromAssignedNumbersDocument.rawValue.description,
-                        VendorIDSource.fromVendorIDValue.rawValue.description]
+            case .present:
+                return [BatteryPresentState.unknown.rawValue.description,
+                        BatteryPresentState.notSupported.rawValue.description,
+                        BatteryPresentState.notPresent.rawValue.description,
+                        BatteryPresentState.present.rawValue.description]
                 
-            default:
-                return []
+            case .discharge:
+                return [BatteryDischargeState.unknown.rawValue.description,
+                        BatteryDischargeState.notSupported.rawValue.description,
+                        BatteryDischargeState.notDischarging.rawValue.description,
+                        BatteryDischargeState.discharging.rawValue.description]
+                
+            case .charge:
+                return [BatteryChargeState.unknown.rawValue.description,
+                        BatteryChargeState.notChargeable.rawValue.description,
+                        BatteryChargeState.notCharging.rawValue.description,
+                        BatteryChargeState.charging.rawValue.description]
+                
+            case .level:
+                return [BatteryLevelState.unknown.rawValue.description,
+                        BatteryLevelState.notSupported.rawValue.description,
+                        BatteryLevelState.good.rawValue.description,
+                        BatteryLevelState.criticallyLow.rawValue.description]
+                
+            default: return []
             }
         }
         
-        var keyboardType: UIKeyboardType {
-            switch self {
-            case .vendorIdSource:
-                return .default
-                
-            default:
-                return.numberPad
-            }
-        }
+        var keyboardType: UIKeyboardType { return .default }
     }
 }

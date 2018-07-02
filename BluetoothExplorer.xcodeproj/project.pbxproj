@@ -7,6 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */; };
+		35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */; };
+		35317A3920E5485400D31493 /* SerialNumberStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */; };
+		35317A3B20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A3A20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift */; };
+		35317A3F20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A3E20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard */; };
+		35317A4820E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A4720E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift */; };
+		35335A0520E1316F006ABD4D /* ModelNumberCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */; };
+		35335A0720E13203006ABD4D /* ModelNumberCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A0620E13203006ABD4D /* ModelNumberCharacteristicViewController.swift */; };
+		35335A1220E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */; };
+		35335A1420E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A1320E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift */; };
+		35335A1620E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A1520E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard */; };
+		35335A1820E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A1720E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift */; };
+		35335A1A20E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A1920E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard */; };
+		35335A1C20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A1B20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift */; };
+		35335A1E20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A1D20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard */; };
+		35335A2B20E16D4F006ABD4D /* DateTimeCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35335A2320E16D4F006ABD4D /* DateTimeCharacteristic.storyboard */; };
+		35335A2D20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35335A2C20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift */; };
+		353557C720E28CB700543440 /* InstantiableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557C620E28CB700543440 /* InstantiableViewController.swift */; };
+		353557D020E28CD200543440 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557CF20E28CD200543440 /* String.swift */; };
+		353557D620E2D15000543440 /* PnPIDCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */; };
+		353557DF20E2D17300543440 /* PnPIDCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */; };
+		35CA5E0920E5740E00F6B589 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E0820E5740E00F6B589 /* Integer.swift */; };
+		35CA5E1220E5777000F6B589 /* GATTAlertCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */; };
+		35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35CA5E1720E579B100F6B589 /* Localizable.strings */; };
+		35CA5E3D20E58F5400F6B589 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E3C20E58F5300F6B589 /* R.generated.swift */; };
+		35F5BB5A20E3DAC500AC5FF1 /* InputTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35F5BB5920E3DAC500AC5FF1 /* InputTextView.xib */; };
+		35F5BB6320E3DB8A00AC5FF1 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F5BB6220E3DB8A00AC5FF1 /* InputTextView.swift */; };
+		35F5BB6520E3DC0000AC5FF1 /* NibDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F5BB6420E3DC0000AC5FF1 /* NibDesignable.swift */; };
+		35FE560120E41F5B0052C0C0 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE560020E41F5B0052C0C0 /* InputTextField.swift */; };
+		35FE560C20E434860052C0C0 /* SystemIDCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */; };
+		35FE560E20E435860052C0C0 /* InputTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35FE560D20E435860052C0C0 /* InputTextViewCell.xib */; };
+		35FE561020E436CA0052C0C0 /* InputTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE560F20E436CA0052C0C0 /* InputTextViewCell.swift */; };
+		6E10553520E9CDFA00D0CD0D /* Rswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 35CA5E2520E5865300F6B589 /* Rswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E13E8CC20D9C7270007111B /* AdvertisementDataManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E13E8CB20D9C7270007111B /* AdvertisementDataManagedObject.swift */; };
 		6E13E8E320D9D8290007111B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E13E8E220D9D8290007111B /* TableViewController.swift */; };
 		6E353A4620D7FDB200E94B73 /* CoreDataEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E353A4520D7FDB200E94B73 /* CoreDataEncodable.swift */; };
@@ -55,6 +88,41 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		35CA5E2420E5865300F6B589 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D592464E1C117A55007F94C7;
+			remoteInfo = "Rswift-iOS";
+		};
+		35CA5E2620E5865300F6B589 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D59246581C117A55007F94C7;
+			remoteInfo = "RswiftTests-iOS";
+		};
+		35CA5E2820E5865300F6B589 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 806E69921C42BD9C00DE3A8B;
+			remoteInfo = "Rswift-tvOS";
+		};
+		35CA5E2A20E5865300F6B589 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 806E699B1C42BD9C00DE3A8B;
+			remoteInfo = "RswiftTests-tvOS";
+		};
+		6E10553320E9CDEF00D0CD0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D592464D1C117A55007F94C7;
+			remoteInfo = "Rswift-iOS";
+		};
 		6EC0D99E20DDF5E0005FB128 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */;
@@ -155,6 +223,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6E10553520E9CDFA00D0CD0D /* Rswift.framework in Embed Frameworks */,
 				6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */,
 				6EC0D9BF20DDF871005FB128 /* Bluetooth.framework in Embed Frameworks */,
 			);
@@ -164,6 +233,40 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HardwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SerialNumberStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35317A3A20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialNumberStringCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35317A3E20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlertCategoryCharacteristic.storyboard; sourceTree = "<group>"; };
+		35317A4720E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCategoryCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ModelNumberCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A0620E13203006ABD4D /* ModelNumberCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelNumberCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FirmwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A1320E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35335A1520E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SoftwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A1720E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35335A1920E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManufacturerNameStringCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A1B20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManufacturerNameStringCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35335A1D20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SystemIDCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A2320E16D4F006ABD4D /* DateTimeCharacteristic.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DateTimeCharacteristic.storyboard; sourceTree = "<group>"; };
+		35335A2C20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeCharacteristicViewController.swift; sourceTree = "<group>"; };
+		353557C620E28CB700543440 /* InstantiableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstantiableViewController.swift; sourceTree = "<group>"; };
+		353557CF20E28CD200543440 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PnPIDCharacteristic.storyboard; sourceTree = "<group>"; };
+		353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PnPIDCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35CA5E0820E5740E00F6B589 /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
+		35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTAlertCategory.swift; sourceTree = "<group>"; };
+		35CA5E1620E579B100F6B589 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		35CA5E1A20E584A100F6B589 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = Carthage/Build/iOS/Rswift.framework; sourceTree = "<group>"; };
+		35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = R.swift.Library.xcodeproj; path = Carthage/Checkouts/R.swift.Library/R.swift.Library.xcodeproj; sourceTree = "<group>"; };
+		35CA5E3C20E58F5300F6B589 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		35F5BB5920E3DAC500AC5FF1 /* InputTextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputTextView.xib; sourceTree = "<group>"; };
+		35F5BB6220E3DB8A00AC5FF1 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
+		35F5BB6420E3DC0000AC5FF1 /* NibDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NibDesignable.swift; sourceTree = "<group>"; };
+		35FE560020E41F5B0052C0C0 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemIDCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35FE560D20E435860052C0C0 /* InputTextViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputTextViewCell.xib; sourceTree = "<group>"; };
+		35FE560F20E436CA0052C0C0 /* InputTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewCell.swift; sourceTree = "<group>"; };
 		6E13E8CB20D9C7270007111B /* AdvertisementDataManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementDataManagedObject.swift; sourceTree = "<group>"; };
 		6E13E8E220D9D8290007111B /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		6E353A4520D7FDB200E94B73 /* CoreDataEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataEncodable.swift; sourceTree = "<group>"; };
@@ -233,6 +336,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		35CA5E1E20E5865200F6B589 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				35CA5E2520E5865300F6B589 /* Rswift.framework */,
+				35CA5E2720E5865300F6B589 /* RswiftTests-iOS.xctest */,
+				35CA5E2920E5865300F6B589 /* Rswift.framework */,
+				35CA5E2B20E5865300F6B589 /* RswiftTests-tvOS.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6E8C68DF20DA02AA00232169 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +363,7 @@
 			children = (
 				6E8C68EC20DA030900232169 /* ActivityIndicatorViewController.swift */,
 				6EDE00D620DB60D9002E951A /* CharacteristicViewController.swift */,
+				353557C620E28CB700543440 /* InstantiableViewController.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -260,8 +375,19 @@
 				6E98B69E2059B51000B6F016 /* LaunchScreen.storyboard */,
 				6E98B6992059B51000B6F016 /* Main.storyboard */,
 				6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */,
+				35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */,
+				35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */,
+				35335A1520E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard */,
+				35335A1920E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard */,
+				35335A1D20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard */,
+				35335A2320E16D4F006ABD4D /* DateTimeCharacteristic.storyboard */,
+				353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */,
+				35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */,
+				35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */,
+				35317A3E20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard */,
 				6E98B69C2059B51000B6F016 /* Assets.xcassets */,
 				6E98B6A12059B51000B6F016 /* Info.plist */,
+				35CA5E1720E579B100F6B589 /* Localizable.strings */,
 				6E8C68EF20DA04D400232169 /* Async.swift */,
 				6EDE00C720DB0EA8002E951A /* Extensions */,
 				6EDE00D020DB47C6002E951A /* View */,
@@ -322,6 +448,9 @@
 			isa = PBXGroup;
 			children = (
 				6EDE00C820DB0EB5002E951A /* Data.swift */,
+				353557CF20E28CD200543440 /* String.swift */,
+				35CA5E0820E5740E00F6B589 /* Integer.swift */,
+				35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -331,6 +460,12 @@
 			children = (
 				6EC0D9C620DE076A005FB128 /* Appearance.swift */,
 				6EDE00D120DB47FD002E951A /* CustomButton.swift */,
+				35F5BB5920E3DAC500AC5FF1 /* InputTextView.xib */,
+				35F5BB6220E3DB8A00AC5FF1 /* InputTextView.swift */,
+				35F5BB6420E3DC0000AC5FF1 /* NibDesignable.swift */,
+				35FE560020E41F5B0052C0C0 /* InputTextField.swift */,
+				35FE560D20E435860052C0C0 /* InputTextViewCell.xib */,
+				35FE560F20E436CA0052C0C0 /* InputTextViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -339,6 +474,16 @@
 			isa = PBXGroup;
 			children = (
 				6EDE00D420DB4C84002E951A /* BatteryLevelCharacteristicViewController.swift */,
+				35335A0620E13203006ABD4D /* ModelNumberCharacteristicViewController.swift */,
+				35335A1320E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift */,
+				35335A1720E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift */,
+				35335A1B20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift */,
+				35335A2C20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift */,
+				353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */,
+				35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */,
+				35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */,
+				35317A3A20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift */,
+				35317A4720E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift */,
 			);
 			path = "GATT Characteristic Editors";
 			sourceTree = "<group>";
@@ -346,8 +491,10 @@
 		6EE84D7A1CAF419D00A40C4D = {
 			isa = PBXGroup;
 			children = (
+				35CA5E3C20E58F5300F6B589 /* R.generated.swift */,
 				6ECCCC5A20E0866E0054663C /* Cartfile */,
 				6ECCCC5B20E091060054663C /* FDStackView */,
+				35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */,
 				6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */,
 				6EC0D99620DDF5E0005FB128 /* Bluetooth.xcodeproj */,
 				6E98B6942059B51000B6F016 /* BluetoothExplorer */,
@@ -367,6 +514,7 @@
 		6EFB3E6720D3EB0600364CA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				35CA5E1A20E584A100F6B589 /* Rswift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -412,6 +560,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E98B6A42059B51000B6F016 /* Build configuration list for PBXNativeTarget "BluetoothExplorer" */;
 			buildPhases = (
+				35CA5E1920E5845700F6B589 /* R swift */,
 				6E98B68F2059B51000B6F016 /* Sources */,
 				6E98B6902059B51000B6F016 /* Frameworks */,
 				6E98B6912059B51000B6F016 /* Resources */,
@@ -421,6 +570,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E10553420E9CDEF00D0CD0D /* PBXTargetDependency */,
 				6EC0D9BD20DDF5F6005FB128 /* PBXTargetDependency */,
 				6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */,
 				6EC0D9C120DDF871005FB128 /* PBXTargetDependency */,
@@ -473,6 +623,10 @@
 					ProductGroup = 6EC0D9A920DDF5E8005FB128 /* Products */;
 					ProjectRef = 6EC0D9A820DDF5E8005FB128 /* GATT.xcodeproj */;
 				},
+				{
+					ProductGroup = 35CA5E1E20E5865200F6B589 /* Products */;
+					ProjectRef = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -482,6 +636,34 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		35CA5E2520E5865300F6B589 /* Rswift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Rswift.framework;
+			remoteRef = 35CA5E2420E5865300F6B589 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		35CA5E2720E5865300F6B589 /* RswiftTests-iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "RswiftTests-iOS.xctest";
+			remoteRef = 35CA5E2620E5865300F6B589 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		35CA5E2920E5865300F6B589 /* Rswift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Rswift.framework;
+			remoteRef = 35CA5E2820E5865300F6B589 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		35CA5E2B20E5865300F6B589 /* RswiftTests-tvOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "RswiftTests-tvOS.xctest";
+			remoteRef = 35CA5E2A20E5865300F6B589 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		6EC0D99F20DDF5E0005FB128 /* Bluetooth.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -552,16 +734,43 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */,
 				6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */,
 				6E98B6A02059B51000B6F016 /* LaunchScreen.storyboard in Resources */,
+				35335A0520E1316F006ABD4D /* ModelNumberCharacteristic.storyboard in Resources */,
+				35317A3920E5485400D31493 /* SerialNumberStringCharacteristic.storyboard in Resources */,
+				35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */,
 				6E98B69D2059B51000B6F016 /* Assets.xcassets in Resources */,
 				6E98B69B2059B51000B6F016 /* Main.storyboard in Resources */,
+				35335A1E20E14EFA006ABD4D /* SystemIDCharacteristic.storyboard in Resources */,
+				353557D620E2D15000543440 /* PnPIDCharacteristic.storyboard in Resources */,
+				35FE560E20E435860052C0C0 /* InputTextViewCell.xib in Resources */,
+				35335A1A20E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard in Resources */,
+				35335A1220E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard in Resources */,
+				35317A3F20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard in Resources */,
+				35335A1620E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard in Resources */,
+				35F5BB5A20E3DAC500AC5FF1 /* InputTextView.xib in Resources */,
+				35335A2B20E16D4F006ABD4D /* DateTimeCharacteristic.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		35CA5E1920E5845700F6B589 /* R swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "R swift";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/rswift\" generate \"$SRCROOT\"";
+		};
 		6ECCCC5920E078F10054663C /* Increment Build */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -586,6 +795,10 @@
 				6E13E8CC20D9C7270007111B /* AdvertisementDataManagedObject.swift in Sources */,
 				6E8C68E920DA02DA00232169 /* PresentPopover.swift in Sources */,
 				6EFB3E9520D3EFFB00364CA0 /* PeripheralManagedObject.swift in Sources */,
+				35335A1C20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift in Sources */,
+				35FE561020E436CA0052C0C0 /* InputTextViewCell.swift in Sources */,
+				35CA5E1220E5777000F6B589 /* GATTAlertCategory.swift in Sources */,
+				35F5BB6320E3DB8A00AC5FF1 /* InputTextView.swift in Sources */,
 				6ECCCC6E20E091070054663C /* FDStackView.m in Sources */,
 				6E8C68F220DA340C00232169 /* PeripheralServicesViewController.swift in Sources */,
 				6E98B6982059B51000B6F016 /* PeripheralsViewController.swift in Sources */,
@@ -593,8 +806,11 @@
 				6EFD557E20D83B8F003B75A1 /* ServiceManagedObject.swift in Sources */,
 				6EDE00C920DB0EB5002E951A /* Data.swift in Sources */,
 				6EFB3E2520D3E5A600364CA0 /* DeviceStore.swift in Sources */,
+				353557C720E28CB700543440 /* InstantiableViewController.swift in Sources */,
 				6ECCCC7320E091070054663C /* FDGapLayoutGuide.m in Sources */,
+				35335A1420E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift in Sources */,
 				6E8C68EA20DA02DA00232169 /* UIAlertAction.swift in Sources */,
+				35335A0720E13203006ABD4D /* ModelNumberCharacteristicViewController.swift in Sources */,
 				6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */,
 				6EFB3E9720D3F0D700364CA0 /* CentralManagedObject.swift in Sources */,
 				6EFD558420D83C76003B75A1 /* CharacteristicManagedObject.swift in Sources */,
@@ -602,9 +818,12 @@
 				6E94B2AF20DAC53200404FD9 /* PeripheralCharacteristicsViewController.swift in Sources */,
 				6E353A4C20D7FDC900E94B73 /* CoreDataDecodable.swift in Sources */,
 				6E8C68F020DA04D500232169 /* Async.swift in Sources */,
+				35317A4820E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift in Sources */,
 				6E353A4620D7FDB200E94B73 /* CoreDataEncodable.swift in Sources */,
 				6EDE00D220DB47FD002E951A /* CustomButton.swift in Sources */,
+				353557D020E28CD200543440 /* String.swift in Sources */,
 				6EFB3E9120D3EF6C00364CA0 /* CoreDataExtensions.swift in Sources */,
+				35CA5E0920E5740E00F6B589 /* Integer.swift in Sources */,
 				6EFB3E9B20D40F2000364CA0 /* PeripheralModel.swift in Sources */,
 				6E8C68ED20DA030A00232169 /* ActivityIndicatorViewController.swift in Sources */,
 				6ECCCC7120E091070054663C /* FDStackViewDistributionLayoutArrangement.m in Sources */,
@@ -612,11 +831,20 @@
 				6EFB3E9320D3EF9A00364CA0 /* ScanDataManagedObject.swift in Sources */,
 				6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */,
 				6E98B6962059B51000B6F016 /* AppDelegate.swift in Sources */,
+				353557DF20E2D17300543440 /* PnPIDCharacteristicViewController.swift in Sources */,
+				35F5BB6520E3DC0000AC5FF1 /* NibDesignable.swift in Sources */,
+				35FE560C20E434860052C0C0 /* SystemIDCharacteristicViewController.swift in Sources */,
 				6E8C68E520DA02B600232169 /* ErrorAlert.swift in Sources */,
+				35CA5E3D20E58F5400F6B589 /* R.generated.swift in Sources */,
+				35FE560120E41F5B0052C0C0 /* InputTextField.swift in Sources */,
 				6ECCCC7020E091070054663C /* FDStackViewAlignmentLayoutArrangement.m in Sources */,
 				6ECCCC7220E091070054663C /* FDStackViewLayoutArrangement.m in Sources */,
+				35317A3B20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift in Sources */,
 				6E8C68EB20DA02DA00232169 /* AdaptiveNavigation.swift in Sources */,
 				6E13E8E320D9D8290007111B /* TableViewController.swift in Sources */,
+				35335A1820E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift in Sources */,
+				35335A2D20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift in Sources */,
+				35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */,
 				6EDE00D720DB60D9002E951A /* CharacteristicViewController.swift in Sources */,
 				6EDE00C620DB0D4F002E951A /* PeripheralCharacteristicDetailViewController.swift in Sources */,
 				6EFB3E8D20D3ECF200364CA0 /* Model.xcdatamodeld in Sources */,
@@ -626,6 +854,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6E10553420E9CDEF00D0CD0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Rswift-iOS";
+			targetProxy = 6E10553320E9CDEF00D0CD0D /* PBXContainerItemProxy */;
+		};
 		6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "GATT-iOS";
@@ -649,6 +882,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		35CA5E1720E579B100F6B589 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				35CA5E1620E579B100F6B589 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		6E98B6992059B51000B6F016 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -680,7 +921,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
+				FRAMEWORK_SEARCH_PATHS = (
+					$SRCROOT/../Carthage/Build/iOS,
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -705,7 +949,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
+				FRAMEWORK_SEARCH_PATHS = (
+					$SRCROOT/../Carthage/Build/iOS,
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

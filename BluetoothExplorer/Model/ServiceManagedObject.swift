@@ -53,7 +53,7 @@ public extension ServiceManagedObject {
 
 public extension ServiceManagedObject {
     
-    func update(_ value: CentralManager.Service) {
+    func update(_ value: Service) {
         
         self.uuid = value.uuid.rawValue
         self.isPrimary = value.isPrimary
@@ -62,7 +62,7 @@ public extension ServiceManagedObject {
 
 // MARK: - CoreData Decodable
 
-extension CentralManager.Service: CoreDataDecodable {
+extension Service: CoreDataDecodable {
     
     public init(managedObject: ServiceManagedObject) {
         

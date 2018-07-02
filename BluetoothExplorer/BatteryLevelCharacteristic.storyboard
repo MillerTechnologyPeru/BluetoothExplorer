@@ -12,7 +12,7 @@
         <!--Battery Level-->
         <scene sceneID="7a5-5w-4K9">
             <objects>
-                <viewController title="Battery Level" id="9ns-IV-lIP" customClass="BatteryLevelCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BatteryLevelCharacteristicViewController" title="Battery Level" id="9ns-IV-lIP" customClass="BatteryLevelCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RBe-uA-Gxd"/>
                         <viewControllerLayoutGuide type="bottom" id="dRZ-uC-PD8"/>

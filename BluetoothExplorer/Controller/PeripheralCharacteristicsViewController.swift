@@ -46,7 +46,7 @@ final class PeripheralCharacteristicsViewController: TableViewController {
         guard let managedObject = self.service
             else { fatalError("View controller not configured") }
         
-        let service = CentralManager.Service(managedObject: managedObject)
+        let service = Service(managedObject: managedObject)
         
         self.title = service.uuid.name ?? service.uuid.rawValue
     }

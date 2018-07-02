@@ -141,9 +141,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         let canWrite = characteristic.properties.contains(.write)
             || characteristic.properties.contains(.writeWithoutResponse)
         
-        func load <T: CharacteristicViewController & UIViewController> (_ type: T.Type) -> T {
+        func load <T: CharacteristicViewController & UIViewController & InstantiableViewController> (_ type: T.Type) -> T {
             
-            let viewController = T.fromStoryboard()
+            let viewController: T = .instantiate()
             
             if let data = self.value, let value = T.CharacteristicValue(data: data) {
                 
@@ -164,6 +164,36 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
             
         case BatteryLevelCharacteristicViewController.uuid:
             viewController = load(BatteryLevelCharacteristicViewController.self)
+            
+        case ModelNumberCharacteristicViewController.uuid:
+            viewController = load(ModelNumberCharacteristicViewController.self)
+            
+        case FirmwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(FirmwareRevisionStringCharacteristicViewController.self)
+            
+        case SoftwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(SoftwareRevisionStringCharacteristicViewController.self)
+            
+        case ManufacturerNameStringCharacteristicViewController.uuid:
+            viewController = load(ManufacturerNameStringCharacteristicViewController.self)
+
+        case DateTimeCharacteristicViewController.uuid:
+            viewController = load(DateTimeCharacteristicViewController.self)
+            
+        case SystemIDCharacteristicViewController.uuid:
+            viewController = load(SystemIDCharacteristicViewController.self)
+            
+        case PnPIDCharacteristicViewController.uuid:
+            viewController = load(PnPIDCharacteristicViewController.self)
+            
+        case HardwareRevisionStringCharacteristicViewController.uuid:
+            viewController = load(HardwareRevisionStringCharacteristicViewController.self)
+            
+        case SerialNumberStringCharacteristicViewController.uuid:
+            viewController = load(SerialNumberStringCharacteristicViewController.self)
+            
+        case AlertCategoryCharacteristicViewController.uuid:
+            viewController = load(AlertCategoryCharacteristicViewController.self)
             
         default:
             viewController = nil

@@ -223,7 +223,7 @@ public final class DeviceStore {
         // perform BLE operation
         let peripheral = Peripheral(identifier: serviceManagedObject.peripheral.attributesView.identifier)
         
-        let foundCharacteristics: [CentralManager.Characteristic] = try device(for: peripheral) {
+        let foundCharacteristics: [Characteristic] = try device(for: peripheral) {
             
             let services = try centralManager.discoverServices(for: peripheral)
             

@@ -31,7 +31,6 @@
 		35CA5E0920E5740E00F6B589 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E0820E5740E00F6B589 /* Integer.swift */; };
 		35CA5E1220E5777000F6B589 /* GATTAlertCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */; };
 		35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35CA5E1720E579B100F6B589 /* Localizable.strings */; };
-		35CA5E2C20E5869400F6B589 /* Rswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 35CA5E1A20E584A100F6B589 /* Rswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		35CA5E3D20E58F5400F6B589 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E3C20E58F5300F6B589 /* R.generated.swift */; };
 		35F5BB5A20E3DAC500AC5FF1 /* InputTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35F5BB5920E3DAC500AC5FF1 /* InputTextView.xib */; };
 		35F5BB6320E3DB8A00AC5FF1 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F5BB6220E3DB8A00AC5FF1 /* InputTextView.swift */; };
@@ -40,6 +39,7 @@
 		35FE560C20E434860052C0C0 /* SystemIDCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */; };
 		35FE560E20E435860052C0C0 /* InputTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35FE560D20E435860052C0C0 /* InputTextViewCell.xib */; };
 		35FE561020E436CA0052C0C0 /* InputTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE560F20E436CA0052C0C0 /* InputTextViewCell.swift */; };
+		6E10553520E9CDFA00D0CD0D /* Rswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 35CA5E2520E5865300F6B589 /* Rswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E13E8CC20D9C7270007111B /* AdvertisementDataManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E13E8CB20D9C7270007111B /* AdvertisementDataManagedObject.swift */; };
 		6E13E8E320D9D8290007111B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E13E8E220D9D8290007111B /* TableViewController.swift */; };
 		6E353A4620D7FDB200E94B73 /* CoreDataEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E353A4520D7FDB200E94B73 /* CoreDataEncodable.swift */; };
@@ -115,6 +115,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 806E699B1C42BD9C00DE3A8B;
 			remoteInfo = "RswiftTests-tvOS";
+		};
+		6E10553320E9CDEF00D0CD0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35CA5E1D20E5865200F6B589 /* R.swift.Library.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D592464D1C117A55007F94C7;
+			remoteInfo = "Rswift-iOS";
 		};
 		6EC0D99E20DDF5E0005FB128 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -216,7 +223,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				35CA5E2C20E5869400F6B589 /* Rswift.framework in Embed Frameworks */,
+				6E10553520E9CDFA00D0CD0D /* Rswift.framework in Embed Frameworks */,
 				6EC0D9C320DDF876005FB128 /* GATT.framework in Embed Frameworks */,
 				6EC0D9BF20DDF871005FB128 /* Bluetooth.framework in Embed Frameworks */,
 			);
@@ -563,6 +570,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E10553420E9CDEF00D0CD0D /* PBXTargetDependency */,
 				6EC0D9BD20DDF5F6005FB128 /* PBXTargetDependency */,
 				6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */,
 				6EC0D9C120DDF871005FB128 /* PBXTargetDependency */,
@@ -585,7 +593,7 @@
 				TargetAttributes = {
 					6E98B6922059B51000B6F016 = {
 						CreatedOnToolsVersion = 9.2;
-						DevelopmentTeam = RH4PC25J9C;
+						DevelopmentTeam = 4W79SG34MW;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -846,6 +854,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6E10553420E9CDEF00D0CD0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Rswift-iOS";
+			targetProxy = 6E10553320E9CDEF00D0CD0D /* PBXContainerItemProxy */;
+		};
 		6EC0D9BB20DDF5F6005FB128 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "GATT-iOS";
@@ -907,7 +920,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RH4PC25J9C;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -935,7 +948,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RH4PC25J9C;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

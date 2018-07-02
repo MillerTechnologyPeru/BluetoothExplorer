@@ -23,5 +23,5 @@ public struct PeripheralModel {
     
     public var scanData: ScanData
     
-    public var services: CentralManager.Service
+    public var services: GATT.Service
 }

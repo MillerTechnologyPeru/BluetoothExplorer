@@ -17,7 +17,7 @@ final class SystemIDCharacteristicViewController: UITableViewController, Charact
     
     private var fields = [Field]()
     
-    var value = GATTSystemID(manufacturerIdentifier: 0, organizationallyUniqueIdentifier: 0)!
+    var value = GATTSystemID(manufacturerIdentifier: 0, organizationallyUniqueIdentifier: 0)
     
     var valueDidChange: ((GATTSystemID) -> ())?
     

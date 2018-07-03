@@ -16,7 +16,7 @@ final class AlertLevelCharacteristicViewController: UITableViewController, Chara
     
     // MARK: - Properties
     
-    private let cellIdentifier = "InputTextViewCell"
+    private let cellIdentifier = R.nib.inputTextViewCell.name
     
     private var fields = [Field]()
     
@@ -30,8 +30,7 @@ final class AlertLevelCharacteristicViewController: UITableViewController, Chara
         super.viewDidLoad()
         
         fields = [.level("\(value.rawValue)")]
-        
-        tableView.register(UINib(nibName: cellIdentifier, bundle: nil), forCellReuseIdentifier: cellIdentifier)
+        tableView.register(R.nib.inputTextViewCell(), forCellReuseIdentifier: cellIdentifier)
         tableView.separatorStyle = .none
     }
     

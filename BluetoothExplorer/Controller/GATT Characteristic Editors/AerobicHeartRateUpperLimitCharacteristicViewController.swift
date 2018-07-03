@@ -1,5 +1,5 @@
 //
-//  AerobicHeartRateLowerLimitCharacteristicViewController.swift
+//  AerobicHeartRateUpperLimitCharacteristicViewController.swift
 //  BluetoothExplorer
 //
 //  Created by Carlos Duclos on 7/3/18.
@@ -12,7 +12,7 @@ import CoreData
 import Bluetooth
 import GATT
 
-final class AerobicHeartRateLowerLimitCharacteristicViewController: UITableViewController, CharacteristicViewController, InstantiableViewController {
+final class AerobicHeartRateUpperLimitCharacteristicViewController: UITableViewController, CharacteristicViewController, InstantiableViewController {
     
     // MARK: - Properties
     
@@ -20,16 +20,16 @@ final class AerobicHeartRateLowerLimitCharacteristicViewController: UITableViewC
     
     private var fields = [Field]()
     
-    var value = GATTAerobicHeartRateLowerLimit(beats: 98)
+    var value = GATTAerobicHeartRateUpperLimit(beats: 98)
     
-    var valueDidChange: ((GATTAerobicHeartRateLowerLimit) -> ())?
+    var valueDidChange: ((GATTAerobicHeartRateUpperLimit) -> ())?
     
     // MARK: - Loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fields = [.lowerLimit("\(value.beats.rawValue)")]
+        fields = [.upperLimit("\(value.beats.rawValue)")]
         tableView.register(R.nib.inputTextViewCell(), forCellReuseIdentifier: cellIdentifier)
         tableView.separatorStyle = .none
     }
@@ -72,7 +72,7 @@ final class AerobicHeartRateLowerLimitCharacteristicViewController: UITableViewC
                 else { return .none }
             
             switch field {
-            case .lowerLimit:
+            case .upperLimit:
                 
                 guard let _ = UInt8(value)
                     else { return .error("Maximum value is 0xFF") }
@@ -83,26 +83,27 @@ final class AerobicHeartRateLowerLimitCharacteristicViewController: UITableViewC
     }
 }
 
-extension AerobicHeartRateLowerLimitCharacteristicViewController {
+extension AerobicHeartRateUpperLimitCharacteristicViewController {
     
     enum Field {
         
-        case lowerLimit(String)
+        case upperLimit(String)
         
         var title: String {
             
             switch self {
-            case .lowerLimit: return "Lower Limit"
+            case .upperLimit: return "Upper Limit"
             }
         }
         
         var bluetoothValue: String {
             
             switch self {
-            case .lowerLimit(let value): return value
+            case .upperLimit(let value): return value
             }
         }
         
         var keyboardType: UIKeyboardType { return .numberPad }
     }
 }
+

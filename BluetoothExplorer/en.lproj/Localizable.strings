@@ -17,3 +17,10 @@
 "gattAlertCategoryHighPrioritized" = "High Prioritized Alert";
 "gattAlertCategoryInstantMessage" = "Instant Message";
 
+"gattAlertNotificationControlPointDisableNewIncoming" = "Disable new incoming alert notification";
+"gattAlertNotificationControlPointDisableUnreadCategoryStatus" = "Disable unread category status";
+"gattAlertNotificationControlPointEnableNewIncomingAlert" = "Enable new incoming alert notification";
+"gattAlertNotificationControlPointEnableUnreadCategoryStatus" = "Enable unread category status";
+"gattAlertNotificationControlPointNotifyNewIncomingAlert" = "Notify new incoming alert immediately";
+"gattAlertNotificationControlPointNotifyUnreadCategoryStatus" = "Notify unread category status immediately";
+

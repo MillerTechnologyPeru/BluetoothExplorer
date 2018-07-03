@@ -201,6 +201,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case BatteryPowerStateCharacteristicViewController.uuid:
             viewController = load(BatteryPowerStateCharacteristicViewController.self)
             
+        case AgeCharacteristicViewController.uuid:
+            viewController = load(AgeCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

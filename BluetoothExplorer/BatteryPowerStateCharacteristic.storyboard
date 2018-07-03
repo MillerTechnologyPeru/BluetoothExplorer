@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--PnP ID-->
+        <!--Battery Level State-->
         <scene sceneID="gRR-mt-nIb">
             <objects>
-                <tableViewController storyboardIdentifier="PnPIDCharacteristicViewController" title="PnP ID" id="f6t-8S-6TY" customClass="PnPIDCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="BatteryPowerStateCharacteristicViewController" title="Battery Level State" id="f6t-8S-6TY" customClass="BatteryPowerStateCharacteristicViewController" customModule="BluetoothExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Tum-PO-yQQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

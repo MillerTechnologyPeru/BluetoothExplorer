@@ -130,8 +130,6 @@ extension BatteryPowerStateCharacteristicViewController {
                         BatteryLevelState.notSupported.rawValue.description,
                         BatteryLevelState.good.rawValue.description,
                         BatteryLevelState.criticallyLow.rawValue.description]
-                
-            default: return []
             }
         }
         

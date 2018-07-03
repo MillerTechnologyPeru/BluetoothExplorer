@@ -36,6 +36,8 @@
 		35386B0E20EBC5920016D662 /* AlertNotificationControlPointCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35386B0D20EBC5920016D662 /* AlertNotificationControlPointCharacteristicViewController.swift */; };
 		35386B1520EBE13E0016D662 /* AgeCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35386B1420EBE13E0016D662 /* AgeCharacteristic.storyboard */; };
 		35386B2120EBE1530016D662 /* AgeCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35386B2020EBE1530016D662 /* AgeCharacteristicViewController.swift */; };
+		35386B3820EBF0310016D662 /* AerobicHeartRateLowerLimitCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35386B3720EBF0310016D662 /* AerobicHeartRateLowerLimitCharacteristicViewController.swift */; };
+		35386B4420EBF64A0016D662 /* AerobicHeartRateLowerLimitCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35386B4320EBF64A0016D662 /* AerobicHeartRateLowerLimitCharacteristic.storyboard */; };
 		35CA5E0920E5740E00F6B589 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E0820E5740E00F6B589 /* Integer.swift */; };
 		35CA5E1220E5777000F6B589 /* GATTAlertCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */; };
 		35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35CA5E1720E579B100F6B589 /* Localizable.strings */; };
@@ -270,6 +272,8 @@
 		35386B0D20EBC5920016D662 /* AlertNotificationControlPointCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertNotificationControlPointCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35386B1420EBE13E0016D662 /* AgeCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AgeCharacteristic.storyboard; sourceTree = "<group>"; };
 		35386B2020EBE1530016D662 /* AgeCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35386B3720EBF0310016D662 /* AerobicHeartRateLowerLimitCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AerobicHeartRateLowerLimitCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35386B4320EBF64A0016D662 /* AerobicHeartRateLowerLimitCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AerobicHeartRateLowerLimitCharacteristic.storyboard; sourceTree = "<group>"; };
 		35CA5E0820E5740E00F6B589 /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
 		35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTAlertCategory.swift; sourceTree = "<group>"; };
 		35CA5E1620E579B100F6B589 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -405,6 +409,7 @@
 				35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */,
 				35386B0120EBC5000016D662 /* AlertNotificationControlPointCharacteristic.storyboard */,
 				35386B1420EBE13E0016D662 /* AgeCharacteristic.storyboard */,
+				35386B4320EBF64A0016D662 /* AerobicHeartRateLowerLimitCharacteristic.storyboard */,
 				6E98B69C2059B51000B6F016 /* Assets.xcassets */,
 				6E98B6A12059B51000B6F016 /* Info.plist */,
 				35CA5E1720E579B100F6B589 /* Localizable.strings */,
@@ -508,6 +513,7 @@
 				35298F2520EACD700093B830 /* PnPIDCharacteristicViewController.swift */,
 				35386B0D20EBC5920016D662 /* AlertNotificationControlPointCharacteristicViewController.swift */,
 				35386B2020EBE1530016D662 /* AgeCharacteristicViewController.swift */,
+				35386B3720EBF0310016D662 /* AerobicHeartRateLowerLimitCharacteristicViewController.swift */,
 			);
 			path = "GATT Characteristic Editors";
 			sourceTree = "<group>";
@@ -774,6 +780,7 @@
 				35FE560E20E435860052C0C0 /* InputTextViewCell.xib in Resources */,
 				35335A1A20E14830006ABD4D /* ManufacturerNameStringCharacteristic.storyboard in Resources */,
 				35335A1220E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard in Resources */,
+				35386B4420EBF64A0016D662 /* AerobicHeartRateLowerLimitCharacteristic.storyboard in Resources */,
 				35317A3F20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard in Resources */,
 				35335A1620E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard in Resources */,
 				35F5BB5A20E3DAC500AC5FF1 /* InputTextView.xib in Resources */,
@@ -861,6 +868,7 @@
 				35298F4920EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift in Sources */,
 				6EFB3E9320D3EF9A00364CA0 /* ScanDataManagedObject.swift in Sources */,
 				6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */,
+				35386B3820EBF0310016D662 /* AerobicHeartRateLowerLimitCharacteristicViewController.swift in Sources */,
 				6E98B6962059B51000B6F016 /* AppDelegate.swift in Sources */,
 				353557DF20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift in Sources */,
 				35F5BB6520E3DC0000AC5FF1 /* NibDesignable.swift in Sources */,

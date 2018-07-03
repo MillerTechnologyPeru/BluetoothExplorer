@@ -207,6 +207,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case AgeCharacteristicViewController.uuid:
             viewController = load(AgeCharacteristicViewController.self)
             
+        case AerobicHeartRateLowerLimitCharacteristicViewController.uuid:
+            viewController = load(AerobicHeartRateLowerLimitCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

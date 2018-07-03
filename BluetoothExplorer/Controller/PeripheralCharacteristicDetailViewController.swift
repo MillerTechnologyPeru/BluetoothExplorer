@@ -203,6 +203,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
             
         case AlertNotificationControlPointCharacteristicViewController.uuid:
             viewController = load(AlertNotificationControlPointCharacteristicViewController.self)
+
+        case AgeCharacteristicViewController.uuid:
+            viewController = load(AgeCharacteristicViewController.self)
             
         default:
             viewController = nil

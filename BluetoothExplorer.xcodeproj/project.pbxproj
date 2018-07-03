@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35298F4920EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */; };
+		35298F5B20EB08D10093B830 /* AlertLevelCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */; };
 		35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */; };
 		35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */; };
 		35317A3920E5485400D31493 /* SerialNumberStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */; };
@@ -233,6 +235,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertLevelCharacteristicViewController.swift; sourceTree = "<group>"; };
+		35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlertLevelCharacteristic.storyboard; sourceTree = "<group>"; };
 		35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HardwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
 		35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SerialNumberStringCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -385,6 +389,7 @@
 				35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */,
 				35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */,
 				35317A3E20E56B9800D31493 /* AlertCategoryCharacteristic.storyboard */,
+				35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */,
 				6E98B69C2059B51000B6F016 /* Assets.xcassets */,
 				6E98B6A12059B51000B6F016 /* Info.plist */,
 				35CA5E1720E579B100F6B589 /* Localizable.strings */,
@@ -484,6 +489,7 @@
 				35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */,
 				35317A3A20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift */,
 				35317A4720E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift */,
+				35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */,
 			);
 			path = "GATT Characteristic Editors";
 			sourceTree = "<group>";
@@ -593,7 +599,7 @@
 				TargetAttributes = {
 					6E98B6922059B51000B6F016 = {
 						CreatedOnToolsVersion = 9.2;
-						DevelopmentTeam = 4W79SG34MW;
+						DevelopmentTeam = RH4PC25J9C;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -739,6 +745,7 @@
 				6E98B6A02059B51000B6F016 /* LaunchScreen.storyboard in Resources */,
 				35335A0520E1316F006ABD4D /* ModelNumberCharacteristic.storyboard in Resources */,
 				35317A3920E5485400D31493 /* SerialNumberStringCharacteristic.storyboard in Resources */,
+				35298F5B20EB08D10093B830 /* AlertLevelCharacteristic.storyboard in Resources */,
 				35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */,
 				6E98B69D2059B51000B6F016 /* Assets.xcassets in Resources */,
 				6E98B69B2059B51000B6F016 /* Main.storyboard in Resources */,
@@ -828,6 +835,7 @@
 				6E8C68ED20DA030A00232169 /* ActivityIndicatorViewController.swift in Sources */,
 				6ECCCC7120E091070054663C /* FDStackViewDistributionLayoutArrangement.m in Sources */,
 				6ECCCC6F20E091070054663C /* FDStackViewExtensions.m in Sources */,
+				35298F4920EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift in Sources */,
 				6EFB3E9320D3EF9A00364CA0 /* ScanDataManagedObject.swift in Sources */,
 				6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */,
 				6E98B6962059B51000B6F016 /* AppDelegate.swift in Sources */,
@@ -920,7 +928,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DEVELOPMENT_TEAM = RH4PC25J9C;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -948,7 +956,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DEVELOPMENT_TEAM = RH4PC25J9C;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

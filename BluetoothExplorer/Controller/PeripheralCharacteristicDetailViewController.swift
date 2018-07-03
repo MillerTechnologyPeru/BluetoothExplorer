@@ -198,6 +198,9 @@ final class PeripheralCharacteristicDetailViewController: UITableViewController 
         case AlertLevelCharacteristicViewController.uuid:
             viewController = load(AlertLevelCharacteristicViewController.self)
             
+        case BatteryPowerStateCharacteristicViewController.uuid:
+            viewController = load(BatteryPowerStateCharacteristicViewController.self)
+            
         default:
             viewController = nil
         }

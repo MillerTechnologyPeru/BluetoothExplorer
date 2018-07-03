@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		35298F4920EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */; };
 		35298F5B20EB08D10093B830 /* AlertLevelCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */; };
+		35298F1A20EACCB10093B830 /* BatteryPowerStateCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35298F1920EACCB10093B830 /* BatteryPowerStateCharacteristic.storyboard */; };
+		35298F2620EACD700093B830 /* PnPIDCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35298F2520EACD700093B830 /* PnPIDCharacteristicViewController.swift */; };
 		35317A2E20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */; };
 		35317A3720E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */; };
 		35317A3920E5485400D31493 /* SerialNumberStringCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */; };
@@ -29,7 +31,7 @@
 		353557C720E28CB700543440 /* InstantiableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557C620E28CB700543440 /* InstantiableViewController.swift */; };
 		353557D020E28CD200543440 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557CF20E28CD200543440 /* String.swift */; };
 		353557D620E2D15000543440 /* PnPIDCharacteristic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */; };
-		353557DF20E2D17300543440 /* PnPIDCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */; };
+		353557DF20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353557DE20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift */; };
 		35CA5E0920E5740E00F6B589 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E0820E5740E00F6B589 /* Integer.swift */; };
 		35CA5E1220E5777000F6B589 /* GATTAlertCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */; };
 		35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35CA5E1720E579B100F6B589 /* Localizable.strings */; };
@@ -237,6 +239,8 @@
 /* Begin PBXFileReference section */
 		35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertLevelCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35298F5A20EB08D10093B830 /* AlertLevelCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlertLevelCharacteristic.storyboard; sourceTree = "<group>"; };
+		35298F1920EACCB10093B830 /* BatteryPowerStateCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BatteryPowerStateCharacteristic.storyboard; sourceTree = "<group>"; };
+		35298F2520EACD700093B830 /* PnPIDCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PnPIDCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35317A2D20E53BD500D31493 /* HardwareRevisionStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HardwareRevisionStringCharacteristic.storyboard; sourceTree = "<group>"; };
 		35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareRevisionStringCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35317A3820E5485400D31493 /* SerialNumberStringCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SerialNumberStringCharacteristic.storyboard; sourceTree = "<group>"; };
@@ -257,7 +261,7 @@
 		353557C620E28CB700543440 /* InstantiableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstantiableViewController.swift; sourceTree = "<group>"; };
 		353557CF20E28CD200543440 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		353557D520E2D15000543440 /* PnPIDCharacteristic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PnPIDCharacteristic.storyboard; sourceTree = "<group>"; };
-		353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PnPIDCharacteristicViewController.swift; sourceTree = "<group>"; };
+		353557DE20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryPowerStateCharacteristicViewController.swift; sourceTree = "<group>"; };
 		35CA5E0820E5740E00F6B589 /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
 		35CA5E1120E5777000F6B589 /* GATTAlertCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTAlertCategory.swift; sourceTree = "<group>"; };
 		35CA5E1620E579B100F6B589 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -379,6 +383,7 @@
 				6E98B69E2059B51000B6F016 /* LaunchScreen.storyboard */,
 				6E98B6992059B51000B6F016 /* Main.storyboard */,
 				6EDE00CE20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard */,
+				35298F1920EACCB10093B830 /* BatteryPowerStateCharacteristic.storyboard */,
 				35335A0420E1316F006ABD4D /* ModelNumberCharacteristic.storyboard */,
 				35335A0A20E13FC0006ABD4D /* FirmwareRevisionStringCharacteristic.storyboard */,
 				35335A1520E14353006ABD4D /* SoftwareRevisionStringCharacteristic.storyboard */,
@@ -484,12 +489,13 @@
 				35335A1720E14392006ABD4D /* SoftwareRevisionStringCharacteristicViewController.swift */,
 				35335A1B20E14846006ABD4D /* ManufacturerNameStringCharacteristicViewController.swift */,
 				35335A2C20E16D74006ABD4D /* DateTimeCharacteristicViewController.swift */,
-				353557DE20E2D17300543440 /* PnPIDCharacteristicViewController.swift */,
+				353557DE20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift */,
 				35FE560B20E434860052C0C0 /* SystemIDCharacteristicViewController.swift */,
 				35317A3620E53C2C00D31493 /* HardwareRevisionStringCharacteristicViewController.swift */,
 				35317A3A20E5486200D31493 /* SerialNumberStringCharacteristicViewController.swift */,
 				35317A4720E56CCA00D31493 /* AlertCategoryCharacteristicViewController.swift */,
 				35298F4820EAE1D60093B830 /* AlertLevelCharacteristicViewController.swift */,
+				35298F2520EACD700093B830 /* PnPIDCharacteristicViewController.swift */,
 			);
 			path = "GATT Characteristic Editors";
 			sourceTree = "<group>";
@@ -740,6 +746,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35298F1A20EACCB10093B830 /* BatteryPowerStateCharacteristic.storyboard in Resources */,
 				35CA5E1520E579B100F6B589 /* Localizable.strings in Resources */,
 				6EDE00CF20DB12B3002E951A /* BatteryLevelCharacteristic.storyboard in Resources */,
 				6E98B6A02059B51000B6F016 /* LaunchScreen.storyboard in Resources */,
@@ -818,6 +825,7 @@
 				35335A1420E13FF0006ABD4D /* FirmwareRevisionStringCharacteristicViewController.swift in Sources */,
 				6E8C68EA20DA02DA00232169 /* UIAlertAction.swift in Sources */,
 				35335A0720E13203006ABD4D /* ModelNumberCharacteristicViewController.swift in Sources */,
+				35298F2620EACD700093B830 /* PnPIDCharacteristicViewController.swift in Sources */,
 				6EC0D9C720DE076A005FB128 /* Appearance.swift in Sources */,
 				6EFB3E9720D3F0D700364CA0 /* CentralManagedObject.swift in Sources */,
 				6EFD558420D83C76003B75A1 /* CharacteristicManagedObject.swift in Sources */,
@@ -839,7 +847,7 @@
 				6EFB3E9320D3EF9A00364CA0 /* ScanDataManagedObject.swift in Sources */,
 				6ECCCC6C20E091070054663C /* FDTransformLayer.m in Sources */,
 				6E98B6962059B51000B6F016 /* AppDelegate.swift in Sources */,
-				353557DF20E2D17300543440 /* PnPIDCharacteristicViewController.swift in Sources */,
+				353557DF20E2D17300543440 /* BatteryPowerStateCharacteristicViewController.swift in Sources */,
 				35F5BB6520E3DC0000AC5FF1 /* NibDesignable.swift in Sources */,
 				35FE560C20E434860052C0C0 /* SystemIDCharacteristicViewController.swift in Sources */,
 				6E8C68E520DA02B600232169 /* ErrorAlert.swift in Sources */,

@@ -1,10 +1,12 @@
 //
-//  PnPIDCharacteristicViewController.swift
+//  BatteryPowerStateCharacteristicViewController.swift
 //  BluetoothExplorer
 //
-//  Created by Carlos Duclos on 6/26/18.
+//  Created by Carlos Duclos on 7/2/18.
 //  Copyright © 2018 PureSwift. All rights reserved.
 //
+
+import Foundation
 
 import UIKit
 import Bluetooth
@@ -66,7 +68,7 @@ final class PnPIDCharacteristicViewController: UITableViewController, Characteri
         
         cell.inputTextView.value = field.bluetoothValue
         cell.inputTextView.posibleInputValues = field.posibleValues
-        cell.inputTextView.isEnabled = valueDidChange != nil
+//        cell.inputTextView.isEnabled = valueDidChange != nil
         cell.inputTextView.keyboardType = field.keyboardType
         cell.inputTextView.fieldLabelText = field.title
         cell.inputTextView.placeholder = field.title
@@ -80,14 +82,14 @@ final class PnPIDCharacteristicViewController: UITableViewController, Characteri
                 
                 guard let _ = UInt16(value)
                     else { return .error("Maximum value is 0xFFFF)") }
-            
+                
             case .productId(let value):
-            
+                
                 guard let _ = UInt16(value)
                     else { return .error("Maximum value is 0xFFFF)") }
-            
+                
             case .productVersionId(let value):
-            
+                
                 guard let _ = UInt16(value)
                     else { return .error("Maximum value is 0xFFFF)") }
                 

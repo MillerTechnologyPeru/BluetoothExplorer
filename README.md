@@ -1,2 +1,3 @@
 # BluetoothExplorer
-Bluetooth Explorer iOS App
+
+A description of this package.

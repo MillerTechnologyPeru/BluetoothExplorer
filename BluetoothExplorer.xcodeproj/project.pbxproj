@@ -629,7 +629,7 @@
 				TargetAttributes = {
 					6E98B6922059B51000B6F016 = {
 						CreatedOnToolsVersion = 9.2;
-						DevelopmentTeam = RH4PC25J9C;
+						DevelopmentTeam = 4W79SG34MW;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -968,7 +968,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RH4PC25J9C;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -996,7 +996,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RH4PC25J9C;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
 				FRAMEWORK_SEARCH_PATHS = (
 					$SRCROOT/../Carthage/Build/iOS,
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

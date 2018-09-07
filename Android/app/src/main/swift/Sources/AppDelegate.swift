@@ -27,14 +27,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NSLog("\(#function)")
         
+        #if os(Android)
         NSLog("UIScreen scale: \(UIScreen.main.scale)")
         NSLog("UIScreen native scale: \(UIScreen.main.nativeScale)")
         NSLog("UIScreen size: \(UIScreen.main.bounds.size)")
         NSLog("UIScreen native size: \(UIScreen.main.nativeBounds.size)")
+        #endif
         
-        let viewController = UIViewController()
-        viewController.title = "Test Title"
-        viewController.view.backgroundColor = .blue
+        // initalize BLE
+        NativeCentral.shared.log = { log("Central: \($0)") }
+        
+        // load window and view controller
+        
+        let viewController = CentralViewController()
         
         let navigationController = UINavigationController(rootViewController: viewController)
         

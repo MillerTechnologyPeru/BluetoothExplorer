@@ -17,6 +17,12 @@
 		6E733FE621423DFE001B8682 /* DarwinGATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733FDC21423DEC001B8682 /* DarwinGATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E733FE921423DFE001B8682 /* Bluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733F9E21423DE0001B8682 /* Bluetooth.framework */; };
 		6E733FEA21423DFE001B8682 /* Bluetooth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733F9E21423DE0001B8682 /* Bluetooth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E73401F21424322001B8682 /* CentralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73401E21424322001B8682 /* CentralViewController.swift */; };
+		6E73402C21424437001B8682 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73402B21424437001B8682 /* Central.swift */; };
+		6EAEEE3C2142470C009A7A9F /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE302142470C009A7A9F /* ErrorAlert.swift */; };
+		6EAEEE3E21424717009A7A9F /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */; };
+		6EAEEE4021424790009A7A9F /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3F21424790009A7A9F /* Async.swift */; };
+		6EAEEE42214247F3009A7A9F /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE41214247F3009A7A9F /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,13 +168,16 @@
 		6E303E062142398F0034A6C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E303E092142398F0034A6C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E303E0B2142398F0034A6C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6E303E1221423AED0034A6C1 /* MainActivityBindings_Listener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainActivityBindings_Listener.swift; sourceTree = "<group>"; };
-		6E303E1321423AED0034A6C1 /* MainActivityBindings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainActivityBindings.swift; sourceTree = "<group>"; };
 		6E303E1421423AED0034A6C1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E303E1521423AED0034A6C1 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		6E303E1621423AED0034A6C1 /* MainActivityBindings_Responder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainActivityBindings_Responder.swift; sourceTree = "<group>"; };
 		6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = ../Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
 		6E733FC321423DEC001B8682 /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = ../Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
+		6E73401E21424322001B8682 /* CentralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralViewController.swift; sourceTree = "<group>"; };
+		6E73402B21424437001B8682 /* Central.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6EAEEE302142470C009A7A9F /* ErrorAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
+		6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewController.swift; sourceTree = "<group>"; };
+		6EAEEE3F21424790009A7A9F /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
+		6EAEEE41214247F3009A7A9F /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,11 +225,12 @@
 		6E303E1121423AED0034A6C1 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				6E303E1221423AED0034A6C1 /* MainActivityBindings_Listener.swift */,
-				6E303E1321423AED0034A6C1 /* MainActivityBindings.swift */,
-				6E303E1421423AED0034A6C1 /* AppDelegate.swift */,
 				6E303E1521423AED0034A6C1 /* main.swift */,
-				6E303E1621423AED0034A6C1 /* MainActivityBindings_Responder.swift */,
+				6E303E1421423AED0034A6C1 /* AppDelegate.swift */,
+				6EAEEE3F21424790009A7A9F /* Async.swift */,
+				6EAEEE41214247F3009A7A9F /* Log.swift */,
+				6E73402D21424456001B8682 /* Controller */,
+				6E73402E21424460001B8682 /* Model */,
 			);
 			name = Sources;
 			path = ../Android/app/src/main/swift/Sources;
@@ -261,6 +271,40 @@
 				6E733FE021423DEC001B8682 /* DarwinGATT.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6E73402D21424456001B8682 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE4421424869009A7A9F /* Protocols */,
+				6EAEEE432142485F009A7A9F /* Extensions */,
+				6E73401E21424322001B8682 /* CentralViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		6E73402E21424460001B8682 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6E73402B21424437001B8682 /* Central.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		6EAEEE432142485F009A7A9F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE302142470C009A7A9F /* ErrorAlert.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		6EAEEE4421424869009A7A9F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -449,6 +493,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E303E1921423AED0034A6C1 /* AppDelegate.swift in Sources */,
+				6EAEEE3E21424717009A7A9F /* ActivityIndicatorViewController.swift in Sources */,
+				6EAEEE3C2142470C009A7A9F /* ErrorAlert.swift in Sources */,
+				6EAEEE4021424790009A7A9F /* Async.swift in Sources */,
+				6E73402C21424437001B8682 /* Central.swift in Sources */,
+				6E73401F21424322001B8682 /* CentralViewController.swift in Sources */,
+				6EAEEE42214247F3009A7A9F /* Log.swift in Sources */,
 				6E303E1A21423AED0034A6C1 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

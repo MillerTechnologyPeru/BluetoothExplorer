@@ -15,28 +15,30 @@ UIApplicationMain(0, nil, nil, NSStringFromClass(AppDelegate.self))
 
 #else
 
-import java_swift
-import java_lang
-import java_util
 import Android
 import AndroidUIKit
 
 /// Needs to be implemented by app.
 @_silgen_name("SwiftAndroidMainApplication")
 public func SwiftAndroidMainApplication() -> SwiftApplication.Type {
-
+    
     NSLog("\(#function)")
-
-    return SwiftApplication.self
+    
+    // initialize singleton App Delegate
+    UIApplication.shared.delegate = AppDelegate()
+    
+    // return specialized Android Application
+    return AndroidUIKitApplication.self
 }
 
 /// Needs to be implemented by app.
 @_silgen_name("SwiftAndroidMainActivity")
 public func SwiftAndroidMainActivity() -> SwiftSupportAppCompatActivity.Type {
-
+    
     NSLog("\(#function)")
-
-    return SwiftSupportAppCompatActivity.self
+    
+    // return specialized Android Activity
+    return AndroidUIKitMainActivity.self
 }
 
 #endif

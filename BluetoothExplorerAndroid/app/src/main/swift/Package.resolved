@@ -14,8 +14,8 @@
         "package": "AndroidUIKit",
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
-          "branch": "spmFix",
-          "revision": "fce705bf3c8de24ef6f600692678f3676e6807c5",
+          "branch": "master",
+          "revision": "cdead03cbe0750b2c861b6655f18466c20909c79",
           "version": null
         }
       },

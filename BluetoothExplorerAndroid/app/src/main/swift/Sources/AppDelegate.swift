@@ -22,6 +22,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        NSLog("\(#function)")
+        
         NSLog("UIScreen scale: \(UIScreen.main.scale)")
         NSLog("UIScreen native scale: \(UIScreen.main.nativeScale)")
         NSLog("UIScreen size: \(UIScreen.main.bounds.size)")

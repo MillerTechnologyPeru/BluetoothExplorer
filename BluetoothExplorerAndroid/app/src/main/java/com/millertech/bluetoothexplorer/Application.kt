@@ -7,7 +7,7 @@ class Application: SwiftApplication() {
     companion object {
 
         init {
-            System.loadLibrary("BluetoothExplorerAndroid")
+            System.loadLibrary("BluetoothExplorer")
         }
     }
 }

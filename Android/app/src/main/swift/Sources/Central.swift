@@ -22,6 +22,24 @@ private struct CentralCache {
     static let central = DarwinCentral(options: options)
 }
 
+#elseif os(Android)
+
+import Android
+import AndroidUIKit
+
+typealias NativeCentral = AndroidCentral
+
+private struct CentralCache {
+    
+    static let hostController = Android.Bluetooth.Adapter.default!
+    
+    static let context = UIApplication.shared.context
+    
+    static let options = AndroidCentral.Options()
+    
+    static let central = AndroidCentral(hostController: hostController, context: context, options: options)
+}
+
 #endif
 
 internal extension NativeCentral {

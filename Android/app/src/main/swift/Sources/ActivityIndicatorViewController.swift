@@ -7,7 +7,13 @@
 //
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#elseif os(Android) || os(macOS)
+import Android
+import AndroidUIKit
+#endif
 
 protocol ActivityIndicatorViewController: class {
     

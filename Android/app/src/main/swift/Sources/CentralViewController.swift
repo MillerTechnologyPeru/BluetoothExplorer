@@ -162,7 +162,9 @@ final class CentralViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        #if os(iOS)
         defer { tableView.deselectRow(at: indexPath, animated: true) }
+        #endif
         
         let item = self[indexPath]
         

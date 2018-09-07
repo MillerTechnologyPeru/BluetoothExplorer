@@ -57,6 +57,10 @@ final class CentralViewController: UITableViewController {
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         self.refreshControl = refreshControl
         #endif
+        
+        #if os(Android) || os(macOS)
+        AppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
+        #endif
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +98,8 @@ final class CentralViewController: UITableViewController {
     #endif
     
     private func reloadData() {
+        
+        log("\(type(of: self)) \(#function)")
         
         // clear table data
         self.items.removeAll()

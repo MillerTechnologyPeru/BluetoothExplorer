@@ -51,6 +51,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
         
+        // request Bluetooth permissions
         #if os(Android) || os(macOS)
         self.enableBluetooth()
         #endif
@@ -153,7 +154,7 @@ extension AppDelegate {
     func enableBluetooth(hostController: Android.Bluetooth.Adapter = Android.Bluetooth.Adapter.default!) -> Bool {
         
         guard hostController.isEnabled() == false
-            else { return true }
+            else { return requestLocationPermissions() }
         
         let enableBluetoothIntent = Android.Content.Intent(action: Android.Bluetooth.Adapter.Action.requestEnable.rawValue)
         

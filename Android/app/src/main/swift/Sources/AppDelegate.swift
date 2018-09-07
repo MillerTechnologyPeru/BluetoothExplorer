@@ -51,6 +51,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
         
+        #if os(Android) || os(macOS)
+        self.enableBluetooth()
+        #endif
+        
         return true
     }
     

@@ -33,7 +33,7 @@ private struct CentralCache {
     
     static let hostController = Android.Bluetooth.Adapter.default!
     
-    static let context = AndroidContext(casting: UIApplication.shared.android)!
+    static let context = AndroidContext(casting: UIApplication.shared.androidActivity)!
     
     static let options = AndroidCentral.Options()
     

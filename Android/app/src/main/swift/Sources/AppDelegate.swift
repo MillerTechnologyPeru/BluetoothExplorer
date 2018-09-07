@@ -1,8 +1,9 @@
 //
 //  AppDelegate.swift
-//  AndroidUIKit
+//  BluetoothExplorer
 //
-//  Created by Carlos Duclos on 7/13/18.
+//  Created by Alsey Coleman Miller on 9/7/18.
+//  Copyright © 2018 PureSwift. All rights reserved.
 //
 
 import Foundation
@@ -83,3 +84,42 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("\(#function)")
     }
 }
+
+// MARK: - Android Permissions
+
+#if os(Android) || os(macOS)
+
+extension AppDelegate {
+    
+    internal struct AndroidPermissionRequest {
+        
+        static let enableBluetooth = 1000
+        static let gps = 2000
+    }
+    
+    /// Checks if permissions are needed.
+    func requestBluetoothPermissions() -> Bool {
+        
+        let context = AndroidContextWrapper(casting: UIApplication.shared.android)!
+        
+        if Android.OS.Build.Version.Sdk.sdkInt.rawValue >= Android.OS.Build.VersionCodes.M,
+            context.checkSelfPermission(permission: Android.ManifestPermission.accessCoarseLocation.rawValue) != Android.Content.PM.PackageManager.Permission.granted.rawValue {
+            
+            log("\(type(of: self)) \(#function) request permission")
+            
+            let permissions = [Android.ManifestPermission.accessCoarseLocation.rawValue]
+            
+            context.requestPermissions(permissions: permissions, requestCode: AndroidPermissionRequest.gps)
+            
+            return false
+            
+        } else {
+            
+            log("\(type(of: self)) \(#function) dont request permission")
+            
+            return true
+        }
+    }
+}
+
+#endif

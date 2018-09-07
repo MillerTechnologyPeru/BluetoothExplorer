@@ -98,6 +98,12 @@ final class CentralViewController: UITableViewController {
         // clear table data
         self.items.removeAll()
         
+        // make sure its enabled
+        #if os(Android)
+        guard AndroidCentral.shared.hostController.isEnabled()
+            else { return } // wait until enabled
+        #endif
+        
         // scan
         let scanDuration = self.scanDuration
         let filterDuplicates = self.filterDuplicates

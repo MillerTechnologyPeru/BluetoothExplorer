@@ -14,6 +14,9 @@ import Android
 import AndroidUIKit
 #endif
 
+import Bluetooth
+import GATT
+
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static var shared: AppDelegate { return UIApplication.shared.delegate as! AppDelegate }

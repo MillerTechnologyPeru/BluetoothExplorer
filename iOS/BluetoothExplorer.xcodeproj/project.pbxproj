@@ -23,6 +23,7 @@
 		6EAEEE3E21424717009A7A9F /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */; };
 		6EAEEE4021424790009A7A9F /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3F21424790009A7A9F /* Async.swift */; };
 		6EAEEE42214247F3009A7A9F /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE41214247F3009A7A9F /* Log.swift */; };
+		6EAEEED221437F2B009A7A9F /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +179,7 @@
 		6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewController.swift; sourceTree = "<group>"; };
 		6EAEEE3F21424790009A7A9F /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
 		6EAEEE41214247F3009A7A9F /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +281,7 @@
 				6EAEEE4421424869009A7A9F /* Protocols */,
 				6EAEEE432142485F009A7A9F /* Extensions */,
 				6E73401E21424322001B8682 /* CentralViewController.swift */,
+				6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				6EAEEE4021424790009A7A9F /* Async.swift in Sources */,
 				6E73402C21424437001B8682 /* Central.swift in Sources */,
 				6E73401F21424322001B8682 /* CentralViewController.swift in Sources */,
+				6EAEEED221437F2B009A7A9F /* ServicesViewController.swift in Sources */,
 				6EAEEE42214247F3009A7A9F /* Log.swift in Sources */,
 				6E303E1A21423AED0034A6C1 /* main.swift in Sources */,
 			);

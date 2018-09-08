@@ -183,6 +183,9 @@ final class CentralViewController: UITableViewController {
         
         log("Selected \(item.peripheral) \(item.advertisementData.localName ?? "")")
         
+        let viewController = ServicesViewController(scanData: item)
+        
+        self.show(viewController, sender: self)
     }
 }
 

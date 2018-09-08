@@ -15,7 +15,7 @@
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "32b842cc24cad47d7651f169e9f5bacb492af680",
+          "revision": "36be71989736b93b30a172af1683fb00a4241bc4",
           "version": null
         }
       },
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
           "branch": null,
-          "revision": "9c867064434a14974a348946936e337cd0ff6c1e",
-          "version": "2.3.1"
+          "revision": "01906b5b140fc97df0cab36cd4cb519558bf05f1",
+          "version": "2.3.2"
         }
       },
       {

@@ -225,14 +225,9 @@ public final class AndroidCentral: CentralProtocol {
             guard let cache = self.internalState.cache[peripheral]
                 else { throw CentralError.unknownPeripheral }
             
-            return cache.services.values.compactMap { identifier, service in
+            return cache.services.values.map { identifier, service in
                 
-                let uuidRawValue = service.getUuid().toString() ?? ""
-                
-                guard let uuid = BluetoothUUID(rawValue: uuidRawValue) else {
-                    self.log?("Invalid UUID \(uuidRawValue)")
-                    return nil
-                }
+                let uuid = BluetoothUUID(android: service.getUuid())
                 
                 let isPrimary = service.getType() == AndroidBluetoothGattService.ServiceType.primary
                 
@@ -276,14 +271,9 @@ public final class AndroidCentral: CentralProtocol {
         
         let gattCharacteristics = gattService.getCharacteristics()
         
-        return gattCharacteristics.compactMap { characteristic in
+        return gattCharacteristics.map { characteristic in
             
-            let uuidRawValue = characteristic.getUuid().toString() ?? ""
-            
-            guard let uuid = BluetoothUUID(rawValue: uuidRawValue) else {
-                self.log?("Invalid UUID \(uuidRawValue)")
-                return nil
-            }
+            let uuid = BluetoothUUID(android: characteristic.getUuid())
             
             let properties = BitMaskOptionSet<GATT.CharacteristicProperty>(rawValue: UInt8(characteristic.getProperties()))
             
@@ -558,7 +548,7 @@ public extension AndroidCentral {
         
         public let maximumTransmissionUnit: ATTMaximumTransmissionUnit
         
-        public init(maximumTransmissionUnit: ATTMaximumTransmissionUnit = .max) {
+        public init(maximumTransmissionUnit: ATTMaximumTransmissionUnit = .default) {
             
             self.maximumTransmissionUnit = maximumTransmissionUnit
         }
@@ -722,6 +712,23 @@ fileprivate extension Peripheral {
     init(_ gatt: AndroidBluetoothGatt) {
         
         self.init(gatt.getDevice())
+    }
+}
+
+internal extension BluetoothUUID {
+    
+    init(android javaUUID: java_util.UUID) {
+        
+        let uuid = UUID(uuidString: javaUUID.toString())!
+        
+        if let value = UInt16(bluetooth: uuid) {
+            
+            self = .bit16(value)
+            
+        } else {
+            
+            self = .bit128(UInt128(uuid: uuid))
+        }
     }
 }
 

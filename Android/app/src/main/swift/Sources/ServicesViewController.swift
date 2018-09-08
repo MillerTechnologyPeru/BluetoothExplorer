@@ -43,7 +43,7 @@ final class ServicesViewController: UITableViewController {
         
         self.scanData = scanData
         
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .plain)
     }
     
     #if os(iOS)

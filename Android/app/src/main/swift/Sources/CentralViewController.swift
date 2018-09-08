@@ -32,7 +32,7 @@ final class CentralViewController: UITableViewController {
     
     private(set) var items = [NativeScanData]()
     
-    let scanDuration: TimeInterval = 5.0
+    let scanDuration: TimeInterval = 10.0
     
     let filterDuplicates: Bool = false
     

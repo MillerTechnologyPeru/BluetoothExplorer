@@ -100,7 +100,7 @@ extension AppDelegate {
     /// Checks if permissions are needed.
     func requestBluetoothPermissions() -> Bool {
         
-        let context = AndroidContextWrapper(casting: UIApplication.shared.android)!
+        let context = AndroidContextWrapper(casting: UIApplication.shared.androidActivity)!
         
         if Android.OS.Build.Version.Sdk.sdkInt.rawValue >= Android.OS.Build.VersionCodes.M,
             context.checkSelfPermission(permission: Android.ManifestPermission.accessCoarseLocation.rawValue) != Android.Content.PM.PackageManager.Permission.granted.rawValue {

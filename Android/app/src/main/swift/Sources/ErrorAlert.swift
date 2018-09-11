@@ -6,6 +6,7 @@
 //  Copyright © 2018 PureSwift. All rights reserved.
 //
 
+import Foundation
 #if os(iOS)
 import UIKit
 #elseif os(Android) || os(macOS)
@@ -19,8 +20,6 @@ public extension UIViewController {
     func showErrorAlert(_ localizedText: String,
                         okHandler: (() -> ())? = nil,
                         retryHandler: (()-> ())? = nil) {
-        
-        #if os(iOS)
         
         let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Error"),
                                       message: localizedText,
@@ -46,7 +45,5 @@ public extension UIViewController {
         }
         
         self.present(alert, animated: true, completion: nil)
-        
-        #endif
     }
 }

@@ -24,11 +24,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    #if os(Android) || os(macOS)
+    var bluetoothEnabled: (() -> ())?
+    #endif
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         NSLog("\(#function)")
         
-        #if os(Android)
+        #if os(Android) || os(macOS)
         NSLog("UIScreen scale: \(UIScreen.main.scale)")
         NSLog("UIScreen native scale: \(UIScreen.main.nativeScale)")
         NSLog("UIScreen size: \(UIScreen.main.bounds.size)")
@@ -39,7 +43,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         NativeCentral.shared.log = { log("Central: \($0)") }
         
         // load window and view controller
-        
         let viewController = CentralViewController()
         
         let navigationController = UINavigationController(rootViewController: viewController)
@@ -47,6 +50,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
+        
+        // request Bluetooth permissions
+        #if os(Android) || os(macOS)
+        self.enableBluetooth()
+        #endif
         
         return true
     }
@@ -90,26 +98,83 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 #if os(Android) || os(macOS)
 
 extension AppDelegate {
-    
+
     internal struct AndroidPermissionRequest {
         
         static let enableBluetooth = 1000
         static let gps = 2000
     }
+}
+
+extension AppDelegate {
+    
+    func application(_ application: UIApplication, activityResult requestCode: Int, resultCode: Int, data: Android.Content.Intent?) {
+        
+        NSLog("\(type(of: self)) \(#function) - requestCode = \(requestCode) - resultCode = \(resultCode)")
+        
+        if resultCode == AndroidPermissionRequest.enableBluetooth,
+           resultCode == SwiftSupportAppCompatActivity.RESULT_OK {
+            
+            // no need to request permissions
+            if requestLocationPermissions() {
+                
+                //
+                bluetoothEnabled?()
+            }
+        }
+    }
+    
+    func application(_ application: UIApplication, requestPermissionsResult requestCode: Int, permissions: [String], grantResults: [Int]) {
+        
+        NSLog("\(type(of: self)) \(#function)")
+        
+        if requestCode == AndroidPermissionRequest.gps {
+            
+            if grantResults[0] == Android.Content.PM.PackageManager.Permission.granted.rawValue {
+                
+                // permission granted, now we can scan
+                bluetoothEnabled?()
+                
+            } else {
+                
+                NSLog(" \(type(of: self)) \(#function) GPS Permission is required")
+            }
+        }
+    }
+}
+
+extension AppDelegate {
     
     /// Checks if permissions are needed.
-    func requestBluetoothPermissions() -> Bool {
+    @discardableResult
+    func enableBluetooth(hostController: Android.Bluetooth.Adapter = Android.Bluetooth.Adapter.default!) -> Bool {
         
-        let context = AndroidContextWrapper(casting: UIApplication.shared.androidActivity)!
+        guard hostController.isEnabled() == false
+            else { return requestLocationPermissions() }
+        
+        let enableBluetoothIntent = Android.Content.Intent(action: Android.Bluetooth.Adapter.Action.requestEnable.rawValue)
+        
+        UIApplication.shared.androidActivity.startActivityForResult(intent: enableBluetoothIntent,
+                                                                    requestCode: AndroidPermissionRequest.enableBluetooth)
+        
+        log("\(type(of: self)) \(#function) enable Bluetooth")
+        
+        return false
+    }
+    
+    @discardableResult
+    func requestLocationPermissions() -> Bool {
+        
+        let activity = UIApplication.shared.androidActivity
         
         if Android.OS.Build.Version.Sdk.sdkInt.rawValue >= Android.OS.Build.VersionCodes.M,
-            context.checkSelfPermission(permission: Android.ManifestPermission.accessCoarseLocation.rawValue) != Android.Content.PM.PackageManager.Permission.granted.rawValue {
+            activity.checkSelfPermission(permission: Android.ManifestPermission.accessCoarseLocation.rawValue) != Android.Content.PM.PackageManager.Permission.granted.rawValue {
             
             log("\(type(of: self)) \(#function) request permission")
             
             let permissions = [Android.ManifestPermission.accessCoarseLocation.rawValue]
             
-            context.requestPermissions(permissions: permissions, requestCode: AndroidPermissionRequest.gps)
+            activity.requestPermissions(permissions: permissions, requestCode: AndroidPermissionRequest.gps)
             
             return false
             

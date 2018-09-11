@@ -9,9 +9,18 @@
 import Foundation
 import Dispatch
 
+#if os(Android) || os(macOS)
+import Android
+import AndroidUIKit
+#endif
+
 func mainQueue(_ block: @escaping () -> ()) {
     
+    #if os(iOS)
     DispatchQueue.main.async(execute: block)
+    #elseif os(Android) || os(macOS)
+    UIApplication.shared.androidActivity.runOnMainThread(block)
+    #endif
 }
 
 /// Perform a task on the internal queue.

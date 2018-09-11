@@ -32,7 +32,7 @@ final class CentralViewController: UITableViewController {
     
     private(set) var items = [NativeScanData]()
     
-    let scanDuration: TimeInterval = 5.0
+    let scanDuration: TimeInterval = 10.0
     
     let filterDuplicates: Bool = false
     
@@ -56,6 +56,11 @@ final class CentralViewController: UITableViewController {
         let refreshControl = UIRefreshControl(frame: .zero)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         self.refreshControl = refreshControl
+        #endif
+        
+        #if os(Android) || os(macOS)
+        AppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
+        reloadData()
         #endif
     }
     
@@ -94,6 +99,8 @@ final class CentralViewController: UITableViewController {
     #endif
     
     private func reloadData() {
+        
+        log("\(type(of: self)) \(#function)")
         
         // clear table data
         self.items.removeAll()
@@ -176,6 +183,9 @@ final class CentralViewController: UITableViewController {
         
         log("Selected \(item.peripheral) \(item.advertisementData.localName ?? "")")
         
+        let viewController = ServicesViewController(scanData: item)
+        
+        self.show(viewController, sender: self)
     }
 }
 

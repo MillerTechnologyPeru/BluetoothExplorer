@@ -52,11 +52,15 @@ final class CentralViewController: UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         
         // add refresh control
-        #if os(iOS)
+        let actionRefresh: () -> () = {
+            
+            self.pullToRefresh()
+        }
+        
         let refreshControl = UIRefreshControl(frame: .zero)
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.addTarget(action: actionRefresh, for: UIControlEvent.valueChanged)
+        
         self.refreshControl = refreshControl
-        #endif
         
         #if os(Android) || os(macOS)
         AppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
@@ -72,12 +76,16 @@ final class CentralViewController: UITableViewController {
     
     // MARK: - Actions
     
-    #if os(iOS)
-    @IBAction func pullToRefresh(_ sender: UIRefreshControl) {
+    func pullToRefresh() {
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in self?.reloadData() })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in
+            
+            UIApplication.shared.androidActivity.runOnMainThread {
+                
+                self?.reloadData()
+            }
+        })
     }
-    #endif
     
     // MARK: - Methods
     
@@ -87,7 +95,6 @@ final class CentralViewController: UITableViewController {
         get { return self.items[indexPath.row] }
     }
     
-    #if os(iOS)
     private final func endRefreshing() {
         
         if let refreshControl = self.refreshControl,
@@ -96,7 +103,6 @@ final class CentralViewController: UITableViewController {
             refreshControl.endRefreshing()
         }
     }
-    #endif
     
     private func reloadData() {
         
@@ -200,12 +206,9 @@ extension CentralViewController: ActivityIndicatorViewController {
     
     func hideActivity(animated: Bool = true) {
         
-        #if os(iOS)
-        if let refreshControl = self.refreshControl,
-            refreshControl.isRefreshing {
+        if let refreshControl = self.refreshControl, refreshControl.isRefreshing {
             
             self.endRefreshing()
         }
-        #endif
     }
 }

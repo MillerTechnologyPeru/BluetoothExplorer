@@ -6,7 +6,7 @@
         "repositoryURL": "git@github.com:PureSwift/Android.git",
         "state": {
           "branch": "master",
-          "revision": "fe82fef303bb164ab9a6772cfb7446718727fe53",
+          "revision": "5e45fee9583cabe7ccfc8bfd131dca791c0d579c",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "cdb97dac4870249cacf45b9676191a05c8d80324",
+          "revision": "e9e427f176ed9f56e15565a05309b46ebf0c5ca4",
           "version": null
         }
       },
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
           "branch": null,
-          "revision": "de0eb5093bc04fa2cb80a32921847c79f85da9eb",
-          "version": "2.4.0"
+          "revision": "8dc48df9cafe80cd97aadc5fd5dca0b18571d0f2",
+          "version": "2.5.2"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/PureSwift/BluetoothLinux.git",
         "state": {
           "branch": null,
-          "revision": "b63ac955dcb2ab3cdf76fecea6df3ca31198a25f",
-          "version": "3.1.2"
+          "revision": "881c319763206f60e26bac11d21272e19c995f7e",
+          "version": "3.2.0"
         }
       },
       {
@@ -51,7 +51,7 @@
         "repositoryURL": "git@github.com:PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "4388f92ed4b108b8ace0567276bd359299ac690e",
+          "revision": "1bc12de689f97828549b91d1a4addddea0caeec3",
           "version": null
         }
       },

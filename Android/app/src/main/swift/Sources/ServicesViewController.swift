@@ -61,11 +61,15 @@ final class ServicesViewController: UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         
         // add refresh control
-        #if os(iOS)
+        
+        let actionRefresh: () -> () = {
+            
+            self.reloadData()
+        }
+        
         let refreshControl = UIRefreshControl(frame: .zero)
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.addTarget(action: actionRefresh, for: .valueChanged)
         self.refreshControl = refreshControl
-        #endif
         
         self.configureView()
         self.reloadData()
@@ -73,12 +77,6 @@ final class ServicesViewController: UITableViewController {
     
     // MARK: - Actions
     
-    #if os(iOS)
-    @IBAction func pullToRefresh(_ sender: UIRefreshControl) {
-        
-        reloadData()
-    }
-    #endif
     
     // MARK: - Methods
     
@@ -107,7 +105,6 @@ final class ServicesViewController: UITableViewController {
         })
     }
     
-    #if os(iOS)
     private func endRefreshing() {
         
         if let refreshControl = self.refreshControl,
@@ -116,7 +113,6 @@ final class ServicesViewController: UITableViewController {
             refreshControl.endRefreshing()
         }
     }
-    #endif
     
     private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
         
@@ -158,12 +154,10 @@ extension ServicesViewController: ActivityIndicatorViewController {
     
     func hideActivity(animated: Bool = true) {
         
-        #if os(iOS)
         if let refreshControl = self.refreshControl,
             refreshControl.isRefreshing {
             
             self.endRefreshing()
         }
-        #endif
     }
 }

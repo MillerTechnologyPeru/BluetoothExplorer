@@ -110,6 +110,7 @@ final class CentralViewController: UITableViewController {
         
         // clear table data
         self.items.removeAll()
+        tableView.reloadData()
         
         // make sure its enabled
         #if os(Android)

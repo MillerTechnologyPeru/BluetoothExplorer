@@ -141,6 +141,23 @@ final class ServicesViewController: UITableViewController {
         
         return cell
     }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        #if os(iOS)
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        #endif
+        
+        let item = self[indexPath]
+        
+        log("Selected \(item.peripheral) \(item.uuid.description ?? "")")
+        
+        let viewController = CharacteristicsViewController(selectedService: item)
+        
+        self.show(viewController, sender: self)
+    }
 }
 
 // MARK: - ActivityIndicatorViewController

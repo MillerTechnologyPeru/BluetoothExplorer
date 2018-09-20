@@ -228,7 +228,7 @@ public final class AndroidCentral: CentralProtocol {
             return cache.services.values.map { identifier, service in
                 
                 let uuid = BluetoothUUID(android: service.getUuid())
-                
+                NSLog("Service UUID: \(uuid.description)")
                 let isPrimary = service.getType() == AndroidBluetoothGattService.ServiceType.primary
                 
                 let service = Service(identifier: identifier,
@@ -245,9 +245,7 @@ public final class AndroidCentral: CentralProtocol {
                                         for service: Service<Peripheral>,
                                         timeout: TimeInterval = .gattDefaultTimeout) throws -> [Characteristic<Peripheral>] {
         
-        guard hostController.isEnabled()
-            else { throw AndroidCentralError.bluetoothDisabled }
-        
+        NSLog("im in discoverCharacteristics")
         /*
         // store semaphore
         let semaphore = Semaphore(timeout: timeout)
@@ -265,16 +263,16 @@ public final class AndroidCentral: CentralProtocol {
         
         guard let cache = self.internalState.cache[service.peripheral]
             else { throw CentralError.disconnected }
-        
+        NSLog("discoverCharacteristics got cache")
         guard let gattService = cache.services.values[service.identifier]
             else { throw AndroidCentralError.binderFailure }
-        
+        NSLog("discoverCharacteristics got serevice from cache")
         let gattCharacteristics = gattService.getCharacteristics()
-        
+        NSLog("discoverCharacteristics count \(gattCharacteristics.count)")
         return gattCharacteristics.map { characteristic in
             
             let uuid = BluetoothUUID(android: characteristic.getUuid())
-            
+            NSLog("Characteristics UUID: \(uuid.description)")
             let properties = BitMaskOptionSet<GATT.CharacteristicProperty>(rawValue: UInt8(characteristic.getProperties()))
             
             let characteristic = Characteristic<Peripheral>(identifier: UInt(characteristic.getInstanceId()),
@@ -653,7 +651,8 @@ internal extension AndroidCentral {
         fileprivate func update(_ newValues: [Android.Bluetooth.GattService]) {
             
             newValues.forEach {
-                let identifier = UInt(bitPattern: $0.getInstanceId())
+                
+                let identifier = UInt(bitPattern: $0.hashCode())
                 services.values[identifier] = $0
             }
         }

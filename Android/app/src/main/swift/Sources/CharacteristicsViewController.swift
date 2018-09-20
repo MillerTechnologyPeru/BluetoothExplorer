@@ -93,15 +93,49 @@ final class CharacteristicsViewController: UITableViewController {
     
     private func reloadData() {
         
-        let timeout = self.timeout
+        //let timeout = self.timeout
+        
+        let serviceUUID = self.selectedService.uuid
+        let peripheral = self.selectedService.peripheral
         
         performActivity({
-            try NativeCentral.shared.connect(to: self.selectedService.peripheral)
-            defer { NativeCentral.shared.disconnect(peripheral: self.selectedService.peripheral) }
-            return try NativeCentral.shared.discoverCharacteristics(for: self.selectedService)
+            try NativeCentral.shared.connect(to: peripheral)
+            defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
+            let services = try NativeCentral.shared.discoverServices(for: peripheral)
+            guard let service = services.first(where: { $0.uuid == serviceUUID })
+                else { throw CentralError.unknownPeripheral }
+            return try NativeCentral.shared.discoverCharacteristics(for: service)
         }, completion: {
             $0.items = $1
         })
+    }
+    
+    private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
+        
+        let item = self[indexPath]
+        
+        cell.textLabel?.text = item.uuid.description
+    }
+    
+    // MARK: - UITableViewDataSource
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return items.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
+        
+        configure(cell: cell, at: indexPath)
+        
+        return cell
     }
 }
 

@@ -23,6 +23,12 @@ public enum AndroidCentralError: Error {
     /// Binder IPC failure.
     case binderFailure
     
+    /// Characteristic not found
+    case characteristicNotFound
+    
+    /// Unsatisfactory Process
+    case unsatisfactoryProcess
+    
     /// Unexpected null value.
     case nullValue(AnyKeyPath)
 }
@@ -245,41 +251,28 @@ public final class AndroidCentral: CentralProtocol {
                                         for service: Service<Peripheral>,
                                         timeout: TimeInterval = .gattDefaultTimeout) throws -> [Characteristic<Peripheral>] {
         
-        NSLog("im in discoverCharacteristics")
-        /*
-        // store semaphore
-        let semaphore = Semaphore(timeout: timeout)
-        accessQueue.sync { [unowned self] in self.internalState.discoverCharacteristics.semaphore = semaphore }
-        defer { accessQueue.sync { [unowned self] in self.internalState.discoverCharacteristics.semaphore = nil } }
-        
-        try accessQueue.sync { [unowned self] in
-         
-            NSLog("\(gattService.getUuid().toString()) - char size \(characteristics.size())")
-        }
-        
-        // throw async error
-        do { try semaphore.wait() }
-        */
-        
         guard let cache = self.internalState.cache[service.peripheral]
             else { throw CentralError.disconnected }
-        NSLog("discoverCharacteristics got cache")
+        
         guard let gattService = cache.services.values[service.identifier]
             else { throw AndroidCentralError.binderFailure }
-        NSLog("discoverCharacteristics got serevice from cache")
+        
         let gattCharacteristics = gattService.getCharacteristics()
-        NSLog("discoverCharacteristics count \(gattCharacteristics.count)")
+        
+        internalState.cache[service.peripheral]?.update(gattCharacteristics)
+        
         return gattCharacteristics.map { characteristic in
             
             let uuid = BluetoothUUID(android: characteristic.getUuid())
-            NSLog("Characteristics UUID: \(uuid.description)")
+            
             let properties = BitMaskOptionSet<GATT.CharacteristicProperty>(rawValue: UInt8(characteristic.getProperties()))
             
-            let characteristic = Characteristic<Peripheral>(identifier: UInt(characteristic.getInstanceId()),
+            let identifier = UInt(characteristic.hashCode())
+            
+            let characteristic = Characteristic<Peripheral>(identifier: identifier,
                                                             uuid: uuid,
                                                             peripheral: service.peripheral,
                                                             properties: properties)
-            
             return characteristic
         }
     }
@@ -287,7 +280,44 @@ public final class AndroidCentral: CentralProtocol {
     public func readValue(for characteristic: Characteristic<Peripheral>, timeout: TimeInterval) throws -> Data {
         NSLog("\(type(of: self)) \(#function)")
         
-        fatalError("not implemented")
+        guard hostController.isEnabled()
+            else { throw AndroidCentralError.bluetoothDisabled }
+        
+        // store semaphore
+        let semaphore = Semaphore(timeout: timeout)
+        accessQueue.sync { [unowned self] in self.internalState.readCharacteristic.semaphore = semaphore }
+        defer { accessQueue.sync { [unowned self] in self.internalState.readCharacteristic.semaphore = nil } }
+        
+        
+        try accessQueue.sync { [unowned self] in
+            
+            guard let cache = self.internalState.cache[characteristic.peripheral]
+                else { throw CentralError.disconnected }
+            
+            guard let gattCharacteristic = cache.characteristics.values[characteristic.identifier]
+                else { throw AndroidCentralError.characteristicNotFound }
+            
+            guard cache.gatt.readCharacteristic(characteristic: gattCharacteristic)
+                else { throw AndroidCentralError.unsatisfactoryProcess }
+        }
+        
+        // throw async error
+        do { try semaphore.wait() }
+        
+        // get values from internal state
+        return try accessQueue.sync { [unowned self] in
+            
+            guard let cache = self.internalState.cache[characteristic.peripheral]
+                else { throw CentralError.unknownPeripheral }
+            
+            guard let readCharacteristic = cache.readCharacteristic
+                else { throw CentralError.invalidAttribute(characteristic.uuid) }
+            
+            guard let value = readCharacteristic.getValue()
+                else { throw CentralError.invalidAttribute(characteristic.uuid) }
+            
+            return Data(unsafeBitCast(value, to: [UInt8].self))
+        }
     }
     
     public func writeValue(_ data: Data, for characteristic: Characteristic<Peripheral>, withResponse: Bool, timeout: TimeInterval) throws {
@@ -470,6 +500,26 @@ public final class AndroidCentral: CentralProtocol {
             
             central?.log?("\(type(of: self)): \(#function)")
             
+            let peripheral = Peripheral(gatt)
+            
+            central?.log?("\(type(of: self)): \(#function)")
+            
+            central?.log?("\(peripheral) Status: \(status)")
+            
+            central?.accessQueue.async { [weak self] in
+                
+                guard let central = self?.central
+                    else { return }
+                
+                guard status == .success
+                    else { central.internalState.readCharacteristic.semaphore?.stopWaiting(status); return }
+                
+                central.internalState.cache[peripheral]?.update(characteristic)
+                
+                // success
+                central.internalState.discoverServices.semaphore?.stopWaiting()
+                central.internalState.discoverServices.semaphore = nil
+            }
         }
         
         public override func onCharacteristicWrite(gatt: Android.Bluetooth.Gatt, characteristic: Android.Bluetooth.GattCharacteristic, status: AndroidBluetoothGatt.Status) {
@@ -643,6 +693,15 @@ internal extension AndroidCentral {
         
         var services = Services()
         
+        var characteristics = Characteristics()
+        
+        var readCharacteristic: Android.Bluetooth.GattCharacteristic?
+        
+        struct Characteristics {
+            
+            fileprivate(set) var values: [UInt: Android.Bluetooth.GattCharacteristic] = [:]
+        }
+        
         struct Services {
             
             fileprivate(set) var values: [UInt: Android.Bluetooth.GattService] = [:]
@@ -655,6 +714,20 @@ internal extension AndroidCentral {
                 let identifier = UInt(bitPattern: $0.hashCode())
                 services.values[identifier] = $0
             }
+        }
+        
+        fileprivate func update(_ newValues: [Android.Bluetooth.GattCharacteristic]) {
+            
+            newValues.forEach {
+                
+                let identifier = UInt(bitPattern: $0.hashCode())
+                characteristics.values[identifier] = $0
+            }
+        }
+        
+        fileprivate func update(_ newValue: Android.Bluetooth.GattCharacteristic) {
+            
+            readCharacteristic = newValue
         }
     }
 }

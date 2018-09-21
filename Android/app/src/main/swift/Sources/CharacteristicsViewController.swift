@@ -16,7 +16,7 @@ import Android
 import AndroidUIKit
 #endif
 
-/// Services
+/// Characteristics
 final class CharacteristicsViewController: UITableViewController {
     
     typealias NativeService = Service<NativeCentral.Peripheral>
@@ -64,7 +64,13 @@ final class CharacteristicsViewController: UITableViewController {
         }
         
         let refreshControl = UIRefreshControl(frame: .zero)
-        refreshControl.addTarget(action: actionRefresh, for: .valueChanged)
+
+        #if os(Android) || os(macOS)
+        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        #else
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
+        #endif
+        
         self.refreshControl = refreshControl
         
         self.configureView()
@@ -76,6 +82,16 @@ final class CharacteristicsViewController: UITableViewController {
         @inline(__always)
         get { return self.items[indexPath.row] }
     }
+    
+    #if os(iOS) || os(macOS)
+    @objc func pullToRefresh() {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in
+            
+            self?.reloadData()
+        })
+    }
+    #endif
     
     private func endRefreshing() {
         
@@ -136,6 +152,23 @@ final class CharacteristicsViewController: UITableViewController {
         configure(cell: cell, at: indexPath)
         
         return cell
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        #if os(iOS)
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        #endif
+        
+        let item = self[indexPath]
+        
+        log("Selected \(item.peripheral) \(item.uuid.description ?? "")")
+        
+        let viewController = CharacteristicViewController(selectedService: selectedService, selectedCharacteristic: item)
+        
+        self.show(viewController, sender: self)
     }
 }
 

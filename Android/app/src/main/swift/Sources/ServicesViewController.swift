@@ -68,7 +68,12 @@ final class ServicesViewController: UITableViewController {
         }
         
         let refreshControl = UIRefreshControl(frame: .zero)
-        refreshControl.addTarget(action: actionRefresh, for: .valueChanged)
+        #if os(Android) || os(macOS)
+        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        #else
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
+        #endif
+        
         self.refreshControl = refreshControl
         
         self.configureView()
@@ -77,6 +82,15 @@ final class ServicesViewController: UITableViewController {
     
     // MARK: - Actions
     
+    #if os(iOS) || os(macOS)
+    @objc func pullToRefresh() {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in
+            
+            self?.reloadData()
+        })
+    }
+    #endif
     
     // MARK: - Methods
     

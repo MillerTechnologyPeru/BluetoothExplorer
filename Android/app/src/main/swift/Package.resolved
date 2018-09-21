@@ -15,7 +15,7 @@
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "588f4c52186e31f398663973f65bd7fdafe7737a",
+          "revision": "eecb602bf2328e2bc086be050bfe2bbe487861e4",
           "version": null
         }
       },
@@ -51,7 +51,7 @@
         "repositoryURL": "git@github.com:PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "1bc12de689f97828549b91d1a4addddea0caeec3",
+          "revision": "2841502875c91ba0fb3314951feed12054d70ac5",
           "version": null
         }
       },

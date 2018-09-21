@@ -54,11 +54,16 @@ final class CentralViewController: UITableViewController {
         // add refresh control
         let actionRefresh: () -> () = {
             
-            self.pullToRefresh()
+            self.reloadData()
         }
         
         let refreshControl = UIRefreshControl(frame: .zero)
-        refreshControl.addTarget(action: actionRefresh, for: UIControlEvent.valueChanged)
+        
+        #if os(Android) || os(macOS)
+        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        #else
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
+        #endif
         
         self.refreshControl = refreshControl
         
@@ -76,16 +81,16 @@ final class CentralViewController: UITableViewController {
     
     // MARK: - Actions
     
-    func pullToRefresh() {
+    #if os(iOS) || os(macOS)
+    @objc func pullToRefresh() {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in
             
-            UIApplication.shared.androidActivity.runOnMainThread {
-                
-                self?.reloadData()
-            }
+            self?.reloadData()
         })
     }
+    #endif
+    
     
     // MARK: - Methods
     
@@ -188,6 +193,8 @@ final class CentralViewController: UITableViewController {
         
         let item = self[indexPath]
         
+        self.endRefreshing()
+        
         log("Selected \(item.peripheral) \(item.advertisementData.localName ?? "")")
         
         let viewController = ServicesViewController(scanData: item)
@@ -207,9 +214,6 @@ extension CentralViewController: ActivityIndicatorViewController {
     
     func hideActivity(animated: Bool = true) {
         
-        if let refreshControl = self.refreshControl, refreshControl.isRefreshing {
-            
-            self.endRefreshing()
-        }
+        self.endRefreshing()
     }
 }

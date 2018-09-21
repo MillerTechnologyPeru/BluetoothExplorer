@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51B6F9B3215567E800251524 /* CharacteristicsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */; };
 		6E303E072142398F0034A6C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E303E062142398F0034A6C1 /* Assets.xcassets */; };
 		6E303E0A2142398F0034A6C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E303E082142398F0034A6C1 /* LaunchScreen.storyboard */; };
 		6E303E1921423AED0034A6C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E303E1421423AED0034A6C1 /* AppDelegate.swift */; };
@@ -165,6 +166,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicsViewController.swift; sourceTree = "<group>"; };
 		6E303DFC2142398E0034A6C1 /* BluetoothExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluetoothExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E303E062142398F0034A6C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E303E092142398F0034A6C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				6EAEEE4421424869009A7A9F /* Protocols */,
 				6EAEEE432142485F009A7A9F /* Extensions */,
 				6E73401E21424322001B8682 /* CentralViewController.swift */,
+				51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */,
 				6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */,
 			);
 			name = Controller;
@@ -504,6 +507,7 @@
 				6EAEEED221437F2B009A7A9F /* ServicesViewController.swift in Sources */,
 				6EAEEE42214247F3009A7A9F /* Log.swift in Sources */,
 				6E303E1A21423AED0034A6C1 /* main.swift in Sources */,
+				51B6F9B3215567E800251524 /* CharacteristicsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

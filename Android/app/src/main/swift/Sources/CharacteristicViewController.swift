@@ -33,6 +33,10 @@ final class CharacteristicViewController: UITableViewController {
         didSet { configureView() }
     }
     
+    private var isNotifying = false {
+        didSet { configureView() }
+    }
+    
     private let timeout: TimeInterval = .gattDefaultTimeout
     
     // MARK: - Initialization
@@ -76,7 +80,7 @@ final class CharacteristicViewController: UITableViewController {
     private subscript (indexPath: IndexPath) -> Item {
         
         @inline(__always)
-        get { return self.sections[indexPath.row].items[indexPath.section] }
+        get { return self.sections[indexPath.section].items[indexPath.row] }
     }
     
     private func configureView() {
@@ -101,7 +105,7 @@ final class CharacteristicViewController: UITableViewController {
             sections.append(Section(name: "", items: items))
         }
         
-        if sections.isEmpty == false {
+        if characteristicValue.isEmpty == false {
             
             sections.append(Section(name: "Value", items: characteristicValue.map { Item.value($0) }))
         }
@@ -110,6 +114,9 @@ final class CharacteristicViewController: UITableViewController {
             
             sections.append(Section(name: "Properties", items: characteristic.properties.map { Item.property($0) }))
         }
+        
+        // update UI
+        tableView.reloadData()
     }
     
     private func readValue() {
@@ -148,6 +155,46 @@ final class CharacteristicViewController: UITableViewController {
             try NativeCentral.shared.writeValue(newValue, for: characteristic, withResponse: withResponse, timeout: timeout)
         }, completion: { (viewController: CharacteristicViewController, _) in
             viewController.characteristicValue.append(newValue)
+        })
+    }
+    
+    private func startNotifications() {
+        
+        let timeout = self.timeout
+        let service = self.service
+        let characteristic = self.characteristic
+        let peripheral = self.service.peripheral
+        
+        performActivity({
+            try NativeCentral.shared.connect(to: peripheral, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
+            try NativeCentral.shared.notify({ [weak self] (newValue) in mainQueue { self?.notification(newValue) } }, for: characteristic)
+        }, completion: { (viewController: CharacteristicViewController, _) in
+            viewController.isNotifying = true
+        })
+    }
+    
+    private func notification(_ newValue: Data) {
+        
+        self.characteristicValue.append(newValue)
+    }
+    
+    private func stopNotifications() {
+        
+        let timeout = self.timeout
+        let service = self.service
+        let characteristic = self.characteristic
+        let peripheral = self.service.peripheral
+        
+        performActivity({
+            // should already be connected
+            defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
+            let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
+            try NativeCentral.shared.notify(nil, for: characteristic)
+        }, completion: { (viewController: CharacteristicViewController, _) in
+            viewController.isNotifying = false
         })
     }
     
@@ -203,6 +250,41 @@ final class CharacteristicViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        #if os(iOS)
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        #endif
+        
+        let item = self[indexPath]
+        
+        switch item {
+            
+        case .uuid,
+             .name:
+            break
+            
+        case let .value(data):
+            break // TODO: Show expanded data
+            
+        case let .property(property):
+            
+            switch property {
+            case .broadcast,
+                 .extendedProperties,
+                 .signedWrite:
+                break // cant handle
+            case .read:
+                readValue()
+            case .write:
+                // TODO: show UI to write new value
+                break
+            case .writeWithoutResponse:
+                // TODO: show UI to write new value
+                break
+            case .notify,
+                 .indicate:
+                isNotifying ? stopNotifications() : startNotifications()
+            }
+        }
     }
 }
 

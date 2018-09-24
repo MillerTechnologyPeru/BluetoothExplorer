@@ -26,9 +26,6 @@ public enum AndroidCentralError: Error {
     /// Characteristic not found
     case characteristicNotFound
     
-    /// Unsatisfactory Process
-    case unsatisfactoryProcess
-    
     /// Unexpected null value.
     case nullValue(AnyKeyPath)
 }
@@ -295,7 +292,7 @@ public final class AndroidCentral: CentralProtocol {
                 else { throw AndroidCentralError.characteristicNotFound }
             
             guard cache.gatt.readCharacteristic(characteristic: gattCharacteristic)
-                else { throw AndroidCentralError.unsatisfactoryProcess }
+                else { throw AndroidCentralError.binderFailure }
         }
         
         // throw async error

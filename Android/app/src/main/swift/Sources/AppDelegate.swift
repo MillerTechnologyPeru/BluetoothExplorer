@@ -30,7 +30,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        NSLog("\(#function)")
+        #if os(iOS)
+        log("Launching Bluetooth Explorer v\(AppVersion) Build \(AppBuild)")
+        #elseif os(Android)
+        log("Launching Bluetooth Explorer")
+        #endif
         
         #if os(Android) || os(macOS)
         NSLog("UIScreen scale: \(UIScreen.main.scale)")
@@ -54,7 +58,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
         
-        // request Bluetooth permissions
+        // request Bluetooth permissions on Android
         #if os(Android) || os(macOS)
         self.enableBluetooth()
         #endif
@@ -95,6 +99,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("\(#function)")
     }
 }
+
+// MARK: - iOS Info Plist
+
+#if os(iOS)
+/// Version of the app.
+public let AppVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+
+/// Build of the app.
+public let AppBuild = Int(Bundle.main.infoDictionary!["CFBundleVersion"] as! String)!
+#endif
 
 // MARK: - Android Permissions
 

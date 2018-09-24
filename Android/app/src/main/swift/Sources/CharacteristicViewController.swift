@@ -108,17 +108,17 @@ final class CharacteristicViewController: UITableViewController {
             
             items.append(.uuid(characteristic.uuid))
             
-            sections.append(Section(name: "", items: items))
+            sections.append(Section(title: nil, items: items))
         }
         
         if characteristic.properties.isEmpty == false {
             
-            sections.append(Section(name: "Properties", items: characteristic.properties.map { Item.property($0) }))
+            sections.append(Section(title: "Properties", items: characteristic.properties.map { Item.property($0) }))
         }
         
         if characteristicValue.isEmpty == false {
             
-            sections.append(Section(name: "Value", items: characteristicValue.reversed().map { Item.value($0) }))
+            sections.append(Section(title: "Value", items: characteristicValue.reversed().map { Item.value($0) }))
         }
                 
         // update UI
@@ -252,6 +252,11 @@ final class CharacteristicViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        return self.sections[section].title
+    }
+    
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -281,10 +286,12 @@ final class CharacteristicViewController: UITableViewController {
             case .read:
                 readValue()
             case .write:
-                // TODO: show UI to write new value
+                // TODO: show UI to type new value
+                writeValue(Data())
                 break
             case .writeWithoutResponse:
-                // TODO: show UI to write new value
+                // TODO: show UI to type new value
+                writeValue(Data(), withResponse: false)
                 break
             case .notify,
                  .indicate:
@@ -315,7 +322,7 @@ private extension CharacteristicViewController {
     
     struct Section {
         
-        let name: String
+        let title: String?
         let items: [Item]
     }
     

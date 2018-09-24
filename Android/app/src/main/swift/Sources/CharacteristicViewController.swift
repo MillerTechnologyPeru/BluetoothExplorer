@@ -17,7 +17,7 @@ import AndroidUIKit
 #endif
 
 /// Characteristic
-final class CharacteristicViewController: UIViewController {
+final class CharacteristicViewController: UITableViewController {
     
     typealias NativeService = Service<NativeCentral.Peripheral>
     typealias NativeCharacteristic = Characteristic<NativeCentral.Peripheral>
@@ -27,9 +27,9 @@ final class CharacteristicViewController: UIViewController {
     let service: NativeService
     let characteristic: NativeCharacteristic
     
-    private(set) var characteristicValue = Data() {
+    private(set) var characteristicValue = [Data]() {
         
-        didSet { showInfo() }
+        didSet { configureView() }
     }
     
     private let timeout: TimeInterval = .gattDefaultTimeout
@@ -41,7 +41,7 @@ final class CharacteristicViewController: UIViewController {
         self.characteristic = characteristic
         self.service = service
         
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .grouped)
     }
     
     #if os(iOS)
@@ -52,32 +52,12 @@ final class CharacteristicViewController: UIViewController {
     
     // MARK: - Loading
     
-    override func loadView() {
-        
-         self.view = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
-        
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 250, height: 40))
-        label.text = "I'am a test label"
-        
-        self.view.addSubview(label)
-        
-        var label2 = UILabel.init(frame: CGRect.init(x: 0, y: 50, width: 250, height: 40))
-        label2.text = "I'am a test label 2"
-        
-        self.view.addSubview(label2)
-        
-        var label3 = UILabel.init(frame: CGRect.init(x: 0, y: 100, width: 250, height: 40))
-        label3.text = "I'am a test label 3"
-        
-        self.view.addSubview(label3)
-        
         self.configureView()
+        
+        self.readValue()
     }
     
     // MARK: - Methods
@@ -85,9 +65,8 @@ final class CharacteristicViewController: UIViewController {
     private func configureView() {
         
         self.title = self.characteristic.uuid.description
-    }
-    
-    private func showInfo() {
+        
+        // configure table view
         
     }
     
@@ -98,15 +77,40 @@ final class CharacteristicViewController: UIViewController {
         let characteristic = self.characteristic
         let peripheral = self.service.peripheral
         
+        guard characteristic.properties.contains(.read)
+            else { return }
+        
         performActivity({
-            
             try NativeCentral.shared.connect(to: peripheral, timeout: timeout)
             defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
             let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
             let _ = try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
             return try NativeCentral.shared.readValue(for: characteristic, timeout: timeout)
         }, completion: {
-            $0.characteristicValue = $1
+            $0.characteristicValue.append($1)
+        })
+    }
+    
+    private func writeValue() {
+        
+        let timeout = self.timeout
+        let service = self.service
+        let characteristic = self.characteristic
+        let peripheral = self.service.peripheral
+        
+        guard characteristic.properties.contains(.write)
+            || characteristic.properties.contains(.writeWithoutResponse)
+            else { return }
+        
+        let withResponse = characteristic.properties.contains(.writeWithoutResponse) ? false : true
+        let newValue = Data() // FIXME:
+        
+        performActivity({
+            try NativeCentral.shared.connect(to: peripheral, timeout: timeout)
+            defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
+            let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
+            try NativeCentral.shared.writeValue(newValue, for: characteristic, withResponse: withResponse, timeout: timeout)
         })
     }
 }
@@ -122,6 +126,21 @@ extension CharacteristicViewController: ActivityIndicatorViewController {
     
     func hideActivity(animated: Bool = true) {
         
-            //self.endRefreshing()
+        
+    }
+}
+
+// MARK: - Supporting Types
+
+private extension CharacteristicViewController {
+    
+    enum Cell {
+        
+        case uuid(UUID)
+        case name(String)
+        
+        case value(Data)
+        
+        case property(GATT.CharacteristicProperty)
     }
 }

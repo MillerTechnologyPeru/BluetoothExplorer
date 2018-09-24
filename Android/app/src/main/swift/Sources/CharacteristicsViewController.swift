@@ -162,7 +162,7 @@ final class CharacteristicsViewController: UITableViewController {
         
         let characteristic = self[indexPath]
         
-        log("Selected \(characteristic.peripheral) \(characteristic.uuid.description)")
+        log("Selected \(characteristic.uuid.description)")
         
         let viewController = CharacteristicViewController(service: service, characteristic: characteristic)
         

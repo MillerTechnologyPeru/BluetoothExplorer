@@ -22,12 +22,6 @@ final class CentralViewController: UITableViewController {
     
     typealias NativeScanData = ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>
     
-    // MARK: - IB Outlets
-    
-    #if os(iOS)
-    //@IBOutlet private(set) var activityIndicatorBarButtonItem: UIBarButtonItem!
-    #endif
-    
     // MARK: - Properties
     
     private(set) var items = [NativeScanData]()
@@ -51,16 +45,10 @@ final class CentralViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         
-        // add refresh control
-        let actionRefresh: () -> () = {
-            
-            self.reloadData()
-        }
-        
         let refreshControl = UIRefreshControl(frame: .zero)
         
         #if os(Android) || os(macOS)
-        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(action: { [unowned self] in self.reloadData() }, for: UIControlEvents.valueChanged)
         #else
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
         #endif
@@ -82,7 +70,7 @@ final class CentralViewController: UITableViewController {
     // MARK: - Actions
     
     #if os(iOS) || os(macOS)
-    @objc func pullToRefresh() {
+    @objc func pullToRefresh(_ sender: UIRefreshControl) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in
             
@@ -149,7 +137,7 @@ final class CentralViewController: UITableViewController {
         self.items.append(scanData)
         
         // sort
-        self.items.sort(by: { $0.rssi < $1.rssi })
+        self.items.sort(by: { $0.peripheral.description < $1.peripheral.description })
         
         // update table view
         self.tableView.reloadData()

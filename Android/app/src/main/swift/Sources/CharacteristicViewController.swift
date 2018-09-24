@@ -22,8 +22,10 @@ final class CharacteristicViewController: UIViewController {
     typealias NativeService = Service<NativeCentral.Peripheral>
     typealias NativeCharacteristic = Characteristic<NativeCentral.Peripheral>
     
-    let selectedService: NativeService
-    let selectedCharacteristic: NativeCharacteristic
+    // MARK: - Properties
+    
+    let service: NativeService
+    let characteristic: NativeCharacteristic
     
     private(set) var characteristicValue = Data() {
         
@@ -32,10 +34,12 @@ final class CharacteristicViewController: UIViewController {
     
     private let timeout: TimeInterval = .gattDefaultTimeout
     
-    init(selectedService: NativeService, selectedCharacteristic: NativeCharacteristic) {
+    // MARK: - Initialization
+    
+    init(service: NativeService, characteristic: NativeCharacteristic) {
         
-        self.selectedCharacteristic = selectedCharacteristic
-        self.selectedService = selectedService
+        self.characteristic = characteristic
+        self.service = service
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -46,37 +50,13 @@ final class CharacteristicViewController: UIViewController {
     }
     #endif
     
+    // MARK: - Loading
+    
     override func loadView() {
+        
          self.view = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
         
-    }
-    
-    private func showInfo(){
         
-    }
-    
-    private func reloadData() {
-        
-        //let timeout = self.timeout
-        
-        let characteristicUUID = self.selectedCharacteristic.uuid
-        let serviceUUID = self.selectedService.uuid
-        let peripheral = self.selectedService.peripheral
-        
-        performActivity({
-            
-            try NativeCentral.shared.connect(to: peripheral)
-            defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
-            let services = try NativeCentral.shared.discoverServices(for: peripheral)
-            guard let service = services.first(where: { $0.uuid == serviceUUID })
-                else { throw CentralError.unknownPeripheral }
-            let characteristics = try NativeCentral.shared.discoverCharacteristics(for: service)
-            guard let characteristic = characteristics.first(where: { $0.uuid == characteristicUUID })
-                else { throw CentralError.unknownPeripheral }
-            return try NativeCentral.shared.readValue(for: characteristic)
-        }, completion: {
-            $0.characteristicValue = $1
-        })
     }
     
     override func viewDidLoad() {
@@ -100,9 +80,44 @@ final class CharacteristicViewController: UIViewController {
         self.configureView()
     }
     
+    // MARK: - Methods
+    
     private func configureView() {
         
-        self.title = self.selectedCharacteristic.uuid.description
+        self.title = self.characteristic.uuid.description
+    }
+    
+    private func showInfo() {
+        
+    }
+    
+    private func reloadData() {
+        
+        let timeout = self.timeout
+        let service = self.service
+        let characteristic = self.characteristic
+        let peripheral = self.service.peripheral
+        
+        performActivity({
+            
+            try NativeCentral.shared.connect(to: peripheral, timeout: timeout)
+            
+            defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
+            
+            let services = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            
+            guard let foundService = services.first(where: { $0.identifier == service.identifier })
+                else { throw CentralError.invalidAttribute(service.uuid) }
+            
+            let characteristics = try NativeCentral.shared.discoverCharacteristics(for: foundService, timeout: timeout)
+            
+            guard let foundCharacteristic = characteristics.first(where: { $0.identifier == characteristic.identifier })
+                else { throw CentralError.invalidAttribute(characteristic.uuid) }
+            
+            return try NativeCentral.shared.readValue(for: foundCharacteristic, timeout: timeout)
+        }, completion: {
+            $0.characteristicValue = $1
+        })
     }
 }
 
@@ -120,5 +135,3 @@ extension CharacteristicViewController: ActivityIndicatorViewController {
             //self.endRefreshing()
     }
 }
-
-

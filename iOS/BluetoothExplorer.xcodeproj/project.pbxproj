@@ -285,8 +285,8 @@
 				6EAEEE4421424869009A7A9F /* Protocols */,
 				6EAEEE432142485F009A7A9F /* Extensions */,
 				6E73401E21424322001B8682 /* CentralViewController.swift */,
-				51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */,
 				6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */,
+				51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */,
 				6E0596A12158448B00BB43DC /* CharacteristicViewController.swift */,
 			);
 			name = Controller;

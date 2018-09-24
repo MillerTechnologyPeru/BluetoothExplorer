@@ -166,9 +166,9 @@ final class ServicesViewController: UITableViewController {
         
         let item = self[indexPath]
         
-        log("Selected \(item.peripheral) \(item.uuid.description ?? "")")
+        log("Selected \(item.peripheral) \(item.uuid.description)")
         
-        let viewController = CharacteristicsViewController(selectedService: item)
+        let viewController = CharacteristicsViewController(service: item)
         
         self.show(viewController, sender: self)
     }

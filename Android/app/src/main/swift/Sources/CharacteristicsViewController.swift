@@ -22,7 +22,7 @@ final class CharacteristicsViewController: UITableViewController {
     typealias NativeService = Service<NativeCentral.Peripheral>
     typealias NativeCharacteristic = Characteristic<NativeCentral.Peripheral>
     
-    let selectedService: NativeService
+    let service: NativeService
     
     private let cellReuseIdentifier = "Cell"
     
@@ -35,9 +35,9 @@ final class CharacteristicsViewController: UITableViewController {
     
     // MARK: - Loading
     
-    init(selectedService: NativeService) {
+    init(service: NativeService) {
         
-        self.selectedService = selectedService
+        self.service = service
         
         super.init(style: .plain)
     }
@@ -57,18 +57,12 @@ final class CharacteristicsViewController: UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         
         // add refresh control
-        
-        let actionRefresh: () -> () = {
-            
-            self.reloadData()
-        }
-        
         let refreshControl = UIRefreshControl(frame: .zero)
 
         #if os(Android) || os(macOS)
-        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(action: { [unowned self] in self.reloadData() }, for: .valueChanged)
         #else
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         #endif
         
         self.refreshControl = refreshControl
@@ -104,23 +98,23 @@ final class CharacteristicsViewController: UITableViewController {
     
     private func configureView() {
         
-        self.title = self.selectedService.uuid.description
+        self.title = self.service.uuid.description
     }
     
     private func reloadData() {
         
-        //let timeout = self.timeout
+        let timeout = self.timeout
         
-        let serviceUUID = self.selectedService.uuid
-        let peripheral = self.selectedService.peripheral
+        let service = self.service
+        let peripheral = self.service.peripheral
         
         performActivity({
             try NativeCentral.shared.connect(to: peripheral)
             defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
-            let services = try NativeCentral.shared.discoverServices(for: peripheral)
-            guard let service = services.first(where: { $0.uuid == serviceUUID })
-                else { throw CentralError.unknownPeripheral }
-            return try NativeCentral.shared.discoverCharacteristics(for: service)
+            let services = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            guard let foundService = services.first(where: { $0.identifier == service.identifier })
+                else { throw CentralError.invalidAttribute(service.uuid) }
+            return try NativeCentral.shared.discoverCharacteristics(for: foundService, timeout: timeout)
         }, completion: {
             $0.items = $1
         })
@@ -162,11 +156,11 @@ final class CharacteristicsViewController: UITableViewController {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         #endif
         
-        let item = self[indexPath]
+        let characteristic = self[indexPath]
         
-        log("Selected \(item.peripheral) \(item.uuid.description ?? "")")
+        log("Selected \(characteristic.peripheral) \(characteristic.uuid.description)")
         
-        let viewController = CharacteristicViewController(selectedService: selectedService, selectedCharacteristic: item)
+        let viewController = CharacteristicViewController(service: service, characteristic: characteristic)
         
         self.show(viewController, sender: self)
     }

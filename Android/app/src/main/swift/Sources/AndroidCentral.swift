@@ -277,7 +277,8 @@ public final class AndroidCentral: CentralProtocol {
         }
     }
     
-    public func readValue(for characteristic: Characteristic<Peripheral>, timeout: TimeInterval) throws -> Data {
+    public func readValue(for characteristic: Characteristic<Peripheral>, timeout: TimeInterval = .gattDefaultTimeout) throws -> Data {
+        
         NSLog("\(type(of: self)) \(#function)")
         
         guard hostController.isEnabled()
@@ -320,12 +321,12 @@ public final class AndroidCentral: CentralProtocol {
         }
     }
     
-    public func writeValue(_ data: Data, for characteristic: Characteristic<Peripheral>, withResponse: Bool, timeout: TimeInterval) throws {
+    public func writeValue(_ data: Data, for characteristic: Characteristic<Peripheral>, withResponse: Bool = true, timeout: TimeInterval = .gattDefaultTimeout) throws {
         NSLog("\(type(of: self)) \(#function)")
         
     }
     
-    public func notify(_ notification: ((Data) -> ())?, for characteristic: Characteristic<Peripheral>, timeout: TimeInterval) throws {
+    public func notify(_ notification: ((Data) -> ())?, for characteristic: Characteristic<Peripheral>, timeout: TimeInterval = .gattDefaultTimeout) throws {
         NSLog("\(type(of: self)) \(#function)")
         
     }

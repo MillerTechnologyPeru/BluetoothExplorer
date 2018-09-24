@@ -103,7 +103,7 @@ final class CentralViewController: UITableViewController {
     private final func endRefreshing() {
         
         if let refreshControl = self.refreshControl,
-            refreshControl.isRefreshing == true {
+            refreshControl.isRefreshing{
             
             refreshControl.endRefreshing()
         }
@@ -149,7 +149,7 @@ final class CentralViewController: UITableViewController {
         self.items.append(scanData)
         
         // sort
-        self.items.sort(by: { $0.peripheral.identifier.description < $1.peripheral.identifier.description })
+        self.items.sort(by: { $0.rssi < $1.rssi })
         
         // update table view
         self.tableView.reloadData()

@@ -25,18 +25,19 @@ final class CharacteristicViewController: UIViewController {
     let selectedService: NativeService
     let selectedCharacteristic: NativeCharacteristic
     
-    private(set) var characteristicValue: Data = Data() {
-        didSet {
-            showInfo()
-        }
+    private(set) var characteristicValue = Data() {
+        
+        didSet { showInfo() }
     }
     
     private let timeout: TimeInterval = .gattDefaultTimeout
     
     init(selectedService: NativeService, selectedCharacteristic: NativeCharacteristic) {
+        
         self.selectedCharacteristic = selectedCharacteristic
         self.selectedService = selectedService
-        super.init()
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
     #if os(iOS)

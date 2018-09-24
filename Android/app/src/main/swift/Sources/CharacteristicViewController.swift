@@ -91,7 +91,7 @@ final class CharacteristicViewController: UIViewController {
         
     }
     
-    private func reloadData() {
+    private func readValue() {
         
         let timeout = self.timeout
         let service = self.service
@@ -101,20 +101,10 @@ final class CharacteristicViewController: UIViewController {
         performActivity({
             
             try NativeCentral.shared.connect(to: peripheral, timeout: timeout)
-            
             defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
-            
-            let services = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
-            
-            guard let foundService = services.first(where: { $0.identifier == service.identifier })
-                else { throw CentralError.invalidAttribute(service.uuid) }
-            
-            let characteristics = try NativeCentral.shared.discoverCharacteristics(for: foundService, timeout: timeout)
-            
-            guard let foundCharacteristic = characteristics.first(where: { $0.identifier == characteristic.identifier })
-                else { throw CentralError.invalidAttribute(characteristic.uuid) }
-            
-            return try NativeCentral.shared.readValue(for: foundCharacteristic, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
+            return try NativeCentral.shared.readValue(for: characteristic, timeout: timeout)
         }, completion: {
             $0.characteristicValue = $1
         })

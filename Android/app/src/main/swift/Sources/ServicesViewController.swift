@@ -68,6 +68,7 @@ final class ServicesViewController: UITableViewController {
         }
         
         let refreshControl = UIRefreshControl(frame: .zero)
+        
         #if os(Android) || os(macOS)
         refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
         #else

@@ -45,6 +45,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // load window and view controller
         let viewController = CentralViewController()
         
+        // setup UI theme
+        configureAppearance()
+        
         let navigationController = UINavigationController(rootViewController: viewController)
         
         self.window = UIWindow(frame: UIScreen.main.bounds)

@@ -48,9 +48,9 @@ final class CentralViewController: UITableViewController {
         let refreshControl = UIRefreshControl(frame: .zero)
         
         #if os(Android) || os(macOS)
-        refreshControl.addTarget(action: { [unowned self] in self.reloadData() }, for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(action: { [unowned self] in self.reloadData() }, for: .valueChanged)
         #else
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         #endif
         
         self.refreshControl = refreshControl

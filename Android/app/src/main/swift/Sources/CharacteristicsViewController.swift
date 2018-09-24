@@ -22,6 +22,8 @@ final class CharacteristicsViewController: UITableViewController {
     typealias NativeService = Service<NativeCentral.Peripheral>
     typealias NativeCharacteristic = Characteristic<NativeCentral.Peripheral>
     
+    // MARK: - Properties
+    
     let service: NativeService
     
     private let cellReuseIdentifier = "Cell"
@@ -33,7 +35,7 @@ final class CharacteristicsViewController: UITableViewController {
         didSet { self.tableView.reloadData() }
     }
     
-    // MARK: - Loading
+    // MARK: - Initialization
     
     init(service: NativeService) {
         
@@ -47,6 +49,8 @@ final class CharacteristicsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     #endif
+    
+    // MARK: - Loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +74,8 @@ final class CharacteristicsViewController: UITableViewController {
         self.configureView()
         self.reloadData()
     }
+    
+    // MARK: - Methods
     
     private subscript (indexPath: IndexPath) -> NativeCharacteristic {
         
@@ -111,10 +117,8 @@ final class CharacteristicsViewController: UITableViewController {
         performActivity({
             try NativeCentral.shared.connect(to: peripheral)
             defer { NativeCentral.shared.disconnect(peripheral: peripheral) }
-            let services = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
-            guard let foundService = services.first(where: { $0.identifier == service.identifier })
-                else { throw CentralError.invalidAttribute(service.uuid) }
-            return try NativeCentral.shared.discoverCharacteristics(for: foundService, timeout: timeout)
+            let _ = try NativeCentral.shared.discoverServices(for: peripheral, timeout: timeout)
+            return try NativeCentral.shared.discoverCharacteristics(for: service, timeout: timeout)
         }, completion: {
             $0.items = $1
         })

@@ -69,7 +69,7 @@ final class CentralViewController: UITableViewController {
     
     // MARK: - Actions
     
-    #if os(iOS) || os(macOS)
+    #if os(iOS)
     @objc func pullToRefresh(_ sender: UIRefreshControl) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in

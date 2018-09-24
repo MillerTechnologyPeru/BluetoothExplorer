@@ -197,11 +197,12 @@ extension CentralViewController: ActivityIndicatorViewController {
     
     func showActivity() {
         
-        
+        self.view.isUserInteractionEnabled = false
     }
     
     func hideActivity(animated: Bool = true) {
         
+        self.view.isUserInteractionEnabled = true
         self.endRefreshing()
     }
 }

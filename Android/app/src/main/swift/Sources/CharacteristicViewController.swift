@@ -49,6 +49,12 @@ final class CharacteristicViewController: UITableViewController {
         super.init(style: .grouped)
     }
     
+    deinit {
+        
+        // just in case we didnt stop notifications
+        NativeCentral.shared.disconnect(peripheral: characteristic.peripheral)
+    }
+    
     #if os(iOS)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -105,16 +111,16 @@ final class CharacteristicViewController: UITableViewController {
             sections.append(Section(name: "", items: items))
         }
         
-        if characteristicValue.isEmpty == false {
-            
-            sections.append(Section(name: "Value", items: characteristicValue.map { Item.value($0) }))
-        }
-        
         if characteristic.properties.isEmpty == false {
             
             sections.append(Section(name: "Properties", items: characteristic.properties.map { Item.property($0) }))
         }
         
+        if characteristicValue.isEmpty == false {
+            
+            sections.append(Section(name: "Value", items: characteristicValue.reversed().map { Item.value($0) }))
+        }
+                
         // update UI
         tableView.reloadData()
     }
@@ -205,7 +211,7 @@ final class CharacteristicViewController: UITableViewController {
     
     private func configure(cell: UITableViewCell, with data: Data) {
         
-        cell.textLabel?.text = "0x" + data.reduce("", { $0 + String($1, radix: 16) })
+        cell.textLabel?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) })
     }
     
     // MARK: - UITableViewDataSource

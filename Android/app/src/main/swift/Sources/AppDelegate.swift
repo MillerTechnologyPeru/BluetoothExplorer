@@ -50,7 +50,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewController = CentralViewController()
         
         // setup UI theme
+        #if os(iOS)
         configureAppearance()
+        #endif
         
         let navigationController = UINavigationController(rootViewController: viewController)
         

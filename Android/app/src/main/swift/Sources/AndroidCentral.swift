@@ -318,6 +318,33 @@ public final class AndroidCentral: CentralProtocol {
         
         NSLog("\(type(of: self)) \(#function)")
         
+        guard hostController.isEnabled()
+            else { throw AndroidCentralError.bluetoothDisabled }
+        
+        // store semaphore
+        let semaphore = Semaphore(timeout: timeout)
+        accessQueue.sync { [unowned self] in self.internalState.writeCharacteristic.semaphore = semaphore }
+        defer { accessQueue.sync { [unowned self] in self.internalState.writeCharacteristic.semaphore = nil } }
+        
+        try accessQueue.sync { [unowned self] in
+            
+            guard let cache = self.internalState.cache[characteristic.peripheral]
+                else { throw CentralError.disconnected }
+            
+            guard let gattCharacteristic = cache.characteristics.values[characteristic.identifier]
+                else { throw AndroidCentralError.characteristicNotFound }
+            
+            let dataArray = [UInt8](data)
+            
+            let _ = gattCharacteristic.setValue(value: unsafeBitCast(dataArray, to: [Int8].self))
+            
+            guard cache.gatt.writeCharacteristic(characteristic: gattCharacteristic)
+                else { throw AndroidCentralError.binderFailure }
+        }
+        
+        // throw async error
+        do { try semaphore.wait() }
+    
     }
     
     public func notify(_ notification: ((Data) -> ())?, for characteristic: Characteristic<Peripheral>, timeout: TimeInterval = .gattDefaultTimeout) throws {
@@ -512,8 +539,8 @@ public final class AndroidCentral: CentralProtocol {
                 central.internalState.cache[peripheral]?.update(characteristic)
                 
                 // success
-                central.internalState.discoverServices.semaphore?.stopWaiting()
-                central.internalState.discoverServices.semaphore = nil
+                central.internalState.readCharacteristic.semaphore?.stopWaiting()
+                central.internalState.readCharacteristic.semaphore = nil
             }
         }
         
@@ -521,6 +548,24 @@ public final class AndroidCentral: CentralProtocol {
             
             central?.log?("\(type(of: self)): \(#function)")
             
+            let peripheral = Peripheral(gatt)
+            
+            central?.log?("\(type(of: self)): \(#function)")
+            
+            central?.log?("\(peripheral) Status: \(status)")
+            
+            central?.accessQueue.async { [weak self] in
+                
+                guard let central = self?.central
+                    else { return }
+                
+                guard status == .success
+                    else { central.internalState.writeCharacteristic.semaphore?.stopWaiting(status); return }
+                
+                // success
+                central.internalState.writeCharacteristic.semaphore?.stopWaiting()
+                central.internalState.writeCharacteristic.semaphore = nil
+            }
         }
         
         public override func onDescriptorRead(gatt: Android.Bluetooth.Gatt, descriptor: Android.Bluetooth.GattDescriptor, status: AndroidBluetoothGatt.Status) {

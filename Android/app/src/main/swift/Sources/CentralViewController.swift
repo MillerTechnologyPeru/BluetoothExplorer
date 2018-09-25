@@ -43,7 +43,11 @@ final class CentralViewController: UITableViewController {
         // setup table view
         self.tableView.estimatedRowHeight = 44
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        #if os(iOS)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
+        #else
+        self.tableView.register(PeripheralCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
+        #endif
         
         let refreshControl = UIRefreshControl(frame: .zero)
         
@@ -147,7 +151,13 @@ final class CentralViewController: UITableViewController {
         
         let item = self[indexPath]
         
+        #if os(iOS)
         cell.textLabel?.text = item.advertisementData.localName ?? item.peripheral.identifier.description
+        #else
+        let peripheralCell = cell as! PeripheralCell
+        peripheralCell.tvName?.text = item.advertisementData.localName ?? "NO NAME"
+        peripheralCell.tvAddress?.text = item.peripheral.description ?? "NO ADDRESS"
+        #endif
     }
     
     // MARK: - UITableViewDataSource

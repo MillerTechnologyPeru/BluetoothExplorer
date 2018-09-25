@@ -252,10 +252,12 @@ final class CharacteristicViewController: UITableViewController {
         }
     }
     
+    #if os(iOS)
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         return self.sections[section].title
     }
+    #endif
     
     // MARK: - UITableViewDelegate
     

@@ -46,7 +46,7 @@ final class CentralViewController: UITableViewController {
         #if os(iOS)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         #else
-        self.tableView.register(PeripheralCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         #endif
         
         let refreshControl = UIRefreshControl(frame: .zero)
@@ -154,9 +154,53 @@ final class CentralViewController: UITableViewController {
         #if os(iOS)
         cell.textLabel?.text = item.advertisementData.localName ?? item.peripheral.identifier.description
         #else
-        let peripheralCell = cell as! PeripheralCell
-        peripheralCell.tvName?.text = item.advertisementData.localName ?? "NO NAME"
-        peripheralCell.tvAddress?.text = item.peripheral.description ?? "NO ADDRESS"
+        
+        let cellTypeIndex = indexPath.row % 2 == 0 ? 0 : 1
+        
+        if(cellTypeIndex == 0){
+            
+            let layoutName = "peripheral_item"
+            
+            if cell.layoutName != layoutName {
+                cell.inflateAndroidLayout(layoutName: layoutName)
+            }
+            
+            let itemView = cell.getItemView()
+            
+            let tvNameId = UIApplication.shared.androidActivity.getIdentifier(name: "tvName", type: "id")
+            let tvAddressId = UIApplication.shared.androidActivity.getIdentifier(name: "tvAddress", type: "id")
+            
+            guard let tvNameObject = itemView.findViewById(tvNameId)
+                else { fatalError("No view for \(tvNameId)") }
+            
+            guard let tvAddressObject = itemView.findViewById(tvAddressId)
+                else { fatalError("No view for \(tvAddressId)") }
+            
+            let tvName = Android.Widget.TextView(casting: tvNameObject)
+            let tvAddress = Android.Widget.TextView(casting: tvAddressObject)
+            
+            tvName?.text = item.advertisementData.localName ?? "NO NAME"
+            tvAddress?.text = item.peripheral.description
+        } else {
+            
+            let layoutName = "peripheral_item_2"
+            
+            if cell.layoutName != layoutName {
+                cell.inflateAndroidLayout(layoutName: layoutName)
+            }
+            
+            let itemView = cell.getItemView()
+            
+            let tvAddressId = UIApplication.shared.androidActivity.getIdentifier(name: "tvAddress", type: "id")
+            
+            guard let tvAddressObject = itemView.findViewById(tvAddressId)
+                else { fatalError("No view for \(tvAddressId)") }
+            
+            let tvAddress = Android.Widget.TextView(casting: tvAddressObject)
+            
+            tvAddress?.text = item.peripheral.description
+        }
+        
         #endif
     }
     
@@ -164,7 +208,7 @@ final class CentralViewController: UITableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -175,9 +219,8 @@ final class CentralViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
-        
         configure(cell: cell, at: indexPath)
-        
+    
         return cell
     }
     

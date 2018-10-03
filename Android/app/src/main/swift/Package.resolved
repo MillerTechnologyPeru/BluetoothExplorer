@@ -6,7 +6,7 @@
         "repositoryURL": "git@github.com:PureSwift/Android.git",
         "state": {
           "branch": "master",
-          "revision": "5e45fee9583cabe7ccfc8bfd131dca791c0d579c",
+          "revision": "b6253d2522afa51a43b949b9cdca5908ae271674",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "89d6ffaf1906f694d143812d06c4bd10063186d4",
+          "revision": "0e6c6b14caa23060470940617706a3800a4e7784",
           "version": null
         }
       },
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/SwiftJava/java_swift.git",
         "state": {
           "branch": null,
-          "revision": "b898d1e2a3440e4d8549ef2840f9f0e97c6289de",
-          "version": "2.3.2"
+          "revision": "f6745e8690d10ca01e983ceeb1339b0899fa8a99",
+          "version": "2.3.3"
         }
       },
       {

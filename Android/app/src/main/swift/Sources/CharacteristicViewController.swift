@@ -61,18 +61,27 @@ final class CharacteristicViewController: UITableViewController {
     }
     #endif
     
+    private let cellReuseIdentifier = "Cell"
+    
     // MARK: - Loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSLog("\(type(of: self)) \(#function)")
+        
+        
         // setup table view
         self.tableView.estimatedRowHeight = 44
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        #if os(iOS)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier.uuid.rawValue)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier.name.rawValue)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier.value.rawValue)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier.property.rawValue)
+        #else
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
+        #endif
         
         // update UI
         self.configureView()
@@ -91,7 +100,7 @@ final class CharacteristicViewController: UITableViewController {
     
     private func configureView() {
         
-        title = self.characteristic.uuid.rawValue
+        title = self.characteristic.uuid.description
         
         // configure table view
         
@@ -108,7 +117,7 @@ final class CharacteristicViewController: UITableViewController {
             
             items.append(.uuid(characteristic.uuid))
             
-            sections.append(Section(title: nil, items: items))
+            sections.append(Section(title: "Information", items: items))
         }
         
         if characteristic.properties.isEmpty == false {
@@ -126,7 +135,7 @@ final class CharacteristicViewController: UITableViewController {
     }
     
     private func readValue() {
-        
+        NSLog("\(type(of: self)) \(#function)")
         let timeout = self.timeout
         let service = self.service
         let characteristic = self.characteristic
@@ -164,6 +173,7 @@ final class CharacteristicViewController: UITableViewController {
         })
     }
     
+    /*
     private func startNotifications() {
         
         let timeout = self.timeout
@@ -203,6 +213,7 @@ final class CharacteristicViewController: UITableViewController {
             viewController.isNotifying = false
         })
     }
+ */
     
     private func configure(cell: UITableViewCell, with value: String) {
         
@@ -217,7 +228,7 @@ final class CharacteristicViewController: UITableViewController {
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
+        NSLog("count: \(sections.count)")
         return sections.count
     }
     
@@ -230,6 +241,7 @@ final class CharacteristicViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        #if os(iOS)
         let item = self[indexPath]
         
         switch item {
@@ -250,6 +262,39 @@ final class CharacteristicViewController: UITableViewController {
             configure(cell: cell, with: property.name)
             return cell
         }
+        #else
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
+        
+        let layoutName = "list_cell"
+        
+        if cell.layoutName != layoutName {
+            cell.inflateAndroidLayout(layoutName: layoutName)
+        }
+        
+        let itemView = cell.getItemView()
+        
+        let tvItemId = UIApplication.shared.androidActivity.getIdentifier(name: "text_label", type: "id")
+        
+        guard let tvItemObject = itemView.findViewById(tvItemId)
+            else { fatalError("No view for \(tvItemId)") }
+        
+        let tvItem = Android.Widget.TextView(casting: tvItemObject)
+        
+        let item = self.sections[indexPath.section].items[indexPath.row]
+        NSLog("tableView \(indexPath.row) : \(item)")
+        switch item {
+        case let .uuid(uuid):
+            tvItem?.text = uuid.rawValue
+        case let .name(name):
+            tvItem?.text = name
+        case let .value(data):
+            tvItem?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) })
+        case let .property(property):
+            tvItem?.text = property.name
+        }
+        return cell
+        #endif
     }
     
     #if os(iOS)
@@ -257,10 +302,34 @@ final class CharacteristicViewController: UITableViewController {
         
         return self.sections[section].title
     }
+    #else
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let peripheralViewLayoutId = UIApplication.shared.androidActivity.getIdentifier(name: "list_header", type: "layout")
+        
+        let layoutInflarer = Android.View.LayoutInflater.from(context: UIApplication.shared.androidActivity)
+        
+        let itemView = layoutInflarer.inflate(resource: Android.R.Layout(rawValue: peripheralViewLayoutId), root: nil, attachToRoot: false)
+        
+        let tvHeaderId = UIApplication.shared.androidActivity.getIdentifier(name: "text_label", type: "id")
+        
+        guard let tvHeaderObject = itemView.findViewById(tvHeaderId)
+            else { fatalError("No view for \(tvHeaderId)") }
+        
+        let tvHeader = Android.Widget.TextView(casting: tvHeaderObject)
+        
+        tvHeader?.text = self.sections[section].title
+        
+        let uiView = UIView.init(androidViewChild: itemView)
+        
+        uiView.androidView.layoutParams = Android.Widget.FrameLayout.FLayoutParams(width: Android.Widget.FrameLayout.FLayoutParams.MATCH_PARENT, height: Android.Widget.FrameLayout.FLayoutParams.WRAP_CONTENT)
+        
+        return uiView
+    }
     #endif
     
     // MARK: - UITableViewDelegate
-    
+    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         #if os(iOS)
@@ -300,7 +369,7 @@ final class CharacteristicViewController: UITableViewController {
                 isNotifying ? stopNotifications() : startNotifications()
             }
         }
-    }
+    }*/
 }
 
 // MARK: - ActivityIndicatorViewController
@@ -342,5 +411,23 @@ private extension CharacteristicViewController {
         case name
         case value
         case property
+    }
+}
+
+extension Data {
+    init?(hexString: String) {
+        let length = hexString.count / 2
+        var data = Data(capacity: length)
+        for i in 0 ..< length {
+            let j = hexString.index(hexString.startIndex, offsetBy: i * 2)
+            let k = hexString.index(j, offsetBy: 2)
+            let bytes = hexString[j..<k]
+            if var byte = UInt8(bytes, radix: 16) {
+                data.append(&byte, count: 1)
+            } else {
+                return nil
+            }
+        }
+        self = data
     }
 }

@@ -15,7 +15,7 @@ import AndroidUIKit
 #endif
 
 public extension UIViewController {
-    
+ 
     /// Presents an error alert controller with the specified completion handlers.
     func showErrorAlert(_ localizedText: String,
                         okHandler: (() -> ())? = nil,
@@ -47,3 +47,4 @@ public extension UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
 }
+

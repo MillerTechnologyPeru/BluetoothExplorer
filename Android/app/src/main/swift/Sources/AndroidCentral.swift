@@ -68,6 +68,8 @@ public final class AndroidCentral: CentralProtocol {
               shouldContinueScanning: () -> (Bool),
               foundDevice: @escaping (ScanData<Peripheral, AdvertisementData>) -> ()) throws {
         
+        NSLog("\(type(of: self)) \(#function)")
+        
         guard hostController.isEnabled()
             else { throw AndroidCentralError.bluetoothDisabled }
         
@@ -93,6 +95,8 @@ public final class AndroidCentral: CentralProtocol {
     }
     
     public func connect(to peripheral: Peripheral, timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        NSLog("\(type(of: self)) \(#function)")
         
         guard hostController.isEnabled()
             else { throw AndroidCentralError.bluetoothDisabled }
@@ -174,6 +178,8 @@ public final class AndroidCentral: CentralProtocol {
     
     public func disconnect(peripheral: Peripheral) {
         
+        NSLog("\(type(of: self)) \(#function)")
+        
         accessQueue.sync { [unowned self] in
             self.internalState.cache[peripheral]?.gatt.disconnect()
             //self.internalState.cache[peripheral]?.gatt.close()
@@ -182,6 +188,8 @@ public final class AndroidCentral: CentralProtocol {
     }
     
     public func disconnectAll() {
+        
+        NSLog("\(type(of: self)) \(#function)")
         
         accessQueue.sync { [unowned self] in
             self.internalState.cache.values.forEach {
@@ -194,6 +202,8 @@ public final class AndroidCentral: CentralProtocol {
     public func discoverServices(_ services: [BluetoothUUID] = [],
                                  for peripheral: Peripheral,
                                  timeout: TimeInterval = .gattDefaultTimeout) throws -> [Service<Peripheral>] {
+        
+        NSLog("\(type(of: self)) \(#function)")
         
         guard hostController.isEnabled()
             else { throw AndroidCentralError.bluetoothDisabled }
@@ -244,6 +254,8 @@ public final class AndroidCentral: CentralProtocol {
                                         for service: Service<Peripheral>,
                                         timeout: TimeInterval = .gattDefaultTimeout) throws -> [Characteristic<Peripheral>] {
         
+        NSLog("\(type(of: self)) \(#function)")
+        
         return try accessQueue.sync { [unowned self] in
             
             guard let cache = self.internalState.cache[service.peripheral]
@@ -278,6 +290,8 @@ public final class AndroidCentral: CentralProtocol {
         guard hostController.isEnabled()
             else { throw AndroidCentralError.bluetoothDisabled }
         
+        NSLog("\(type(of: self)) \(#function) controller isEnabled")
+        
         // store semaphore
         let semaphore = Semaphore(timeout: timeout)
         accessQueue.sync { [unowned self] in self.internalState.readCharacteristic.semaphore = semaphore }
@@ -288,15 +302,24 @@ public final class AndroidCentral: CentralProtocol {
             guard let cache = self.internalState.cache[characteristic.peripheral]
                 else { throw CentralError.disconnected }
             
+            NSLog("\(type(of: self)) \(#function) cache")
+            
             guard let gattCharacteristic = cache.characteristics.values[characteristic.identifier]
                 else { throw AndroidCentralError.characteristicNotFound }
             
+            NSLog("\(type(of: self)) \(#function) cache")
+            
             guard cache.gatt.readCharacteristic(characteristic: gattCharacteristic)
                 else { throw AndroidCentralError.binderFailure }
+            
+            NSLog("\(type(of: self)) \(#function) read success: true")
         }
         
+        NSLog("\(type(of: self)) \(#function) start waiting")
         // throw async error
         do { try semaphore.wait() }
+        
+        NSLog("\(type(of: self)) \(#function) finish waiting")
         
         // get values from internal state
         return try accessQueue.sync { [unowned self] in
@@ -304,13 +327,22 @@ public final class AndroidCentral: CentralProtocol {
             guard let cache = self.internalState.cache[characteristic.peripheral]
                 else { throw CentralError.unknownPeripheral }
             
+            NSLog("\(type(of: self)) \(#function) cache")
+            
             guard let readCharacteristic = cache.readCharacteristic
                 else { throw CentralError.invalidAttribute(characteristic.uuid) }
             
-            guard let value = readCharacteristic.getValue()
-                else { throw CentralError.invalidAttribute(characteristic.uuid) }
-            
-            return Data(unsafeBitCast(value, to: [UInt8].self))
+            NSLog("\(type(of: self)) \(#function) readCharacteristic = \(readCharacteristic.getProperties())")
+
+            if let value = readCharacteristic.getValue() {
+                
+                NSLog("\(type(of: self)) \(#function) characteristic value: \(value)")
+                
+                return Data(unsafeBitCast(value, to: [UInt8].self))
+            } else {
+                NSLog("\(type(of: self)) \(#function) characteristic no value")
+                return Data()
+            }
         }
     }
     
@@ -524,7 +556,7 @@ public final class AndroidCentral: CentralProtocol {
             
             let peripheral = Peripheral(gatt)
             
-            central?.log?("\(type(of: self)): \(#function)")
+            central?.log?("\(type(of: self)): \(#function) got peripheral")
             
             central?.log?("\(peripheral) Status: \(status)")
             
@@ -533,14 +565,19 @@ public final class AndroidCentral: CentralProtocol {
                 guard let central = self?.central
                     else { return }
                 
+                central.log?("\(type(of: self)): \(#function) got centrar again")
+                
                 guard status == .success
                     else { central.internalState.readCharacteristic.semaphore?.stopWaiting(status); return }
                 
+                central.log?("\(type(of: self)): \(#function) status: \(status)")
+                
                 central.internalState.cache[peripheral]?.update(characteristic)
+                
+                central.log?("\(type(of: self)): \(#function) characteristic was updated on cache")
                 
                 // success
                 central.internalState.readCharacteristic.semaphore?.stopWaiting()
-                central.internalState.readCharacteristic.semaphore = nil
             }
         }
         

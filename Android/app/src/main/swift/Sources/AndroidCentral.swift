@@ -400,10 +400,12 @@ public final class AndroidCentral: CentralProtocol {
             guard let gattCharacteristic = cache.characteristics.values[characteristic.identifier]
                 else { throw AndroidCentralError.characteristicNotFound }
             
-            guard cache.gatt.setCharacteristicNotification(characteristic: gattCharacteristic, enable: enable)
-                else { throw AndroidCentralError.binderFailure }
+            guard cache.gatt.setCharacteristicNotification(characteristic: gattCharacteristic, enable: enable) else {
+                throw AndroidCentralError.binderFailure
+            }
+            
             ///0x2902
-            let uuid = java_util.UUID.fromString("00002a29-0000-1000-8000-00805f9b34fb")
+            let uuid = java_util.UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
             //let uuid = java_util.UUID.nameUUIDFromBytes([0x00, 0x10, 0x10, 0x01, 0x00, 0x00, 0x00, 0x10])
             
             guard let descriptor = gattCharacteristic.getDescriptor(uuid: uuid!) else {
@@ -411,9 +413,13 @@ public final class AndroidCentral: CentralProtocol {
                 throw AndroidCentralError.binderFailure
             }
             
-            let valueEnableNotification : [Int8] = enable ? [0x02, 0x00] : [0x00, 0x00]
+            let valueEnableNotification : [Int8] = enable ? [0x01, 0x00] : [0x00, 0x00]
             
             let wasLocallyStored = descriptor.setValue(valueEnableNotification)
+            
+            guard cache.gatt.writeDescriptor(descriptor: descriptor) else {
+                throw AndroidCentralError.binderFailure
+            }
             
             NSLog("\(type(of: self)) \(#function)  \(enable ? "start": "stop") : true , locallyStored: \(wasLocallyStored)")
         }

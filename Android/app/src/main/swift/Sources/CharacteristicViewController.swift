@@ -289,12 +289,38 @@ final class CharacteristicViewController: UITableViewController {
         case let .name(name):
             tvItem?.text = name
         case let .value(data):
-            tvItem?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) })
+            tvItem?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) }).uppercased()
         case let .property(property):
             tvItem?.text = property.name
         }
         return cell
         #endif
+    }
+    
+    func openAlertForWrite(item: NativeCharacteristic){
+        
+         let alertController = UIAlertController.init(title: "Write Characteristic", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        
+        alertController.addTextField(configurationHandler: { text in text.placeHolder = "New Value" })
+        
+        let action1 = UIAlertAction.init(title: "Write", style: UIAlertActionStyle.default) { action in
+            
+            let newValue = alertController.textFields[0].text
+            
+            guard let value = newValue, let data = Data(hexString: value) else {
+                AndroidToast.makeText(context: UIApplication.shared.androidActivity, text: "Value is required", duration: AndroidToast.Dutation.short).show()
+                return
+            }
+            
+            self.writeValue(data)
+        }
+        
+        let action2 = UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel)
+        
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+        
+        present(alertController, animated: false)
     }
     
     #if os(iOS)
@@ -329,7 +355,7 @@ final class CharacteristicViewController: UITableViewController {
     #endif
     
     // MARK: - UITableViewDelegate
-    /*
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         #if os(iOS)
@@ -358,7 +384,7 @@ final class CharacteristicViewController: UITableViewController {
                 readValue()
             case .write:
                 // TODO: show UI to type new value
-                writeValue(Data())
+                openAlertForWrite(item: characteristic)
                 break
             case .writeWithoutResponse:
                 // TODO: show UI to type new value
@@ -366,10 +392,12 @@ final class CharacteristicViewController: UITableViewController {
                 break
             case .notify,
                  .indicate:
+                #if os(iOS)
                 isNotifying ? stopNotifications() : startNotifications()
+                #endif
             }
         }
-    }*/
+    }
 }
 
 // MARK: - ActivityIndicatorViewController
@@ -414,6 +442,8 @@ private extension CharacteristicViewController {
     }
 }
 
+
+//FIXME:
 extension Data {
     init?(hexString: String) {
         let length = hexString.count / 2

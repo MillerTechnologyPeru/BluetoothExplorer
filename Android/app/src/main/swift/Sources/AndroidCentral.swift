@@ -382,6 +382,43 @@ public final class AndroidCentral: CentralProtocol {
     public func notify(_ notification: ((Data) -> ())?, for characteristic: Characteristic<Peripheral>, timeout: TimeInterval = .gattDefaultTimeout) throws {
         NSLog("\(type(of: self)) \(#function)")
         
+        guard hostController.isEnabled()
+            else { throw AndroidCentralError.bluetoothDisabled }
+        
+        let enable = notification != nil
+        
+        // store semaphore
+        let semaphore = Semaphore(timeout: timeout)
+        accessQueue.sync { [unowned self] in self.internalState.notify.semaphore = semaphore }
+        defer { accessQueue.sync { [unowned self] in self.internalState.notify.semaphore = nil } }
+        
+        try accessQueue.sync { [unowned self] in
+            
+            guard let cache = self.internalState.cache[characteristic.peripheral]
+                else { throw CentralError.disconnected }
+            
+            guard let gattCharacteristic = cache.characteristics.values[characteristic.identifier]
+                else { throw AndroidCentralError.characteristicNotFound }
+            
+            guard cache.gatt.setCharacteristicNotification(characteristic: gattCharacteristic, enable: enable)
+                else { throw AndroidCentralError.binderFailure }
+            ///0x2902
+            let uuid = java_util.UUID.fromString("00002a29-0000-1000-8000-00805f9b34fb")
+            //let uuid = java_util.UUID.nameUUIDFromBytes([0x00, 0x10, 0x10, 0x01, 0x00, 0x00, 0x00, 0x10])
+            
+            guard let descriptor = gattCharacteristic.getDescriptor(uuid: uuid!) else {
+                NSLog("ERROR: descriptor doesnt exits")
+                throw AndroidCentralError.binderFailure
+            }
+            
+            let valueEnableNotification : [Int8] = enable ? [0x02, 0x00] : [0x00, 0x00]
+            
+            let wasLocallyStored = descriptor.setValue(valueEnableNotification)
+            
+            NSLog("\(type(of: self)) \(#function)  \(enable ? "start": "stop") : true , locallyStored: \(wasLocallyStored)")
+        }
+        
+        
     }
     
     public func maximumTransmissionUnit(for peripheral: Peripheral) throws -> ATTMaximumTransmissionUnit {
@@ -513,6 +550,8 @@ public final class AndroidCentral: CentralProtocol {
                     break // nothing for now
                     
                 default:
+                    
+                    central.log?("GATT Status Error")
                     
                     central.internalState.connect.semaphore?.stopWaiting(status) // throw `status` error
                 }

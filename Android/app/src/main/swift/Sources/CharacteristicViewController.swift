@@ -173,7 +173,6 @@ final class CharacteristicViewController: UITableViewController {
         })
     }
     
-    /*
     private func startNotifications() {
         
         let timeout = self.timeout
@@ -193,6 +192,7 @@ final class CharacteristicViewController: UITableViewController {
     
     private func notification(_ newValue: Data) {
         
+        NSLog("\(#function) new characteristicValue: \(newValue)")
         self.characteristicValue.append(newValue)
     }
     
@@ -213,7 +213,6 @@ final class CharacteristicViewController: UITableViewController {
             viewController.isNotifying = false
         })
     }
- */
     
     private func configure(cell: UITableViewCell, with value: String) {
         
@@ -301,14 +300,16 @@ final class CharacteristicViewController: UITableViewController {
         
          let alertController = UIAlertController.init(title: "Write Characteristic", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
-        alertController.addTextField(configurationHandler: { text in text.placeHolder = "New Value" })
+        alertController.addTextField(configurationHandler: { text in text.placeholder = "New Value" })
         
         let action1 = UIAlertAction.init(title: "Write", style: UIAlertActionStyle.default) { action in
             
-            let newValue = alertController.textFields[0].text
+            let newValue = alertController.textFields![0].text
             
             guard let value = newValue, let data = Data(hexString: value) else {
-                AndroidToast.makeText(context: UIApplication.shared.androidActivity, text: "Value is required", duration: AndroidToast.Dutation.short).show()
+                
+                NSLog("Value is required")
+                //AndroidToast.makeText(context: UIApplication.shared.androidActivity, text: "Value is required", duration: AndroidToast.Dutation.short).show()
                 return
             }
             
@@ -383,18 +384,15 @@ final class CharacteristicViewController: UITableViewController {
             case .read:
                 readValue()
             case .write:
-                // TODO: show UI to type new value
                 openAlertForWrite(item: characteristic)
                 break
             case .writeWithoutResponse:
                 // TODO: show UI to type new value
                 writeValue(Data(), withResponse: false)
                 break
-            case .notify,
-                 .indicate:
-                #if os(iOS)
+            case .notify, .indicate:
+                NSLog("notify")
                 isNotifying ? stopNotifications() : startNotifications()
-                #endif
             }
         }
     }

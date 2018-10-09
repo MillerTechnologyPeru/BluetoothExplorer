@@ -1,0 +1,756 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		51B6F9B3215567E800251524 /* CharacteristicsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */; };
+		6E0596AD2158448B00BB43DC /* CharacteristicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0596A12158448B00BB43DC /* CharacteristicViewController.swift */; };
+		6E0596EC2158A88500BB43DC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0596EB2158A88500BB43DC /* Appearance.swift */; };
+		6E303E072142398F0034A6C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E303E062142398F0034A6C1 /* Assets.xcassets */; };
+		6E303E0A2142398F0034A6C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E303E082142398F0034A6C1 /* LaunchScreen.storyboard */; };
+		6E303E1921423AED0034A6C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E303E1421423AED0034A6C1 /* AppDelegate.swift */; };
+		6E303E1A21423AED0034A6C1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E303E1521423AED0034A6C1 /* main.swift */; };
+		6E733FE121423DFE001B8682 /* GATT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733FD221423DEC001B8682 /* GATT.framework */; };
+		6E733FE221423DFE001B8682 /* GATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733FD221423DEC001B8682 /* GATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E733FE521423DFE001B8682 /* DarwinGATT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733FDC21423DEC001B8682 /* DarwinGATT.framework */; };
+		6E733FE621423DFE001B8682 /* DarwinGATT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733FDC21423DEC001B8682 /* DarwinGATT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E733FE921423DFE001B8682 /* Bluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733F9E21423DE0001B8682 /* Bluetooth.framework */; };
+		6E733FEA21423DFE001B8682 /* Bluetooth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E733F9E21423DE0001B8682 /* Bluetooth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E73401F21424322001B8682 /* CentralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73401E21424322001B8682 /* CentralViewController.swift */; };
+		6E73402C21424437001B8682 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73402B21424437001B8682 /* Central.swift */; };
+		6EAEEE3C2142470C009A7A9F /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE302142470C009A7A9F /* ErrorAlert.swift */; };
+		6EAEEE3E21424717009A7A9F /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */; };
+		6EAEEE4021424790009A7A9F /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE3F21424790009A7A9F /* Async.swift */; };
+		6EAEEE42214247F3009A7A9F /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEE41214247F3009A7A9F /* Log.swift */; };
+		6EAEEED221437F2B009A7A9F /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6E733F9B21423DE0001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DB71CAF5C7C00A40C4D;
+			remoteInfo = "Bluetooth-macOS";
+		};
+		6E733F9D21423DE0001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FBD1CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+		6E733F9F21423DE0001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EB2EA1D1CD5A8A7000CF975;
+			remoteInfo = "Bluetooth-watchOS";
+		};
+		6E733FA121423DE0001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B26520532D45002EA5DC;
+			remoteInfo = "Bluetooth-tvOS";
+		};
+		6E733FA321423DE0001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DC11CAF5C7C00A40C4D;
+			remoteInfo = BluetoothTests;
+		};
+		6E733FCF21423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84D841CAF419D00A40C4D;
+			remoteInfo = "GATT-macOS";
+		};
+		6E733FD121423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FCF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+		6E733FD321423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE9103A1FDE5C17007AD3EA;
+			remoteInfo = "GATT-watchOS";
+		};
+		6E733FD521423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B23A20532A94002EA5DC;
+			remoteInfo = "GATT-tvOS";
+		};
+		6E733FD721423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E0FC45A20F873B1009269B4;
+			remoteInfo = GATTTests;
+		};
+		6E733FD921423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D1562107DE66009998FD;
+			remoteInfo = "DarwinGATT-macOS";
+		};
+		6E733FDB21423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D16D2107DE6A009998FD;
+			remoteInfo = "DarwinGATT-iOS";
+		};
+		6E733FDD21423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D1842107DE6D009998FD;
+			remoteInfo = "DarwinGATT-watchOS";
+		};
+		6E733FDF21423DEC001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D19B2107DE70009998FD;
+			remoteInfo = "DarwinGATT-tvOS";
+		};
+		6E733FE321423DFE001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FBF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+		6E733FE721423DFE001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA5D1582107DE6A009998FD;
+			remoteInfo = "DarwinGATT-iOS";
+		};
+		6E733FEB21423DFE001B8682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF45FA21CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6E733FED21423DFE001B8682 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E733FEA21423DFE001B8682 /* Bluetooth.framework in Embed Frameworks */,
+				6E733FE221423DFE001B8682 /* GATT.framework in Embed Frameworks */,
+				6E733FE621423DFE001B8682 /* DarwinGATT.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicsViewController.swift; sourceTree = "<group>"; };
+		6E0596A12158448B00BB43DC /* CharacteristicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicViewController.swift; sourceTree = "<group>"; };
+		6E0596EB2158A88500BB43DC /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		6E303DFC2142398E0034A6C1 /* BluetoothExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluetoothExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E303E062142398F0034A6C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6E303E092142398F0034A6C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6E303E0B2142398F0034A6C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E303E1421423AED0034A6C1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6E303E1521423AED0034A6C1 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = ../Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
+		6E733FC321423DEC001B8682 /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = ../Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
+		6E73401E21424322001B8682 /* CentralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralViewController.swift; sourceTree = "<group>"; };
+		6E73402B21424437001B8682 /* Central.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6EAEEE302142470C009A7A9F /* ErrorAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
+		6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewController.swift; sourceTree = "<group>"; };
+		6EAEEE3F21424790009A7A9F /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
+		6EAEEE41214247F3009A7A9F /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6E303DF92142398E0034A6C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E733FE921423DFE001B8682 /* Bluetooth.framework in Frameworks */,
+				6E733FE121423DFE001B8682 /* GATT.framework in Frameworks */,
+				6E733FE521423DFE001B8682 /* DarwinGATT.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6E0596EA2158A87600BB43DC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6E0596EB2158A88500BB43DC /* Appearance.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		6E303DF32142398E0034A6C1 = {
+			isa = PBXGroup;
+			children = (
+				6E733F9221423DD8001B8682 /* Dependencies */,
+				6E303E1121423AED0034A6C1 /* Sources */,
+				6E303DFE2142398E0034A6C1 /* BluetoothExplorer */,
+				6E303DFD2142398E0034A6C1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6E303DFD2142398E0034A6C1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E303DFC2142398E0034A6C1 /* BluetoothExplorer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E303DFE2142398E0034A6C1 /* BluetoothExplorer */ = {
+			isa = PBXGroup;
+			children = (
+				6E303E062142398F0034A6C1 /* Assets.xcassets */,
+				6E303E082142398F0034A6C1 /* LaunchScreen.storyboard */,
+				6E303E0B2142398F0034A6C1 /* Info.plist */,
+			);
+			path = BluetoothExplorer;
+			sourceTree = "<group>";
+		};
+		6E303E1121423AED0034A6C1 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6E303E1521423AED0034A6C1 /* main.swift */,
+				6E303E1421423AED0034A6C1 /* AppDelegate.swift */,
+				6EAEEE3F21424790009A7A9F /* Async.swift */,
+				6EAEEE41214247F3009A7A9F /* Log.swift */,
+				6E0596EA2158A87600BB43DC /* View */,
+				6E73402D21424456001B8682 /* Controller */,
+				6E73402E21424460001B8682 /* Model */,
+			);
+			name = Sources;
+			path = ../Android/app/src/main/swift/Sources;
+			sourceTree = "<group>";
+		};
+		6E733F9221423DD8001B8682 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				6E733FC321423DEC001B8682 /* GATT.xcodeproj */,
+				6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		6E733F9421423DE0001B8682 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E733F9C21423DE0001B8682 /* Bluetooth.framework */,
+				6E733F9E21423DE0001B8682 /* Bluetooth.framework */,
+				6E733FA021423DE0001B8682 /* Bluetooth.framework */,
+				6E733FA221423DE0001B8682 /* Bluetooth.framework */,
+				6E733FA421423DE0001B8682 /* BluetoothTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E733FC421423DEC001B8682 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E733FD021423DEC001B8682 /* GATT.framework */,
+				6E733FD221423DEC001B8682 /* GATT.framework */,
+				6E733FD421423DEC001B8682 /* GATT.framework */,
+				6E733FD621423DEC001B8682 /* GATT.framework */,
+				6E733FD821423DEC001B8682 /* GATTTests.xctest */,
+				6E733FDA21423DEC001B8682 /* DarwinGATT.framework */,
+				6E733FDC21423DEC001B8682 /* DarwinGATT.framework */,
+				6E733FDE21423DEC001B8682 /* DarwinGATT.framework */,
+				6E733FE021423DEC001B8682 /* DarwinGATT.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E73402D21424456001B8682 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE4421424869009A7A9F /* Protocols */,
+				6EAEEE432142485F009A7A9F /* Extensions */,
+				6E73401E21424322001B8682 /* CentralViewController.swift */,
+				6EAEEED121437F2B009A7A9F /* ServicesViewController.swift */,
+				51B6F9A7215567E800251524 /* CharacteristicsViewController.swift */,
+				6E0596A12158448B00BB43DC /* CharacteristicViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		6E73402E21424460001B8682 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6E73402B21424437001B8682 /* Central.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		6EAEEE432142485F009A7A9F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE302142470C009A7A9F /* ErrorAlert.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		6EAEEE4421424869009A7A9F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6EAEEE3D21424717009A7A9F /* ActivityIndicatorViewController.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6E303DFB2142398E0034A6C1 /* BluetoothExplorer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E303E0E2142398F0034A6C1 /* Build configuration list for PBXNativeTarget "BluetoothExplorer" */;
+			buildPhases = (
+				6E303DF82142398E0034A6C1 /* Sources */,
+				6E303DF92142398E0034A6C1 /* Frameworks */,
+				6E303DFA2142398E0034A6C1 /* Resources */,
+				6E733FED21423DFE001B8682 /* Embed Frameworks */,
+				6E0596E92158A46500BB43DC /* Increment Build */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E733FEC21423DFE001B8682 /* PBXTargetDependency */,
+				6E733FE421423DFE001B8682 /* PBXTargetDependency */,
+				6E733FE821423DFE001B8682 /* PBXTargetDependency */,
+			);
+			name = BluetoothExplorer;
+			productName = BluetoothExplorer;
+			productReference = 6E303DFC2142398E0034A6C1 /* BluetoothExplorer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E303DF42142398E0034A6C1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0940;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = PureSwift;
+				TargetAttributes = {
+					6E303DFB2142398E0034A6C1 = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 6E303DF72142398E0034A6C1 /* Build configuration list for PBXProject "BluetoothExplorer" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6E303DF32142398E0034A6C1;
+			productRefGroup = 6E303DFD2142398E0034A6C1 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6E733F9421423DE0001B8682 /* Products */;
+					ProjectRef = 6E733F9321423DE0001B8682 /* Bluetooth.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E733FC421423DEC001B8682 /* Products */;
+					ProjectRef = 6E733FC321423DEC001B8682 /* GATT.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				6E303DFB2142398E0034A6C1 /* BluetoothExplorer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6E733F9C21423DE0001B8682 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E733F9B21423DE0001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733F9E21423DE0001B8682 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E733F9D21423DE0001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FA021423DE0001B8682 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E733F9F21423DE0001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FA221423DE0001B8682 /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E733FA121423DE0001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FA421423DE0001B8682 /* BluetoothTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BluetoothTests.xctest;
+			remoteRef = 6E733FA321423DE0001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FD021423DEC001B8682 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E733FCF21423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FD221423DEC001B8682 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E733FD121423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FD421423DEC001B8682 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E733FD321423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FD621423DEC001B8682 /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E733FD521423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FD821423DEC001B8682 /* GATTTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GATTTests.xctest;
+			remoteRef = 6E733FD721423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FDA21423DEC001B8682 /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E733FD921423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FDC21423DEC001B8682 /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E733FDB21423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FDE21423DEC001B8682 /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E733FDD21423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E733FE021423DEC001B8682 /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E733FDF21423DEC001B8682 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6E303DFA2142398E0034A6C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E303E0A2142398F0034A6C1 /* LaunchScreen.storyboard in Resources */,
+				6E303E072142398F0034A6C1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6E0596E92158A46500BB43DC /* Increment Build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Increment Build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E303DF82142398E0034A6C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E0596AD2158448B00BB43DC /* CharacteristicViewController.swift in Sources */,
+				6E303E1921423AED0034A6C1 /* AppDelegate.swift in Sources */,
+				6EAEEE3E21424717009A7A9F /* ActivityIndicatorViewController.swift in Sources */,
+				6EAEEE3C2142470C009A7A9F /* ErrorAlert.swift in Sources */,
+				6EAEEE4021424790009A7A9F /* Async.swift in Sources */,
+				6E73402C21424437001B8682 /* Central.swift in Sources */,
+				6E73401F21424322001B8682 /* CentralViewController.swift in Sources */,
+				6E0596EC2158A88500BB43DC /* Appearance.swift in Sources */,
+				6EAEEED221437F2B009A7A9F /* ServicesViewController.swift in Sources */,
+				6EAEEE42214247F3009A7A9F /* Log.swift in Sources */,
+				6E303E1A21423AED0034A6C1 /* main.swift in Sources */,
+				51B6F9B3215567E800251524 /* CharacteristicsViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6E733FE421423DFE001B8682 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GATT-iOS";
+			targetProxy = 6E733FE321423DFE001B8682 /* PBXContainerItemProxy */;
+		};
+		6E733FE821423DFE001B8682 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "DarwinGATT-iOS";
+			targetProxy = 6E733FE721423DFE001B8682 /* PBXContainerItemProxy */;
+		};
+		6E733FEC21423DFE001B8682 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Bluetooth-iOS";
+			targetProxy = 6E733FEB21423DFE001B8682 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6E303E082142398F0034A6C1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E303E092142398F0034A6C1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6E303E0C2142398F0034A6C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6E303E0D2142398F0034A6C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E303E0F2142398F0034A6C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DGYBYARDK9;
+				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.pureswift.BluetoothExplorer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E303E102142398F0034A6C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DGYBYARDK9;
+				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.pureswift.BluetoothExplorer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6E303DF72142398E0034A6C1 /* Build configuration list for PBXProject "BluetoothExplorer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E303E0C2142398F0034A6C1 /* Debug */,
+				6E303E0D2142398F0034A6C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E303E0E2142398F0034A6C1 /* Build configuration list for PBXNativeTarget "BluetoothExplorer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E303E0F2142398F0034A6C1 /* Debug */,
+				6E303E102142398F0034A6C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E303DF42142398E0034A6C1 /* Project object */;
+}

@@ -593,21 +593,13 @@ public final class AndroidCentral: CentralProtocol {
             
             central?.log?("characteristics count: \(cache.characteristics.values.count)")
             
-            let charUuid = characteristic.getUuid().toString()!
+            let identifier = UInt(bitPattern: characteristic.getUuid().toString().hashValue ^ characteristic.getInstanceId())
             
-            var notificacion : ((Data) -> ())?
-            
-            cache.characteristics.values.forEach { body in
- 
-                let itemUuid = body.value.attribute.getUuid().toString()!
-                
-                if itemUuid == charUuid {
-                    
-                    notificacion = body.value.notification
-                }
+            guard let characteristicCache = cache.characteristics.values[identifier] else {
+                assertionFailure("Invalid identifier for \(characteristic.getUuid().toString())"); return
             }
-
-            guard let notification = notificacion else {
+            
+            guard let notification = characteristicCache.notification else {
                 assertionFailure("Unexpected notification for \(characteristic.getUuid().toString())"); return
             }
             

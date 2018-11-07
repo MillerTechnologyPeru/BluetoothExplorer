@@ -152,8 +152,10 @@ final class CentralViewController: UITableViewController {
         let item = self[indexPath]
         
         #if os(iOS)
+        
         cell.textLabel?.text = item.advertisementData.localName ?? item.peripheral.identifier.description
-        #else
+        
+        #elseif os(Android)
         
         let cellTypeIndex = indexPath.row % 2 == 0 ? 0 : 1
         

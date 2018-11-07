@@ -10,7 +10,8 @@ import Foundation
 import Bluetooth
 import GATT
 
-#if os(macOS) || os(iOS)
+#if os(iOS)
+
 import DarwinGATT
 
 typealias NativeCentral = DarwinCentral
@@ -22,9 +23,10 @@ private struct CentralCache {
     static let central = DarwinCentral(options: options)
 }
 
-#elseif os(Android)
+#elseif os(Android) || os(macOS)
 
 import Android
+import AndroidBluetooth
 import AndroidUIKit
 
 typealias NativeCentral = AndroidCentral

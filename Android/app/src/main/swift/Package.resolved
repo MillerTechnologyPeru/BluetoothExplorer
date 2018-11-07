@@ -6,7 +6,7 @@
         "repositoryURL": "git@github.com:PureSwift/Android.git",
         "state": {
           "branch": "master",
-          "revision": "c5a6aea60296966fcf321c8b19184eb2d4ddd7b8",
+          "revision": "7cdee606d0ed911a434cd7b11255f436a3e83d00",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "d6e6ecfdd9988b0588109fb78767e39517db0573",
+          "revision": "35a033c258978feab858a27f0f0c33637fa56c50",
           "version": null
         }
       },
@@ -23,18 +23,9 @@
         "package": "Bluetooth",
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
-          "branch": null,
-          "revision": "8dc48df9cafe80cd97aadc5fd5dca0b18571d0f2",
-          "version": "2.5.2"
-        }
-      },
-      {
-        "package": "BluetoothLinux",
-        "repositoryURL": "https://github.com/PureSwift/BluetoothLinux.git",
-        "state": {
-          "branch": null,
-          "revision": "881c319763206f60e26bac11d21272e19c995f7e",
-          "version": "3.2.0"
+          "branch": "master",
+          "revision": "ba4562a36d920ade281db5c74f76828cfa91864a",
+          "version": null
         }
       },
       {
@@ -51,7 +42,7 @@
         "repositoryURL": "git@github.com:PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "2841502875c91ba0fb3314951feed12054d70ac5",
+          "revision": "0b41cbd7fe9531c0108988b9041b05adde94775d",
           "version": null
         }
       },
@@ -77,18 +68,18 @@
         "package": "java_util",
         "repositoryURL": "https://github.com/SwiftJava/java_util.git",
         "state": {
-          "branch": null,
+          "branch": "master",
           "revision": "496b963217a7bf3b3c028db11ede5cfcbb3540e6",
-          "version": "2.3.2"
+          "version": null
         }
       },
       {
         "package": "JNI",
         "repositoryURL": "https://github.com/PureSwift/JNI.git",
         "state": {
-          "branch": null,
-          "revision": "983ece85363e1c26ad5719404502d81b0b13f2d5",
-          "version": "1.0.3"
+          "branch": "master",
+          "revision": "66ba5d594d654c4565dc7873e7daa5a60ce814ad",
+          "version": null
         }
       }
     ]

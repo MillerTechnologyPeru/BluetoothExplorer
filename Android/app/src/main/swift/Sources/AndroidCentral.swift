@@ -9,9 +9,10 @@ import Foundation
 import GATT
 import Bluetooth
 
-//#if os(android)
+#if os(Android) || os(macOS)
 
 import Android
+import AndroidBluetooth
 import java_swift
 import java_util
 
@@ -972,4 +973,4 @@ internal extension BluetoothUUID {
     }
 }
 
-//#endif
+#endif

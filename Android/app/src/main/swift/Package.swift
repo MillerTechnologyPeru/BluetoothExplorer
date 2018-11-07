@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.1
 import PackageDescription
 
 let package = Package(
@@ -7,13 +7,14 @@ let package = Package(
         .library(name: "BluetoothExplorer", type: .dynamic, targets: ["BluetoothExplorerAndroid"]),
     ],
     dependencies: [
+        .package(url: "git@github.com:PureSwift/Android.git", .branch("master")),
         .package(url: "git@github.com:PureSwift/AndroidUIKit.git", .branch("master")),
         .package(url: "git@github.com:PureSwift/GATT.git", .branch("master"))
     ],
     targets: [
         .target(
             name: "BluetoothExplorerAndroid",
-            dependencies: ["GATT", "AndroidUIKit"],
+            dependencies: ["GATT", "Android", "AndroidBluetooth", "AndroidUIKit"],
             path: "Sources"
         ),
     ]

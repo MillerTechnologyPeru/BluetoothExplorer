@@ -69,3 +69,6 @@ fastlane/test_output
 # SPM-generated Xcode projects
 Android/app/src/main/swift/BluetoothExplorer.xcodeproj/*
 BluetoothExplorer.xcodeproj/*
+
+# Android Studio
+.idea/*

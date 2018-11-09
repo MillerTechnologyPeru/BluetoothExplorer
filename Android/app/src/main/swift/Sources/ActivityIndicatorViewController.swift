@@ -67,7 +67,7 @@ extension ActivityIndicatorViewController {
                     
                     log("⚠️ Error: \(error)")
                     
-                    if controller.view.window != nil {
+                    if (controller as UIViewController).view.window != nil {
                         
                         controller.showErrorAlert(error.localizedDescription)
                         

@@ -3,16 +3,25 @@
     "pins": [
       {
         "package": "Android",
-        "repositoryURL": "git@github.com:PureSwift/Android.git",
+        "repositoryURL": "https://github.com/PureSwift/Android.git",
         "state": {
           "branch": "master",
-          "revision": "7cdee606d0ed911a434cd7b11255f436a3e83d00",
+          "revision": "52f5de452537f685391d9062d36512f1faa20cb5",
+          "version": null
+        }
+      },
+      {
+        "package": "AndroidBluetooth",
+        "repositoryURL": "https://github.com/PureSwift/AndroidBluetooth.git",
+        "state": {
+          "branch": "master",
+          "revision": "182eb83847ea462ce1a1f858ff6ee25cf2c7a0b4",
           "version": null
         }
       },
       {
         "package": "AndroidUIKit",
-        "repositoryURL": "git@github.com:PureSwift/AndroidUIKit.git",
+        "repositoryURL": "https://github.com/PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
           "revision": "35a033c258978feab858a27f0f0c33637fa56c50",
@@ -24,7 +33,7 @@
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
           "branch": "master",
-          "revision": "ba4562a36d920ade281db5c74f76828cfa91864a",
+          "revision": "d836f386179e3d113715b72cc5455c7823d7d119",
           "version": null
         }
       },
@@ -39,10 +48,10 @@
       },
       {
         "package": "GATT",
-        "repositoryURL": "git@github.com:PureSwift/GATT.git",
+        "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "0b41cbd7fe9531c0108988b9041b05adde94775d",
+          "revision": "aca3caaff6f5f847bbc4bbb3cd669374b859dc5c",
           "version": null
         }
       },

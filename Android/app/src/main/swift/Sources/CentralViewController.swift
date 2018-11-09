@@ -14,6 +14,7 @@ import GATT
 import UIKit
 #elseif os(Android) || os(macOS)
 import Android
+import AndroidBluetooth
 import AndroidUIKit
 #endif
 
@@ -26,7 +27,7 @@ final class CentralViewController: UITableViewController {
     
     private(set) var items = [NativeScanData]()
     
-    let scanDuration: TimeInterval = 10.0
+    let scanDuration: TimeInterval = 5.0
     
     let filterDuplicates: Bool = false
     
@@ -157,9 +158,7 @@ final class CentralViewController: UITableViewController {
         
         #elseif os(Android)
         
-        let cellTypeIndex = indexPath.row % 2 == 0 ? 0 : 1
-        
-        if(cellTypeIndex == 0){
+        if let localName = item.advertisementData.localName {
             
             let layoutName = "peripheral_item"
             
@@ -181,8 +180,9 @@ final class CentralViewController: UITableViewController {
             let tvName = Android.Widget.TextView(casting: tvNameObject)
             let tvAddress = Android.Widget.TextView(casting: tvAddressObject)
             
-            tvName?.text = item.advertisementData.localName ?? "NO NAME"
+            tvName?.text = localName
             tvAddress?.text = item.peripheral.description
+            
         } else {
             
             let layoutName = "peripheral_item_2"

@@ -5,4 +5,6 @@ Bluetooth Explorer iOS & Android App
 
 Install [Android Swift Toolchain](https://github.com/SwiftJava/android_toolchain) and then compile from Android Studio.
 
-![Screenshot](Assets/screenshot1.png)
+### 
+
+![Screenshot](Assets/scan1.png)

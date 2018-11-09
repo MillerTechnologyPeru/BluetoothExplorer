@@ -7,4 +7,4 @@ Install [Android Swift Toolchain](https://github.com/SwiftJava/android_toolchain
 
 ### 
 
-![Screenshot](Assets/scan1.png)
+![Screenshot](Assets/scan1.gif)

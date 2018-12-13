@@ -64,6 +64,7 @@ final class CentralViewController: UITableViewController {
         
         #if os(Android) || os(macOS)
         AndroidAppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
+        reloadData()
         #endif
     }
     

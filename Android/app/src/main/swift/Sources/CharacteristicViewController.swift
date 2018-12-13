@@ -268,10 +268,10 @@ final class CharacteristicViewController: UITableViewController {
         let layoutName = "list_cell"
         
         if cell.layoutName != layoutName {
-            cell.inflateAndroidLayout(layoutName: layoutName)
+            cell.inflateAndroidLayout(layoutName)
         }
         
-        let itemView = cell.getItemView()
+        let itemView = cell.androidView
         
         let tvItemId = UIApplication.shared.androidActivity.getIdentifier(name: "text_label", type: "id")
         
@@ -290,7 +290,7 @@ final class CharacteristicViewController: UITableViewController {
         case let .value(data):
             tvItem?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) }).uppercased()
         case let .property(property):
-            tvItem?.text = property.name
+            tvItem?.text = property.description
         }
         return cell
         #endif

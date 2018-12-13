@@ -18,7 +18,7 @@ public func SwiftAndroidMainApplication() -> SwiftApplication.Type {
     NSLog("\(#function)")
     
     // initialize singleton App Delegate
-    UIApplication.shared.delegate = AppDelegate()
+    UIApplication.shared.delegate = AndroidAppDelegate()
     
     // return specialized Android Application
     return AndroidUIKitApplication.self

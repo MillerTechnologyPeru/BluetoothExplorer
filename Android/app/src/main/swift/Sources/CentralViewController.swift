@@ -63,8 +63,7 @@ final class CentralViewController: UITableViewController {
         self.refreshControl = refreshControl
         
         #if os(Android) || os(macOS)
-        AppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
-        reloadData()
+        AndroidAppDelegate.shared.bluetoothEnabled = { [weak self] in self?.reloadData() }
         #endif
     }
     
@@ -158,17 +157,17 @@ final class CentralViewController: UITableViewController {
         
         cell.textLabel?.text = item.advertisementData.localName ?? item.peripheral.identifier.description
         
-        #elseif os(Android)
+        #elseif os(Android) || os(macOS)
         
         if let localName = item.advertisementData.localName {
             
             let layoutName = "peripheral_item"
             
             if cell.layoutName != layoutName {
-                cell.inflateAndroidLayout(layoutName: layoutName)
+                cell.inflateAndroidLayout(layoutName)
             }
             
-            let itemView = cell.getItemView()
+            let itemView = cell.androidView
             
             let tvNameId = UIApplication.shared.androidActivity.getIdentifier(name: "tvName", type: "id")
             let tvAddressId = UIApplication.shared.androidActivity.getIdentifier(name: "tvAddress", type: "id")
@@ -190,10 +189,10 @@ final class CentralViewController: UITableViewController {
             let layoutName = "peripheral_item_2"
             
             if cell.layoutName != layoutName {
-                cell.inflateAndroidLayout(layoutName: layoutName)
+                cell.inflateAndroidLayout(layoutName)
             }
             
-            let itemView = cell.getItemView()
+            let itemView = cell.androidView
             
             let tvAddressId = UIApplication.shared.androidActivity.getIdentifier(name: "tvAddress", type: "id")
             

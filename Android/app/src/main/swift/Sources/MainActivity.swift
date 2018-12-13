@@ -5,16 +5,9 @@
 //  Created by Marco Estrella on 9/6/18.
 //
 
+#if os(Android) || os(macOS)
+
 import Foundation
-
-#if os(iOS)
-
-import UIKit
-
-UIApplicationMain(0, nil, nil, NSStringFromClass(AppDelegate.self))
-
-#else
-
 import Android
 import AndroidUIKit
 

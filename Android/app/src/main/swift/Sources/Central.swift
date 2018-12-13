@@ -10,6 +10,8 @@ import Foundation
 import Bluetooth
 import GATT
 
+typealias NativeScanData = ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>
+
 #if os(iOS)
 
 import DarwinGATT

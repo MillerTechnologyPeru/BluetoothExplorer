@@ -73,7 +73,7 @@ extension ActivityIndicatorViewController {
                         
                     } else {
                         
-                        AppDelegate.shared.window?.rootViewController?.showErrorAlert(error.localizedDescription)
+                        NativeAppDelegate.shared.window?.rootViewController?.showErrorAlert(error.localizedDescription)
                     }
                 }
             }

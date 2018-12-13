@@ -258,7 +258,7 @@ final class CharacteristicViewController: UITableViewController {
             return cell
         case let .property(property):
             let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.property.rawValue, for: indexPath)
-            configure(cell: cell, with: property.name)
+            configure(cell: cell, with: property.description)
             return cell
         }
         #else

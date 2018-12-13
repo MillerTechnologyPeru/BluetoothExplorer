@@ -20,10 +20,12 @@ import AndroidUIKit
 
 /// Scans for nearby BLE devices.
 final class CentralViewController: UITableViewController {
-    
-    typealias NativeScanData = ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>
-    
+        
     // MARK: - Properties
+    
+    #if os(iOS)
+    lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
+    #endif
     
     private(set) var items = [NativeScanData]()
     
@@ -206,6 +208,22 @@ final class CentralViewController: UITableViewController {
         #endif
     }
     
+    #if os(iOS)
+    private func loadActivityIndicatorView() -> UIActivityIndicatorView {
+        
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicator.frame.origin = CGPoint(x: 6.5, y: 15)
+        
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 33, height: 44))
+        view.backgroundColor = .clear
+        view.addSubview(activityIndicator)
+        
+        let barButtonItem = UIBarButtonItem(customView: view)
+        self.navigationItem.rightBarButtonItem = barButtonItem
+        return activityIndicator
+    }
+    #endif
+    
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -253,11 +271,34 @@ extension CentralViewController: ActivityIndicatorViewController {
     func showActivity() {
         
         self.view.isUserInteractionEnabled = false
+        
+        #if os(iOS)
+        if refreshControl?.isRefreshing ?? false {
+            
+            // refresh control animating
+            
+        } else {
+            
+            activityIndicator.startAnimating()
+        }
+        #endif
     }
     
     func hideActivity(animated: Bool = true) {
         
         self.view.isUserInteractionEnabled = true
-        self.endRefreshing()
+        
+        #if os(iOS)
+        if refreshControl?.isRefreshing ?? false {
+            
+            refreshControl?.endRefreshing()
+            
+        } else {
+            
+            activityIndicator.stopAnimating()
+        }
+        #else
+        refreshControl?.endRefreshing()
+        #endif
     }
 }

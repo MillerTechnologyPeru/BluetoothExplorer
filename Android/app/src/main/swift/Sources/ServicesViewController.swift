@@ -37,6 +37,18 @@ final class ServicesViewController: UITableViewController {
     
     private let timeout: TimeInterval = .gattDefaultTimeout
     
+    #if os(iOS)
+    lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
+    #else
+    lazy var progressDialog: AndroidProgressDialog = {
+        let progressDialog = AndroidProgressDialog(context: UIApplication.shared.androidActivity)
+        progressDialog.setIndeterminate(true)
+        progressDialog.setTitle("Wait")
+        progressDialog.setMessage("Loading Services...")
+        return progressDialog
+    }()
+    #endif
+    
     // MARK: - Loading
     
     init(scanData: NativeScanData) {
@@ -70,7 +82,7 @@ final class ServicesViewController: UITableViewController {
         let refreshControl = UIRefreshControl(frame: .zero)
         
         #if os(Android) || os(macOS)
-        refreshControl.addTarget(action: actionRefresh, for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(action: actionRefresh, for: .valueChanged)
         #else
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: UIControlEvents.valueChanged)
         #endif
@@ -134,6 +146,10 @@ final class ServicesViewController: UITableViewController {
         let item = self[indexPath]
         
         cell.textLabel?.text = item.uuid.description
+        
+        #if os(iOS)
+        cell.textLabel?.numberOfLines = 0
+        #endif
     }
     
     // MARK: - UITableViewDataSource
@@ -177,19 +193,4 @@ final class ServicesViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension ServicesViewController: ActivityIndicatorViewController {
-    
-    func showActivity() {
-        
-        
-    }
-    
-    func hideActivity(animated: Bool = true) {
-        
-        if let refreshControl = self.refreshControl,
-            refreshControl.isRefreshing {
-            
-            self.endRefreshing()
-        }
-    }
-}
+extension ServicesViewController: TableViewActivityIndicatorViewController { }

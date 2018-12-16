@@ -24,6 +24,18 @@ final class CharacteristicsViewController: UITableViewController {
     
     // MARK: - Properties
     
+    #if os(iOS)
+    lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
+    #else
+    lazy var progressDialog: AndroidProgressDialog = {
+        let progressDialog = AndroidProgressDialog(context: UIApplication.shared.androidActivity)
+        progressDialog.setIndeterminate(true)
+        progressDialog.setTitle("Wait")
+        progressDialog.setMessage("Loading Characteristics...")
+        return progressDialog
+    }()
+    #endif
+    
     let service: NativeService
     
     private let cellReuseIdentifier = "Cell"
@@ -129,6 +141,10 @@ final class CharacteristicsViewController: UITableViewController {
         let item = self[indexPath]
         
         cell.textLabel?.text = item.uuid.description
+        
+        #if os(iOS)
+        cell.textLabel?.numberOfLines = 0
+        #endif
     }
     
     // MARK: - UITableViewDataSource
@@ -172,20 +188,4 @@ final class CharacteristicsViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension CharacteristicsViewController: ActivityIndicatorViewController {
-    
-    func showActivity() {
-        
-        
-    }
-    
-    func hideActivity(animated: Bool = true) {
-        
-        if let refreshControl = self.refreshControl,
-            refreshControl.isRefreshing {
-            
-            self.endRefreshing()
-        }
-    }
-}
-
+extension CharacteristicsViewController: TableViewActivityIndicatorViewController { }

@@ -80,3 +80,72 @@ extension ActivityIndicatorViewController {
         }
     }
 }
+
+protocol TableViewActivityIndicatorViewController: ActivityIndicatorViewController {
+    
+    var tableView: UITableView! { get }
+    
+    var refreshControl: UIRefreshControl? { get }
+    
+    #if os(iOS)
+    var activityIndicator: UIActivityIndicatorView { get }
+    #elseif os(Android) || os(macOS)
+    var progressDialog: AndroidProgressDialog { get }
+    #endif
+}
+
+extension TableViewActivityIndicatorViewController {
+    
+    func showActivity() {
+        
+        self.view.isUserInteractionEnabled = false
+        
+        if refreshControl?.isRefreshing ?? false {
+            
+            // refresh control animating
+        } else {
+            
+            #if os(iOS)
+            activityIndicator.startAnimating()
+            #else
+            progressDialog.show()
+            #endif
+        }
+    }
+    
+    func hideActivity(animated: Bool = true) {
+        
+        self.view.isUserInteractionEnabled = true
+        
+        if refreshControl?.isRefreshing ?? false {
+            
+            refreshControl?.endRefreshing()
+        } else {
+            #if os(iOS)
+            activityIndicator.stopAnimating()
+            #else
+            progressDialog.dismiss()
+            #endif
+            
+        }
+    }
+}
+
+internal extension ActivityIndicatorViewController {
+    
+    #if os(iOS)
+    func loadActivityIndicatorView() -> UIActivityIndicatorView {
+        
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicator.frame.origin = CGPoint(x: 6.5, y: 15)
+        
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 33, height: 44))
+        view.backgroundColor = .clear
+        view.addSubview(activityIndicator)
+        
+        let barButtonItem = UIBarButtonItem(customView: view)
+        self.navigationItem.rightBarButtonItem = barButtonItem
+        return activityIndicator
+    }
+    #endif
+}

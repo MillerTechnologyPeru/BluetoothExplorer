@@ -25,6 +25,14 @@ final class CentralViewController: UITableViewController {
     
     #if os(iOS)
     lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
+    #else
+    lazy var progressDialog: AndroidProgressDialog = {
+        let progressDialog = AndroidProgressDialog(context: UIApplication.shared.androidActivity)
+        progressDialog.setIndeterminate(true)
+        progressDialog.setTitle("Wait")
+        progressDialog.setMessage("Scanning...")
+        return progressDialog
+    }()
     #endif
     
     private(set) var items = [NativeScanData]()
@@ -157,6 +165,7 @@ final class CentralViewController: UITableViewController {
         #if os(iOS)
         
         cell.textLabel?.text = item.advertisementData.localName ?? item.peripheral.identifier.description
+        cell.textLabel?.numberOfLines = 0
         
         #elseif os(Android) || os(macOS)
         
@@ -266,39 +275,4 @@ final class CentralViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension CentralViewController: ActivityIndicatorViewController {
-    
-    func showActivity() {
-        
-        self.view.isUserInteractionEnabled = false
-        
-        #if os(iOS)
-        if refreshControl?.isRefreshing ?? false {
-            
-            // refresh control animating
-            
-        } else {
-            
-            activityIndicator.startAnimating()
-        }
-        #endif
-    }
-    
-    func hideActivity(animated: Bool = true) {
-        
-        self.view.isUserInteractionEnabled = true
-        
-        #if os(iOS)
-        if refreshControl?.isRefreshing ?? false {
-            
-            refreshControl?.endRefreshing()
-            
-        } else {
-            
-            activityIndicator.stopAnimating()
-        }
-        #else
-        refreshControl?.endRefreshing()
-        #endif
-    }
-}
+extension CentralViewController: TableViewActivityIndicatorViewController { }

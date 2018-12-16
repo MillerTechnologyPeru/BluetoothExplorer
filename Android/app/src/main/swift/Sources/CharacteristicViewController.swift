@@ -24,6 +24,18 @@ final class CharacteristicViewController: UITableViewController {
     
     // MARK: - Properties
     
+    #if os(iOS)
+    lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
+    #else
+    lazy var progressDialog: AndroidProgressDialog = {
+        let progressDialog = AndroidProgressDialog(context: UIApplication.shared.androidActivity)
+        progressDialog.setIndeterminate(true)
+        progressDialog.setTitle("Wait")
+        progressDialog.setMessage("Loading...")
+        return progressDialog
+    }()
+    #endif
+    
     let service: NativeService
     let characteristic: NativeCharacteristic
     
@@ -217,11 +229,19 @@ final class CharacteristicViewController: UITableViewController {
     private func configure(cell: UITableViewCell, with value: String) {
         
         cell.textLabel?.text = value
+        
+        #if os(iOS)
+        cell.textLabel?.numberOfLines = 0
+        #endif
     }
     
     private func configure(cell: UITableViewCell, with data: Data) {
         
         cell.textLabel?.text = data.isEmpty ? "No value" : "0x" + data.reduce("", { $0 + String($1, radix: 16) })
+        
+        #if os(iOS)
+        cell.textLabel?.numberOfLines = 0
+        #endif
     }
     
     // MARK: - UITableViewDataSource
@@ -400,18 +420,7 @@ final class CharacteristicViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension CharacteristicViewController: ActivityIndicatorViewController {
-    
-    func showActivity() {
-        
-        
-    }
-    
-    func hideActivity(animated: Bool = true) {
-        
-        
-    }
-}
+extension CharacteristicViewController: TableViewActivityIndicatorViewController { }
 
 // MARK: - Supporting Types
 

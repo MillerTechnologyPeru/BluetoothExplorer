@@ -139,7 +139,6 @@ final class CentralViewController: UITableViewController {
         
         // remove old value
         if let index = self.items.index(where: { $0.peripheral == scanData.peripheral }) {
-            
             self.items.remove(at: index)
         }
         

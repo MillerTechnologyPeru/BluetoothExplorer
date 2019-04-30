@@ -130,13 +130,8 @@ final class CentralViewController: UITableViewController {
         let scanDuration = self.scanDuration
         let filterDuplicates = self.filterDuplicates
         
-        let start = Date()
-        let end = start + scanDuration
-        
         performActivity({
-            try NativeCentral.shared.scan(filterDuplicates: filterDuplicates,
-                                          shouldContinueScanning: { Date() < end },
-                                          foundDevice: { [weak self] (device) in mainQueue { self?.foundDevice(device) } })
+            try NativeCentral.shared.scan(duration: scanDuration, filterDuplicates: filterDuplicates) { [weak self] (device) in mainQueue { self?.foundDevice(device) } }
         })
     }
     

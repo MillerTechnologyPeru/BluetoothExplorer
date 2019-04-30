@@ -41,8 +41,6 @@ final class CentralViewController: UITableViewController {
     
     let filterDuplicates: Bool = false
     
-    private let cellReuseIdentifier = "Cell"
-    
     // MARK: - Loading
     
     override func viewDidLoad() {
@@ -55,7 +53,7 @@ final class CentralViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 44
         self.tableView.rowHeight = UITableViewAutomaticDimension
         #if os(iOS)
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
+        self.tableView.register(ScanDataTableViewCell.self)
         #else
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
         #endif
@@ -241,9 +239,8 @@ final class CentralViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(ScanDataTableViewCell.self, for: indexPath)
         configure(cell: cell, at: indexPath)
-    
         return cell
     }
     

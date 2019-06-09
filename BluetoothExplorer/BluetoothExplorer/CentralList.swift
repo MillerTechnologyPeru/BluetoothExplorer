@@ -12,11 +12,16 @@ struct CentralList: View {
     
     @EnvironmentObject private var store: Store
     
+    var scanResults: [ScanResult<NativeCentral.Peripheral, NativeCentral.Advertisement>] {
+        return store.
+    }
+    
     var body: some View {
         List {
             Text("Hey")
             Text("2")
         }.navigationBarTitle(Text("Central"), displayMode: .large)
+            //.navigationBarItems(trailing: Button(action: {  }, label: Text("Reload")))
     }
 }
 

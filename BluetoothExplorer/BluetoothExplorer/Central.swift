@@ -13,7 +13,7 @@ import SwiftUI
 
 typealias Peripheral = NativeCentral.Peripheral
 
-extension Peripheral: Identifiable {
+extension NativeCentral.Peripheral: Identifiable {
     
     public var id: Identifier {
         return identifier

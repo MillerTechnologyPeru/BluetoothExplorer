@@ -61,6 +61,12 @@ final class Store: BindableObject {
         didSet { didChange.send(self) }
     }
     
+    private var lastScanUpdate: Date?
+    
+    private var pendingScanResults: [Peripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] = [:]
+    
+    private let scanResultsFlushInterval = 1.0
+    
     // MARK: - Methods
     
     private func async <Result> (_ newState: OperationState,
@@ -91,19 +97,49 @@ final class Store: BindableObject {
     func scan() {
         
         self.scanResults.removeAll(keepingCapacity: true)
+        self.lastScanUpdate = nil
+        
         async(.scanning, {
-            try $0.central.scan(filterDuplicates: $0.filterDuplicates) { [unowned self] (scanData) in
-                DispatchQueue.main.async {
-                    self.scanResults[scanData.peripheral] = scanData
-                }
+            try $0.central.scan(filterDuplicates: $0.filterDuplicates) { [unowned self] in
+                self.discovered($0)
             }
         })
     }
     
+    private func discovered(_ scanData: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>) {
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if let lastScanUpdate = self.lastScanUpdate {
+                self.pendingScanResults[scanData.peripheral] = scanData
+                if lastScanUpdate + self.scanResultsFlushInterval < Date() {
+                    self.flushScanResults()
+                    self.lastScanUpdate = Date()
+                }
+            } else {
+                // insert first result
+                self.scanResults[scanData.peripheral] = scanData
+                self.lastScanUpdate = Date()
+            }
+        }
+    }
+    
+    private func flushScanResults() {
+        pendingScanResults.forEach {
+            scanResults[$0] = $1
+        }
+        pendingScanResults.removeAll(keepingCapacity: true)
+    }
+    
     func stopScanning() {
         
-        self.central.stopScan()
+        assert(Thread.current.isMainThread, "Should only be called from main thread")
+        
         self.operationState = .idle
+        self.central.stopScan()
+        if pendingScanResults.isEmpty == false {
+            flushScanResults()
+        }
     }
 }
 

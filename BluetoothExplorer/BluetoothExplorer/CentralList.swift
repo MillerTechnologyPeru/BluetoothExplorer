@@ -26,7 +26,7 @@ struct CentralList: View {
                 }
             }
             .navigationBarTitle(Text("Central"), displayMode: .large)
-            .navigationBarItems(trailing: Navigation)
+            .navigationBarItems(trailing: leftBarButtonItem)
         }
     }
 }

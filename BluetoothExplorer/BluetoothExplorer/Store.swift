@@ -65,7 +65,7 @@ final class Store: BindableObject {
     
     private var pendingScanResults: [Peripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] = [:]
     
-    private let scanResultsFlushInterval = 1.0
+    private let scanResultsFlushInterval = 0.3
     
     // MARK: - Methods
     
@@ -108,35 +108,33 @@ final class Store: BindableObject {
     
     private func discovered(_ scanData: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>) {
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if let lastScanUpdate = self.lastScanUpdate {
-                self.pendingScanResults[scanData.peripheral] = scanData
-                if lastScanUpdate + self.scanResultsFlushInterval < Date() {
-                    self.flushScanResults()
-                    self.lastScanUpdate = Date()
-                }
-            } else {
-                // insert first result
-                self.scanResults[scanData.peripheral] = scanData
-                self.lastScanUpdate = Date()
+        if let lastScanUpdate = self.lastScanUpdate {
+            self.pendingScanResults[scanData.peripheral] = scanData
+            if lastScanUpdate + self.scanResultsFlushInterval < Date() {
+                DispatchQueue.main.async { [weak self] in self?.flushScanResults() }
             }
+        } else {
+            // insert first result
+            DispatchQueue.main.async { self.scanResults[scanData.peripheral] = scanData }
+            self.lastScanUpdate = Date()
         }
     }
     
     private func flushScanResults() {
+        
         pendingScanResults.forEach {
             scanResults[$0] = $1
         }
         pendingScanResults.removeAll(keepingCapacity: true)
+        lastScanUpdate = Date()
     }
     
     func stopScanning() {
         
         assert(Thread.current.isMainThread, "Should only be called from main thread")
         
-        self.operationState = .idle
-        self.central.stopScan()
+        operationState = .idle
+        central.stopScan()
         if pendingScanResults.isEmpty == false {
             flushScanResults()
         }

@@ -6,15 +6,16 @@
 //  Copyright © 2019 Alsey Coleman Miller. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+final class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        Store.shared.central.log = { print("Central:", $0) }
+        
         return true
     }
 

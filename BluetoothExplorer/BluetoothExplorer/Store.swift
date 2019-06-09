@@ -11,6 +11,7 @@ import Combine
 import SwiftUI
 import Bluetooth
 import GATT
+import DarwinGATT
 
 final class Store: BindableObject {
     
@@ -20,6 +21,10 @@ final class Store: BindableObject {
     
     init(central: NativeCentral = .shared) {
         self.central = central
+        self.centralState = central.state
+        self.central.stateChanged = { [weak self] in
+            self?.centralState = $0
+        }
     }
     
     // MARK: - Properties
@@ -32,9 +37,25 @@ final class Store: BindableObject {
     
     private let queue = DispatchQueue(label: "Store Queue")
     
-    private(set) var state: BluetoothState = .idle {
-        didSet { didChange.send(self) }
+    private(set) var operationState: OperationState = .idle {
+        didSet {
+            didChange.send(self)
+            print("Operation State changed: \(oldValue) -> \(operationState)")
+        }
     }
+    
+    #if canImport(DarwinGATT)
+    private(set) var centralState: DarwinBluetoothState {
+        didSet {
+            didChange.send(self)
+            print("Bluetooth State changed: \(oldValue) -> \(centralState)")
+            if centralState == .poweredOn {
+                scan()
+            }
+        }
+    }
+    
+    #endif
     
     private(set) var scanResults: [Peripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] = [:] {
         didSet { didChange.send(self) }
@@ -42,23 +63,23 @@ final class Store: BindableObject {
     
     // MARK: - Methods
     
-    private func async <Result> (_ newState: BluetoothState,
-                                 operation: (Store) throws -> (Result),
+    private func async <Result> (_ newState: OperationState,
+                                 _ operation: @escaping (Store) throws -> (Result),
                                  completion: ((Store, Result) -> ())? = nil) {
         assert(newState != .idle, "Invalid target state")
-        self.state = newState
+        self.operationState = newState
         queue.async { [weak self] in
             guard let self = self else { return }
             do {
                 let result = try operation(self)
                 DispatchQueue.main.async {
-                    self.state = newState
+                    self.operationState = newState
                     completion?(self, result)
                 }
             }
             catch {
                 DispatchQueue.main.async {
-                    self.state = .idle
+                    self.operationState = .idle
                     // FIXME: Show error alert
                     print("⚠️ Error: \(error.localizedDescription)")
                     dump(error)
@@ -69,44 +90,31 @@ final class Store: BindableObject {
     
     func scan() {
         
-        self.state = .scanning
         self.scanResults.removeAll(keepingCapacity: true)
-        
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            do {
-                try self.central.scan(filterDuplicates: self.filterDuplicates) { (scanData) in
-                    DispatchQueue.main.async {
-                        self.scanResults[scanData.peripheral] = scanData
-                    }
-                }
+        async(.scanning, {
+            try $0.central.scan(filterDuplicates: $0.filterDuplicates) { [unowned self] (scanData) in
                 DispatchQueue.main.async {
-                    self.state = .idle
+                    self.scanResults[scanData.peripheral] = scanData
                 }
             }
-            catch {
-                DispatchQueue.main.async {
-                    self.state = .idle
-                }
-            }
-        }
+        })
     }
     
     func stopScanning() {
         
         self.central.stopScan()
-        self.state = .idle
+        self.operationState = .idle
     }
 }
 
-enum BluetoothState {
+enum OperationState {
     
     case idle
     case scanning
     case connecting
-    case discoverServices
-    case discoverCharacteristics
-    case read
-    case write
-    case notificationState
+    case discoveringServices
+    case discoveringCharacteristics
+    case reading
+    case writing
+    case writeNotificationState
 }

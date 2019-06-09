@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  CentralList.swift
 //  BluetoothExplorer
 //
 //  Created by Alsey Coleman Miller on 6/9/19.
@@ -7,21 +7,42 @@
 //
 
 import SwiftUI
+import Bluetooth
+import GATT
 
 struct CentralList: View {
     
     @EnvironmentObject private var store: Store
     
-    var scanResults: [ScanResult<NativeCentral.Peripheral, NativeCentral.Advertisement>] {
-        return store.
+    var scanResults: [ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] {
+        return store.scanResults.values.sorted(by: { $0.peripheral.description < $1.peripheral.description })
     }
     
     var body: some View {
-        List {
-            Text("Hey")
-            Text("2")
-        }.navigationBarTitle(Text("Central"), displayMode: .large)
-            //.navigationBarItems(trailing: Button(action: {  }, label: Text("Reload")))
+        NavigationView {
+            List {
+                ForEach(scanResults) {
+                    Text(verbatim: $0.advertisementData.localName ?? $0.peripheral.description)
+                }
+            }
+            .navigationBarTitle(Text("Central"), displayMode: .large)
+            .navigationBarItems(trailing: Navigation)
+        }
+    }
+}
+
+extension CentralList {
+    
+    var leftBarButtonItem: some View {
+        if store.operationState == .scanning {
+            return Button(action: { self.store.stopScanning() }) {
+                Text("Stop")
+            }
+        } else {
+            return Button(action: { self.store.scan() }) {
+                Text("Scan")
+            }
+        }
     }
 }
 

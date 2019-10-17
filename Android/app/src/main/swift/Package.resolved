@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/PureSwift/Android.git",
         "state": {
           "branch": "master",
-          "revision": "565c5ab65774787ccd14f517bfee540f28bc0345",
+          "revision": "937413a8f7f741466850eb792f4f162378bb7b65",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/PureSwift/AndroidBluetooth.git",
         "state": {
           "branch": "master",
-          "revision": "0c7a396ca182c2aaf079074ba8026db93bc62a5c",
+          "revision": "fcc0c03c440cf6855b95936b7260497cbbbb532a",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/PureSwift/AndroidUIKit.git",
         "state": {
           "branch": "master",
-          "revision": "1f97d289588914ffd593b5375373657ad948fbda",
+          "revision": "d23b4fe083d0a0f1f1767cb46e747efd69a8b96f",
           "version": null
         }
       },
@@ -33,17 +33,17 @@
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
           "branch": "master",
-          "revision": "ec06e90f1b77f6195713594a3b8f7162c0b198a8",
+          "revision": "b03524c7a0c7eca048133a9df9dc4bbe727b38e0",
           "version": null
         }
       },
       {
         "package": "CJavaVM",
-        "repositoryURL": "https://github.com/SwiftJava/CJavaVM.git",
+        "repositoryURL": "https://github.com/PureSwift/CJavaVM.git",
         "state": {
-          "branch": null,
-          "revision": "6240b2a563f02d98a162d4dce856b6c9a7196c90",
-          "version": "1.1.4"
+          "branch": "master",
+          "revision": "3b19893aa50a724c467d341c482087c30323b190",
+          "version": null
         }
       },
       {
@@ -51,34 +51,34 @@
         "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "5752c678e2c723d22112c04477157fc5116863dd",
+          "revision": "955a19b2030e08666154f2ee52d7955f56bb6ff5",
           "version": null
         }
       },
       {
         "package": "java_lang",
-        "repositoryURL": "https://github.com/SwiftJava/java_lang.git",
+        "repositoryURL": "https://github.com/PureSwift/java_lang.git",
         "state": {
-          "branch": null,
-          "revision": "3e3404bcdc29d6bc03ceed17d95e05f0254f7679",
-          "version": "2.3.2"
+          "branch": "master",
+          "revision": "e308632de721a79119b4a76e3b62faf5893d4cad",
+          "version": null
         }
       },
       {
         "package": "java_swift",
-        "repositoryURL": "https://github.com/SwiftJava/java_swift.git",
+        "repositoryURL": "https://github.com/PureSwift/java_swift.git",
         "state": {
-          "branch": null,
-          "revision": "f6745e8690d10ca01e983ceeb1339b0899fa8a99",
-          "version": "2.3.3"
+          "branch": "master",
+          "revision": "65deecc81042d0839a7496450109cafd2a0e1741",
+          "version": null
         }
       },
       {
         "package": "java_util",
-        "repositoryURL": "https://github.com/SwiftJava/java_util.git",
+        "repositoryURL": "https://github.com/PureSwift/java_util.git",
         "state": {
           "branch": "master",
-          "revision": "496b963217a7bf3b3c028db11ede5cfcbb3540e6",
+          "revision": "5cad067437a2567ffcf0ba9ea1c2f19d8b414d61",
           "version": null
         }
       },
@@ -87,7 +87,7 @@
         "repositoryURL": "https://github.com/PureSwift/JNI.git",
         "state": {
           "branch": "master",
-          "revision": "66ba5d594d654c4565dc7873e7daa5a60ce814ad",
+          "revision": "29239efbdd3370dc17f06f9df5380ecd2997370c",
           "version": null
         }
       }

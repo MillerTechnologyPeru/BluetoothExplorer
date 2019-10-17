@@ -52,11 +52,7 @@ final class CentralViewController: UITableViewController {
         // setup table view
         self.tableView.estimatedRowHeight = 44
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        #if os(iOS)
         self.tableView.register(ScanDataTableViewCell.self)
-        #else
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
-        #endif
         
         let refreshControl = UIRefreshControl(frame: .zero)
         

@@ -54,7 +54,7 @@ extension ScanDataTableViewCell: ReusableTableViewCell {
 #if os(iOS)
 extension ScanDataTableViewCell: NibTableViewCell { }
 #elseif os(Android) || os(macOS)
-extension RightDetailTableViewCell: AndroidTableViewCell {
+extension ScanDataTableViewCell: AndroidTableViewCell {
     static let layout = "cell_right_detail"
     
     func awakeFromLayout() {

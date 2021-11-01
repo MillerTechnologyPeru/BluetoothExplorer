@@ -38,6 +38,7 @@ final class Store: ObservableObject {
     
     func scan() async throws {
         isScanning = true
+        scanResults.removeAll(keepingCapacity: true)
         let stream = central.scan(filterDuplicates: false)
         for try await scanData in stream {
             scanResults[scanData.peripheral] = scanData

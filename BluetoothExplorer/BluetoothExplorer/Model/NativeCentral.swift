@@ -13,13 +13,13 @@ import GATT
 import DarwinGATT
 
 typealias NativeCentral = AsyncDarwinCentral
-typealias NativePeripheral = NativeCentral.Peripheral
+typealias NativePeripheral = AsyncDarwinCentral.Peripheral
 typealias NativeScanData = ScanData<NativePeripheral, DarwinAdvertisementData>
 
 extension NativeCentral {
     
     private struct Cache {
-        static let central = AsyncDarwinCentral(
+        static let central = NativeCentral(
             options: .init(showPowerAlert: true)
         )
     }

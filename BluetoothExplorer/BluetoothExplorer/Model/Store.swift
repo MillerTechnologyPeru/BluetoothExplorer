@@ -16,19 +16,21 @@ import DarwinGATT
 @MainActor
 final class Store: ObservableObject {
     
+    typealias Central = AsyncDarwinCentral
+    
     // MARK: - Properties
     
     @Published
-    var scanResults = [NativePeripheral: NativeScanData]()
+    var scanResults = [Central.Peripheral: ScanData<Central.Peripheral, Central.Advertisement>]()
     
     @Published
     var isScanning = false
     
-    private let central: NativeCentral
+    private let central: Central
     
     // MARK: - Initialization
     
-    init(central: NativeCentral) {
+    init(central: Central) {
         self.central = central
     }
     
@@ -39,7 +41,7 @@ final class Store: ObservableObject {
     func scan() async throws {
         isScanning = true
         scanResults.removeAll(keepingCapacity: true)
-        let stream = central.scan(filterDuplicates: false)
+        let stream = central.scan(filterDuplicates: true)
         for try await scanData in stream {
             scanResults[scanData.peripheral] = scanData
         }
@@ -49,16 +51,4 @@ final class Store: ObservableObject {
         isScanning = false
         await central.stopScan()
     }
-}
-
-enum OperationState {
-    
-    case idle
-    case scanning
-    case connecting
-    case discoveringServices
-    case discoveringCharacteristics
-    case reading
-    case writing
-    case writeNotificationState
 }

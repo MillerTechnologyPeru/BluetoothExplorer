@@ -15,24 +15,17 @@ struct CentralList: View {
     @StateObject
     var store: Store
     
-    var scanResults: [ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] {
+    var scanResults: [NativeScanData] {
         return store.scanResults.values.sorted(by: { $0.peripheral.description < $1.peripheral.description })
     }
     
     var body: some View {
         #if os(iOS)
-        NavigationView {
-            list
-            .navigationBarTitle(Text("Central"), displayMode: .automatic)
-            .navigationBarItems(trailing: leftBarButtonItem)
-        }
+        list
+        .navigationBarTitle(Text("Central"), displayMode: .automatic)
+        .navigationBarItems(trailing: leftBarButtonItem)
         #elseif os(macOS)
-        NavigationView {
-            VStack {
-                leftBarButtonItem
-                list
-            }
-        }
+        list
         .navigationTitle(Text("Central"))
         #endif
     }
@@ -42,8 +35,11 @@ extension CentralList {
     
     var list: some View {
         List {
-            ForEach(scanResults) {
-                Text(verbatim: $0.advertisementData.localName ?? $0.peripheral.description)
+            ForEach(scanResults) { scanResult in
+                NavigationLink(
+                    destination: { PeripheralView(store: store, peripheral: scanResult.peripheral) },
+                    label: { Text(verbatim: scanResult.advertisementData.localName ?? scanResult.peripheral.description) }
+                )
             }
         }
     }

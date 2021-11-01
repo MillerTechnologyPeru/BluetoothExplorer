@@ -20,19 +20,33 @@ struct CentralList: View {
     }
     
     var body: some View {
+        #if os(iOS)
         NavigationView {
-            List {
-                ForEach(scanResults) {
-                    Text(verbatim: $0.advertisementData.localName ?? $0.peripheral.description)
-                }
-            }
+            list
             .navigationBarTitle(Text("Central"), displayMode: .automatic)
             .navigationBarItems(trailing: leftBarButtonItem)
         }
+        #elseif os(macOS)
+        NavigationView {
+            VStack {
+                leftBarButtonItem
+                list
+            }
+        }
+        .navigationTitle(Text("Central"))
+        #endif
     }
 }
 
 extension CentralList {
+    
+    var list: some View {
+        List {
+            ForEach(scanResults) {
+                Text(verbatim: $0.advertisementData.localName ?? $0.peripheral.description)
+            }
+        }
+    }
     
     var leftBarButtonItem: some View {
         if store.isScanning {

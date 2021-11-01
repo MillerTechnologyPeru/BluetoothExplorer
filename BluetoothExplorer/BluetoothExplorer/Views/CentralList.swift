@@ -12,7 +12,8 @@ import GATT
 
 struct CentralList: View {
     
-    @EnvironmentObject private var store: Store
+    @StateObject
+    var store: Store
     
     var scanResults: [ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>] {
         return store.scanResults.values.sorted(by: { $0.peripheral.description < $1.peripheral.description })
@@ -25,7 +26,7 @@ struct CentralList: View {
                     Text(verbatim: $0.advertisementData.localName ?? $0.peripheral.description)
                 }
             }
-            .navigationBarTitle(Text("Central"), displayMode: .large)
+            .navigationBarTitle(Text("Central"), displayMode: .automatic)
             .navigationBarItems(trailing: leftBarButtonItem)
         }
     }
@@ -34,12 +35,21 @@ struct CentralList: View {
 extension CentralList {
     
     var leftBarButtonItem: some View {
-        if store.operationState == .scanning {
-            return Button(action: { self.store.stopScanning() }) {
+        if store.isScanning {
+            return Button(action: {
+                Task {
+                    await self.store.stopScan()
+                }
+            }) {
                 Text("Stop")
             }
         } else {
-            return Button(action: { self.store.scan() }) {
+            return Button(action: {
+                Task {
+                    do { try await self.store.scan() }
+                    catch { print(error) }
+                }
+            }) {
                 Text("Scan")
             }
         }
@@ -47,9 +57,9 @@ extension CentralList {
 }
 
 #if DEBUG
-extension CentralList : PreviewProvider {
+struct CentralList_Preview: PreviewProvider {
     static var previews: some View {
-        CentralList()
+        CentralList(store: .shared)
     }
 }
 #endif

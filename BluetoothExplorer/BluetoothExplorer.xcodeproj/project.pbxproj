@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E805D7B22AD650D0051A999 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E805D7A22AD650D0051A999 /* AppDelegate.swift */; };
-		6E805D7D22AD650D0051A999 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E805D7C22AD650D0051A999 /* SceneDelegate.swift */; };
+		6E805D7B22AD650D0051A999 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E805D7A22AD650D0051A999 /* App.swift */; };
 		6E805D7F22AD650E0051A999 /* CentralList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E805D7E22AD650E0051A999 /* CentralList.swift */; };
 		6E805D8122AD651F0051A999 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E805D8022AD651F0051A999 /* Assets.xcassets */; };
 		6E805D8422AD651F0051A999 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E805D8322AD651F0051A999 /* Preview Assets.xcassets */; };
@@ -21,8 +20,7 @@
 
 /* Begin PBXFileReference section */
 		6E805D7722AD650C0051A999 /* BluetoothExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluetoothExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E805D7A22AD650D0051A999 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6E805D7C22AD650D0051A999 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6E805D7A22AD650D0051A999 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		6E805D7E22AD650E0051A999 /* CentralList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralList.swift; sourceTree = "<group>"; };
 		6E805D8022AD651F0051A999 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E805D8322AD651F0051A999 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -30,6 +28,7 @@
 		6E805D8822AD65200051A999 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E805D9B22AD6ACB0051A999 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E805D9D22AD6FDB0051A999 /* Central.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6EFD66A4272F62D50089E8AC /* BluetoothExplorer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BluetoothExplorer.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,11 +63,10 @@
 		6E805D7922AD650C0051A999 /* BluetoothExplorer */ = {
 			isa = PBXGroup;
 			children = (
-				6E805D7A22AD650D0051A999 /* AppDelegate.swift */,
-				6E805D7C22AD650D0051A999 /* SceneDelegate.swift */,
-				6E805D7E22AD650E0051A999 /* CentralList.swift */,
-				6E805D9B22AD6ACB0051A999 /* Store.swift */,
-				6E805D9D22AD6FDB0051A999 /* Central.swift */,
+				6EFD66A4272F62D50089E8AC /* BluetoothExplorer.entitlements */,
+				6E805D7A22AD650D0051A999 /* App.swift */,
+				6EFD66A3272F07B80089E8AC /* Model */,
+				6EFD66A2272F07B20089E8AC /* Views */,
 				6E805D8022AD651F0051A999 /* Assets.xcassets */,
 				6E805D8522AD651F0051A999 /* LaunchScreen.storyboard */,
 				6E805D8822AD65200051A999 /* Info.plist */,
@@ -83,6 +81,23 @@
 				6E805D8322AD651F0051A999 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6EFD66A2272F07B20089E8AC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6E805D7E22AD650E0051A999 /* CentralList.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6EFD66A3272F07B80089E8AC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6E805D9B22AD6ACB0051A999 /* Store.swift */,
+				6E805D9D22AD6FDB0051A999 /* Central.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -116,7 +131,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1310;
 				ORGANIZATIONNAME = "Alsey Coleman Miller";
 				TargetAttributes = {
 					6E805D7622AD650C0051A999 = {
@@ -163,8 +178,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E805D7B22AD650D0051A999 /* AppDelegate.swift in Sources */,
-				6E805D7D22AD650D0051A999 /* SceneDelegate.swift in Sources */,
+				6E805D7B22AD650D0051A999 /* App.swift in Sources */,
 				6E805D9E22AD6FDB0051A999 /* Central.swift in Sources */,
 				6E805D7F22AD650E0051A999 /* CentralList.swift in Sources */,
 				6E805D9C22AD6ACB0051A999 /* Store.swift in Sources */,
@@ -211,6 +225,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -235,7 +250,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -271,6 +286,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -289,7 +305,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -303,9 +319,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BluetoothExplorer/BluetoothExplorer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "BluetoothExplorer/Preview\\ Content";
-				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DEVELOPMENT_TEAM = DGYBYARDK9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -314,8 +331,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.pureswift.BluetoothExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -323,9 +342,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BluetoothExplorer/BluetoothExplorer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "BluetoothExplorer/Preview\\ Content";
-				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DEVELOPMENT_TEAM = DGYBYARDK9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BluetoothExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -334,8 +354,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.pureswift.BluetoothExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
@@ -367,7 +389,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureSwift/GATT.git";
 			requirement = {
-				branch = master;
+				branch = feature/async;
 				kind = branch;
 			};
 		};

@@ -52,8 +52,8 @@ struct MockAdvertisementData: AdvertisementData {
 extension MockAdvertisementData {
     
     static let beacon = MockAdvertisementData(
-        localName: "iBeacon",
-        manufacturerData: nil /*AppleBeacon(
+        localName: nil,
+        manufacturerData: ManufacturerSpecificData(data: Data([0x4c, 0x00, 0x02, 0x15, 0xb9, 0x40, 0x7f, 0x30, 0xf5, 0xf8, 0x46, 0x6e, 0xaf, 0xf9, 0x25, 0x55, 0x6b, 0x57, 0xfe, 0x6d, 0x29, 0x4c, 0x90, 0x39, 0x74])) /*AppleBeacon(
             uuid: UUID(),
             rssi: -20
         ).manufacturerData*/,

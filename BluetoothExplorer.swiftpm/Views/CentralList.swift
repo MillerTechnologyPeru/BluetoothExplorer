@@ -35,10 +35,10 @@ extension CentralList {
     
     var list: some View {
         List {
-            ForEach(scanResults) { scanResult in
+            ForEach(scanResults) { scanData in
                 NavigationLink(
-                    destination: { PeripheralView(store: store, peripheral: scanResult.peripheral) },
-                    label: { Text(verbatim: scanResult.advertisementData.localName ?? scanResult.peripheral.description) }
+                    destination: { PeripheralView(store: store, peripheral: scanData.peripheral) },
+                    label: { CentralCell(scanData: scanData) }
                 )
             }
         }

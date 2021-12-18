@@ -16,7 +16,7 @@ struct AdvertisementDataView <Advertisement: AdvertisementData> : View {
     let advertisementData: Advertisement
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: nil) {
             if let localName = advertisementData.localName {
                 HStack {
                     Text("Name")

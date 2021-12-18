@@ -9,14 +9,13 @@
 import SwiftUI
 import Bluetooth
 import GATT
-import DarwinGATT
 
 struct ScanDataView <Peripheral: Peer, Advertisement: AdvertisementData> : View {
     
     let scanData: ScanData<Peripheral, Advertisement>
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: nil) {
             Text(verbatim: scanData.peripheral.description)
             HStack {
                 Text("Date")

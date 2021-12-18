@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Bluetooth",
+        "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
+        "state": {
+          "branch": "feature/async",
+          "revision": "60f8a322e066dc0beed2b50b8524aead46d42c91",
+          "version": null
+        }
+      },
+      {
+        "package": "GATT",
+        "repositoryURL": "https://github.com/PureSwift/GATT.git",
+        "state": {
+          "branch": "feature/async",
+          "revision": "c61dc0b7248136bcb6f77f6629f885a6ecceca5a",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,5 +1,5 @@
 //
-//  .swift
+//  CentralCell.swift
 //  
 //
 //  Created by Alsey Coleman Miller on 18/12/21.
@@ -40,8 +40,6 @@ extension CentralCell {
     var company: String? {
         scanData.advertisementData.manufacturerData?.companyIdentifier.name
     }
-    
-    
 }
 
 #if DEBUG

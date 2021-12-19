@@ -15,6 +15,8 @@ import DarwinGATT
 typealias NativeCentral = DarwinCentral
 typealias NativePeripheral = DarwinCentral.Peripheral
 typealias NativeScanData = ScanData<NativePeripheral, DarwinAdvertisementData>
+typealias NativeService = Service<DarwinCentral.Peripheral, ObjectIdentifier>
+typealias NativeCharacteristic = Characteristic<DarwinCentral.Peripheral, ObjectIdentifier>
 
 extension NativeCentral {
     

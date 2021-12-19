@@ -6,6 +6,7 @@
 //  Copyright © 2021 Alsey Coleman Miller. All rights reserved.
 //
 
+#if DEBUG
 import Foundation
 import Bluetooth
 import GATT
@@ -22,3 +23,4 @@ extension MockScanData {
         isConnectable: true
     )
 }
+#endif

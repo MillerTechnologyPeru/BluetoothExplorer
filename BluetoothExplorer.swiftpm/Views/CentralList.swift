@@ -57,7 +57,7 @@ extension CentralList {
             return Button(action: {
                 Task {
                     do { try await self.store.scan() }
-                    catch { print(error) }
+                    catch { print("Error scanning:", error) }
                 }
             }) {
                 Text("Scan")

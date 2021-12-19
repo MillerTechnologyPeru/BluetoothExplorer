@@ -21,10 +21,19 @@ final class Store: ObservableObject {
     // MARK: - Properties
     
     @Published
-    var scanResults = [Central.Peripheral: ScanData<Central.Peripheral, Central.Advertisement>]()
+    private(set) var state: DarwinBluetoothState = .unknown
     
     @Published
-    var isScanning = false
+    private(set) var scanResults = [Central.Peripheral: ScanData<Central.Peripheral, Central.Advertisement>]()
+    
+    @Published
+    private(set) var isScanning = false
+    
+    @Published
+    private(set) var connected = Set<Central.Peripheral>()
+    
+    @Published
+    private(set) var services = [Central.Peripheral: [NativeService]]()
     
     private let central: Central
     
@@ -32,23 +41,65 @@ final class Store: ObservableObject {
     
     init(central: Central) {
         self.central = central
+        observeValues()
     }
     
     static let shared = Store(central: .shared)
     
     // MARK: - Methods
     
+    private func observeValues() {
+        Task { [unowned self] in
+            for await value in self.central.state {
+                assert(Thread.isMainThread)
+                self.state = value
+            }
+        }
+        Task { [unowned self] in
+            for await value in self.central.isScanning {
+                assert(Thread.isMainThread)
+                self.isScanning = value
+            }
+        }
+        Task { [unowned self] in
+            for await value in self.central.didDisconnect {
+                assert(Thread.isMainThread)
+                if self.connected.contains(value) {
+                    self.connected.remove(value)
+                }
+            }
+        }
+    }
+    
     func scan() async throws {
-        isScanning = true
         scanResults.removeAll(keepingCapacity: true)
         let stream = central.scan(filterDuplicates: true)
         for try await scanData in stream {
+            assert(Thread.isMainThread)
             scanResults[scanData.peripheral] = scanData
         }
     }
     
     func stopScan() async {
-        isScanning = false
         await central.stopScan()
+    }
+    
+    func connect(to peripheral: Central.Peripheral) async throws {
+        if isScanning {
+            await central.stopScan()
+        }
+        try await central.connect(to: peripheral)
+        assert(Thread.isMainThread)
+        connected.insert(peripheral)
+    }
+    
+    func disconnect(_ peripheral: Central.Peripheral) {
+        central.disconnect(peripheral)
+    }
+    
+    func discoverServices(for peripheral: Central.Peripheral) async throws {
+        let services = try await central.discoverServices(for: peripheral)
+        assert(Thread.isMainThread)
+        self.services[peripheral] = services
     }
 }

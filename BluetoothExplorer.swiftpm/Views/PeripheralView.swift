@@ -23,18 +23,7 @@ struct PeripheralView: View {
                 ScanDataView(scanData: scanData)
             }
             if services.isEmpty == false {
-                List {
-                    ForEach(services) { service in
-                        NavigationLink(destination: {
-                            CharacteristicsList(store: store, service: service)
-                        }, label: {
-                            Text(service.uuid.description)
-                        })
-                    }
-                }
-                .refreshable {
-                    //await reload()
-                }
+                ServicesList(store: store, peripheral: peripheral)
             }
             Spacer()
         }

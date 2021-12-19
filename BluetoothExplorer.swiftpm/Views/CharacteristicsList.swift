@@ -38,12 +38,25 @@ struct CharacteristicsList: View {
 
 extension CharacteristicsList {
     
+    var peripheral: NativePeripheral {
+        service.peripheral
+    }
+    
+    var isConnected: Bool {
+        store.connected.contains(peripheral)
+    }
+    
     var characteristics: [NativeCharacteristic] {
         store.characteristics[service] ?? []
     }
     
     func reload() async {
-        do { try await store.discoverCharacteristics(for: service) }
+        do {
+            if isConnected == false {
+                try await store.connect(to: peripheral)
+            }
+            try await store.discoverCharacteristics(for: service)
+        }
         catch { print("Unable to load characteristics", error) }
     }
 }

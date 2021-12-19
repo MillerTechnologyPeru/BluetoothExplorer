@@ -33,7 +33,10 @@ final class Store: ObservableObject {
     private(set) var connected = Set<Central.Peripheral>()
     
     @Published
-    private(set) var services = [Central.Peripheral: [NativeService]]()
+    private(set) var services = [Central.Peripheral: [Service<Central.Peripheral, Central.AttributeID>]]()
+    
+    @Published
+    private(set) var characteristics = [Service<Central.Peripheral, Central.AttributeID>: [Characteristic<Central.Peripheral, Central.AttributeID>]]()
     
     private let central: Central
     
@@ -101,5 +104,11 @@ final class Store: ObservableObject {
         let services = try await central.discoverServices(for: peripheral)
         assert(Thread.isMainThread)
         self.services[peripheral] = services
+    }
+    
+    func discoverCharacteristics(for service: Service<Central.Peripheral, Central.AttributeID>) async throws {
+        let characteristics = try await central.discoverCharacteristics([], for: service)
+        assert(Thread.isMainThread)
+        self.characteristics[service] = characteristics
     }
 }

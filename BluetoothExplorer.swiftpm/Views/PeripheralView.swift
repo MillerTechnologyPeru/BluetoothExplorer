@@ -18,13 +18,25 @@ struct PeripheralView: View {
     let peripheral: NativePeripheral
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: nil) {
             if let scanData = store.scanResults[peripheral] {
                 ScanDataView(scanData: scanData)
             }
             if services.isEmpty == false {
-                ServicesList(services: services)
+                List {
+                    ForEach(services) { service in
+                        NavigationLink(destination: {
+                            CharacteristicsList(store: store, service: service)
+                        }, label: {
+                            Text(service.uuid.description)
+                        })
+                    }
+                }
+                .refreshable {
+                    //await reload()
+                }
             }
+            Spacer()
         }
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)

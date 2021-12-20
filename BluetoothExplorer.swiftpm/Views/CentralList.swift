@@ -45,22 +45,35 @@ extension CentralList {
     }
     
     var leftBarButtonItem: some View {
-        if store.isScanning {
-            return Button(action: {
-                Task {
-                    await self.store.stopScan()
-                }
-            }) {
-                Text("Stop")
-            }
-        } else {
-            return Button(action: {
-                Task {
-                    do { try await self.store.scan() }
-                    catch { print("Error scanning:", error) }
-                }
-            }) {
-                Text("Scan")
+        switch store.state {
+        case .unknown:
+            return AnyView(EmptyView())
+        case .poweredOff,
+             .resetting,
+             .unauthorized,
+             .unsupported:
+            return AnyView(
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.red)
+            )
+        case .poweredOn:
+            if store.isScanning {
+                return AnyView(Button(action: {
+                    Task {
+                        await self.store.stopScan()
+                    }
+                }) {
+                    Text("Stop")
+                })
+            } else {
+                return AnyView(Button(action: {
+                    Task {
+                        do { try await self.store.scan() }
+                        catch { print("Error scanning:", error) }
+                    }
+                }) {
+                    Text("Scan")
+                })
             }
         }
     }

@@ -27,7 +27,9 @@ struct ServicesList: View {
             }
         }
         .task {
-            await reload()
+            if services.isEmpty {
+                await reload()
+            }
         }
         .refreshable {
             await reload()

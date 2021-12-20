@@ -28,7 +28,9 @@ struct CharacteristicsList: View {
         }
         .navigationTitle("Service")
         .task {
-            await reload()
+            if characteristics.isEmpty {
+                await reload()
+            }
         }
         .refreshable {
             await reload()

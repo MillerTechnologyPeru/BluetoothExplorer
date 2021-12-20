@@ -56,6 +56,13 @@ final class Store: ObservableObject {
             for await value in self.central.state {
                 assert(Thread.isMainThread)
                 self.state = value
+                
+                // start scanning when powered on
+                guard state == .poweredOn else {
+                    continue
+                }
+                do { try await self.scan() }
+                catch { } // ignore error
             }
         }
         Task { [unowned self] in

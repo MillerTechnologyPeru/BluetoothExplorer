@@ -21,6 +21,9 @@ final class Store: ObservableObject {
     // MARK: - Properties
     
     @Published
+    private(set) var activity = [Central.Peripheral: Bool]()
+    
+    @Published
     private(set) var state: DarwinBluetoothState = .unknown
     
     @Published
@@ -95,6 +98,8 @@ final class Store: ObservableObject {
     }
     
     func connect(to peripheral: Central.Peripheral) async throws {
+        activity[peripheral] = true
+        defer { activity[peripheral] = false }
         if isScanning {
             await central.stopScan()
         }
@@ -108,12 +113,16 @@ final class Store: ObservableObject {
     }
     
     func discoverServices(for peripheral: Central.Peripheral) async throws {
+        activity[peripheral] = true
+        defer { activity[peripheral] = false }
         let services = try await central.discoverServices(for: peripheral)
         assert(Thread.isMainThread)
         self.services[peripheral] = services
     }
     
     func discoverCharacteristics(for service: Service<Central.Peripheral, Central.AttributeID>) async throws {
+        activity[service.peripheral] = true
+        defer { activity[service.peripheral] = false }
         let characteristics = try await central.discoverCharacteristics([], for: service)
         assert(Thread.isMainThread)
         self.characteristics[service] = characteristics

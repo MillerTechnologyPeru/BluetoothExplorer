@@ -15,7 +15,7 @@ struct CharacteristicsList: View {
     var store: Store
     
     let service: NativeService
-        
+    
     var body: some View {
         List {
             ForEach(characteristics) { characteristic in
@@ -26,7 +26,8 @@ struct CharacteristicsList: View {
                 })
             }
         }
-        .navigationTitle("Service")
+        .navigationTitle(title)
+        .navigationBarItems(trailing: leftBarButtonItem)
         .task {
             if characteristics.isEmpty {
                 await reload()
@@ -40,6 +41,10 @@ struct CharacteristicsList: View {
 
 extension CharacteristicsList {
     
+    var title: String {
+        service.uuid.name ?? "Service"
+    }
+    
     var peripheral: NativePeripheral {
         service.peripheral
     }
@@ -50,6 +55,23 @@ extension CharacteristicsList {
     
     var characteristics: [NativeCharacteristic] {
         store.characteristics[service] ?? []
+    }
+    
+    var showActivity: Bool {
+        store.activity[peripheral] ?? false
+    }
+    
+    var leftBarButtonItem: some View {
+        if showActivity {
+            return AnyView(
+                ProgressView()
+                    .progressViewStyle(.circular)
+            )
+        } else {
+            return AnyView(
+                EmptyView()
+            )
+        }
     }
     
     func reload() async {

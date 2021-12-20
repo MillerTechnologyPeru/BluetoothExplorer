@@ -17,17 +17,8 @@ struct PeripheralView: View {
     
     let peripheral: NativePeripheral
     
-    @State
-    var isConnecting = false
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: nil) {
-            if let scanData = store.scanResults[peripheral] {
-                ScanDataView(scanData: scanData)
-            }
-            ServicesList(store: store, peripheral: peripheral)
-            Spacer()
-        }
+        ServicesList(store: store, peripheral: peripheral)
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)
     }
@@ -47,11 +38,15 @@ extension PeripheralView {
         store.services[peripheral] ?? []
     }
     
+    var showActivity: Bool {
+        store.activity[peripheral] ?? false
+    }
+    
     var leftBarButtonItem: some View {
-        if isConnecting {
+        if showActivity {
             return AnyView(
-                Text("Connecting")
-                .foregroundColor(.gray)
+                ProgressView()
+                    .progressViewStyle(.circular)
             )
         } else if isConnected {
             return AnyView(Button(action: {
@@ -76,8 +71,6 @@ extension PeripheralView {
     func connect() async {
         do {
             if isConnected == false {
-                isConnecting = true
-                defer { isConnecting = false }
                 try await store.connect(to: peripheral)
             }
         }

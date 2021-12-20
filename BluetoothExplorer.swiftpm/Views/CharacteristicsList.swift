@@ -22,7 +22,7 @@ struct CharacteristicsList: View {
                 NavigationLink(destination: {
                     Text(characteristic.uuid.description)
                 }, label: {
-                    Text(service.uuid.description)
+                    AttributeCell(uuid: characteristic.uuid)
                 })
             }
         }

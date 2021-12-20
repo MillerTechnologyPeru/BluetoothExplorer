@@ -26,6 +26,9 @@ struct ServicesList: View {
                 })
             }
         }
+        .task {
+            await reload()
+        }
         .refreshable {
             await reload()
         }

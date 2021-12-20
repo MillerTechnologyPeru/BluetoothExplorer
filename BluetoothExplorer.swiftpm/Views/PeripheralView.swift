@@ -17,14 +17,15 @@ struct PeripheralView: View {
     
     let peripheral: NativePeripheral
     
+    @State
+    var isConnecting = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
             if let scanData = store.scanResults[peripheral] {
                 ScanDataView(scanData: scanData)
             }
-            if services.isEmpty == false {
-                ServicesList(store: store, peripheral: peripheral)
-            }
+            ServicesList(store: store, peripheral: peripheral)
             Spacer()
         }
         .navigationTitle(title)
@@ -47,24 +48,42 @@ extension PeripheralView {
     }
     
     var leftBarButtonItem: some View {
-        if isConnected {
-            return Button(action: {
+        if isConnecting {
+            return AnyView(
+                Text("Connecting")
+                .foregroundColor(.gray)
+            )
+        } else if isConnected {
+            return AnyView(Button(action: {
+                assert(Thread.isMainThread)
                 store.disconnect(peripheral)
             }) {
                 Text("Disconnect")
-            }
+            })
         } else {
-            return Button(action: {
+            return AnyView(Button(action: {
                 Task {
-                    do {
-                        try await self.store.connect(to: peripheral)
-                        try await self.store.discoverServices(for: peripheral)
-                    }
-                    catch { print("Error connecting:", error) }
+                    assert(Thread.isMainThread)
+                    await connect()
+                    assert(Thread.isMainThread)
                 }
             }) {
                 Text("Connect")
+            })
+        }
+    }
+    
+    func connect() async {
+        do {
+            if isConnected == false {
+                isConnecting = true
+                defer { isConnecting = false }
+                try await store.connect(to: peripheral)
             }
+        }
+        catch {
+            print("Unable to connect", error)
+            return
         }
     }
 }

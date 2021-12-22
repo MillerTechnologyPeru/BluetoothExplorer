@@ -17,6 +17,8 @@ struct ScanDataView <Peripheral: Peer, Advertisement: AdvertisementData> : View 
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
             Text(verbatim: scanData.peripheral.description)
+                .font(.subheadline)
+                .foregroundColor(.gray)
             HStack {
                 Text("Date")
                 Text(verbatim: string(from: scanData.date))

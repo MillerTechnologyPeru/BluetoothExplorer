@@ -21,17 +21,19 @@ struct PeripheralView: View {
     var isRefreshing = false
     
     var body: some View {
-        if let scanData = store.scanResults[peripheral] {
-            ScanDataView(scanData: scanData)
-        }
         List {
-            ForEach(services) { service in
-                NavigationLink(destination: {
-                    CharacteristicsList(store: store, service: service)
-                }, label: {
-                    AttributeCell(uuid: service.uuid)
-                })
+            if let scanData = store.scanResults[peripheral] {
+                ScanDataView(scanData: scanData)
             }
+            Section(content: {
+                ForEach(services) { service in
+                    NavigationLink(destination: {
+                        CharacteristicsList(store: store, service: service)
+                    }, label: {
+                        AttributeCell(uuid: service.uuid)
+                    })
+                }
+            })
         }
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)

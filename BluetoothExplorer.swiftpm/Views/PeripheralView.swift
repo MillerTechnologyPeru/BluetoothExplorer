@@ -29,7 +29,10 @@ struct PeripheralView: View {
                 Section(content: {
                     ForEach(services) { service in
                         NavigationLink(destination: {
-                            ServiceView(store: store, service: service)
+                            ServiceView(
+                                store: store,
+                                service: service
+                            )
                         }, label: {
                             AttributeCell(uuid: service.uuid)
                         })

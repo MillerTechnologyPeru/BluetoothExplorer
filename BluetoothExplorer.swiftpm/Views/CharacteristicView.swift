@@ -25,8 +25,30 @@ struct CharacteristicView: View {
                 Text(verbatim: characteristic.uuid.rawValue)
                     .font(.subheadline)
                     .foregroundColor(.gray)
-                ForEach(characteristic.properties.sorted(by: { $0.rawValue > $1.rawValue }), id: \.rawValue) {
-                    Text(verbatim: $0.description)
+            }
+            if actions.isEmpty == false {
+                Section {
+                    if canPerform(.read) {
+                        NavigationLink(destination: {
+                            Text("Read")
+                        }, label: {
+                            Text("Read")
+                        })
+                    }
+                    if canPerform(.write) {
+                        NavigationLink(destination: {
+                            Text("Write")
+                        }, label: {
+                            Text("Write")
+                        })
+                    }
+                    if canPerform(.notify) {
+                        NavigationLink(destination: {
+                            Text("Notify")
+                        }, label: {
+                            Text("Notify")
+                        })
+                    }
                 }
             }
             if descriptors.isEmpty == false {
@@ -55,6 +77,31 @@ struct CharacteristicView: View {
             await reload()
             isRefreshing = false
         }
+    }
+}
+
+extension CharacteristicView {
+    
+    enum Action: CaseIterable {
+        case write
+        case read
+        case notify
+    }
+    
+    func canPerform(_ action: Action) -> Bool {
+        let properties = characteristic.properties
+        switch action {
+        case .read:
+            return properties.contains(.read)
+        case .write:
+            return properties.contains(.write)
+        case .notify:
+            return properties.contains(.notify) || properties.contains(.indicate)
+        }
+    }
+    
+    var actions: [Action] {
+        return Action.allCases.filter({ canPerform($0) })
     }
 }
 

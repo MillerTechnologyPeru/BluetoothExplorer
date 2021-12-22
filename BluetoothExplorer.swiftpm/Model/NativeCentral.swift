@@ -12,16 +12,27 @@ import Bluetooth
 import GATT
 import DarwinGATT
 
-typealias NativeCentral = DarwinCentral
-typealias NativePeripheral = DarwinCentral.Peripheral
-typealias NativeScanData = ScanData<NativePeripheral, DarwinAdvertisementData>
-typealias NativeService = Service<DarwinCentral.Peripheral, ObjectIdentifier>
-typealias NativeCharacteristic = Characteristic<DarwinCentral.Peripheral, ObjectIdentifier>
+#if os(iOS) && targetEnvironment(simulator)
+typealias NativeCentral = MockCentral
 
 extension NativeCentral {
     
     private struct Cache {
-        static let central = NativeCentral(
+        static let central = MockCentral()
+    }
+    
+    static var shared: NativeCentral {
+        return Cache.central
+    }
+}
+
+#else
+typealias NativeCentral = DarwinCentral
+
+extension NativeCentral {
+    
+    private struct Cache {
+        static let central = DarwinCentral(
             options: .init(showPowerAlert: true)
         )
     }
@@ -30,3 +41,5 @@ extension NativeCentral {
         return Cache.central
     }
 }
+
+#endif

@@ -14,7 +14,7 @@ struct ServiceView: View {
     @StateObject
     var store: Store
     
-    let service: NativeService
+    let service: Store.Service
     
     @State
     var isRefreshing = false
@@ -83,7 +83,7 @@ extension ServiceView {
         service.uuid.name ?? "Service"
     }
     
-    var peripheral: NativePeripheral {
+    var peripheral: Store.Peripheral {
         service.peripheral
     }
     
@@ -91,11 +91,11 @@ extension ServiceView {
         store.connected.contains(peripheral)
     }
     
-    var characteristics: [NativeCharacteristic] {
+    var characteristics: [Store.Characteristic] {
         store.characteristics[service] ?? []
     }
     
-    var includedServices: [NativeService] {
+    var includedServices: [Store.Service] {
         store.includedServices[service] ?? []
     }
     

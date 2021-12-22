@@ -16,7 +16,7 @@ import DarwinGATT
 @MainActor
 final class Store: ObservableObject {
     
-    typealias Central = DarwinCentral
+    typealias Central = NativeCentral
     
     typealias Peripheral = Central.Peripheral
     

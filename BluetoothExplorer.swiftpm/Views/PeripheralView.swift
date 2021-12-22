@@ -15,7 +15,7 @@ struct PeripheralView: View {
     @StateObject
     var store: Store
     
-    let peripheral: NativePeripheral
+    let peripheral: Store.Peripheral
     
     @State
     var isRefreshing = false
@@ -67,7 +67,7 @@ extension PeripheralView {
         store.connected.contains(peripheral)
     }
     
-    var services: [NativeService] {
+    var services: [Store.Service] {
         store.services[peripheral] ?? []
     }
     

@@ -15,7 +15,7 @@ struct CentralList: View {
     @StateObject
     var store: Store
     
-    var scanResults: [NativeScanData] {
+    var scanResults: [Store.ScanData] {
         return store.scanResults.values.sorted(by: { $0.peripheral.description < $1.peripheral.description })
     }
     

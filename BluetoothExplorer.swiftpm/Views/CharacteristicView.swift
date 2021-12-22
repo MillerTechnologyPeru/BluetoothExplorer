@@ -14,7 +14,7 @@ struct CharacteristicView: View {
     @StateObject
     var store: Store
     
-    let characteristic: NativeCharacteristic
+    let characteristic: Store.Characteristic
     
     @State
     var isRefreshing = false
@@ -120,7 +120,7 @@ extension CharacteristicView {
         characteristic.uuid.name ?? "Characteristic"
     }
     
-    var peripheral: NativePeripheral {
+    var peripheral: Store.Peripheral {
         characteristic.peripheral
     }
     

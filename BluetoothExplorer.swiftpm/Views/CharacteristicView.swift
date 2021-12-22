@@ -29,27 +29,29 @@ struct CharacteristicView: View {
             if actions.isEmpty == false {
                 Section {
                     if canPerform(.read) {
-                        NavigationLink(destination: {
-                            Text("Read")
-                        }, label: {
-                            Text("Read")
-                        })
+                        Button("Read") {
+                            Task { await read() }
+                        }
                     }
                     if canPerform(.write) {
-                        NavigationLink(destination: {
-                            Text("Write")
-                        }, label: {
-                            Text("Write")
-                        })
+                        Button("Write") {
+                            
+                        }
+                    }
+                    if canPerform(.writeWithoutResponse) {
+                        Button("Write without response") {
+                            
+                        }
                     }
                     if canPerform(.notify) {
-                        NavigationLink(destination: {
-                            Text("Notify")
-                        }, label: {
-                            Text("Notify")
-                        })
+                        Button("Notify") {
+                            
+                        }
                     }
                 }
+            }
+            if values.isEmpty == false {
+                AttributeValuesSection(values: values)
             }
             if descriptors.isEmpty == false {
                 Section(content: {
@@ -84,6 +86,7 @@ extension CharacteristicView {
     
     enum Action: CaseIterable {
         case write
+        case writeWithoutResponse
         case read
         case notify
     }
@@ -95,6 +98,8 @@ extension CharacteristicView {
             return properties.contains(.read)
         case .write:
             return properties.contains(.write)
+        case .writeWithoutResponse:
+            return properties.contains(.writeWithoutResponse)
         case .notify:
             return properties.contains(.notify) || properties.contains(.indicate)
         }
@@ -127,6 +132,10 @@ extension CharacteristicView {
         store.activity[peripheral] ?? false
     }
     
+    var values: [AttributeValue] {
+        store.characteristicValues[characteristic]?.values ?? []
+    }
+    
     var leftBarButtonItem: some View {
         if showActivity, isRefreshing == false {
             return AnyView(
@@ -141,6 +150,17 @@ extension CharacteristicView {
     }
     
     func reload() async {
+        await loadDescriptors()
+        // read value if possible
+        if values.isEmpty {
+            if canPerform(.read) {
+                await read()
+            }
+        }
+    }
+    
+    func loadDescriptors() async {
+        // read descriptors
         do {
             if isConnected == false {
                 try await store.connect(to: peripheral)
@@ -148,5 +168,25 @@ extension CharacteristicView {
             try await store.discoverDescriptors(for: characteristic)
         }
         catch { print("Unable to load descriptors", error) }
+    }
+    
+    func read() async {
+        do {
+            if isConnected == false {
+                try await store.connect(to: peripheral)
+            }
+            try await store.readValue(for: characteristic)
+        }
+        catch { print("Unable to read value", error) }
+    }
+    
+    func notify() async {
+        do {
+            if isConnected == false {
+                try await store.connect(to: peripheral)
+            }
+            try await store.readValue(for: characteristic)
+        }
+        catch { print("Unable to read value", error) }
     }
 }

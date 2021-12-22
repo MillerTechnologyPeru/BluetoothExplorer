@@ -8,6 +8,7 @@
 import Foundation
 
 enum AttributeValueType: Equatable, Hashable {
+    
     case read
     case write
     case notification
@@ -20,4 +21,11 @@ struct AttributeValue: Equatable, Hashable {
     let type: AttributeValueType
     
     let data: Data
+}
+
+extension AttributeValue: Identifiable {
+    
+    var id: Date {
+        date
+    }
 }

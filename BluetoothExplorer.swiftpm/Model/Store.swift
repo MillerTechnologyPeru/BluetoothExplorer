@@ -58,10 +58,10 @@ final class Store: ObservableObject {
     private(set) var descriptors = [Characteristic: [Descriptor]]()
     
     @Published
-    private(set) var characteristicValues = [Characteristic: [AttributeValue]]()
+    private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
     
     @Published
-    private(set) var descriptorValues = [Descriptor: [AttributeValue]]()
+    private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
     
     private let central: Central
     
@@ -176,7 +176,7 @@ final class Store: ObservableObject {
             type: .read,
             data: data
         )
-        self.characteristicValues[characteristic, default: []].append(value)
+        self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
     func writeValue(_ data: Data, for characteristic: Characteristic) async throws {
@@ -189,7 +189,7 @@ final class Store: ObservableObject {
             type: .write,
             data: data
         )
-        self.characteristicValues[characteristic, default: []].append(value)
+        self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
     func readValue(for descriptor: Descriptor) async throws {
@@ -202,7 +202,7 @@ final class Store: ObservableObject {
             type: .read,
             data: data
         )
-        self.descriptorValues[descriptor, default: []].append(value)
+        self.descriptorValues[descriptor, default: .init(capacity: 10)].append(value)
     }
     
     func writeValue(_ data: Data, for descriptor: Descriptor) async throws {
@@ -215,6 +215,6 @@ final class Store: ObservableObject {
             type: .write,
             data: data
         )
-        self.descriptorValues[descriptor, default: []].append(value)
+        self.descriptorValues[descriptor, default: .init(capacity: 10)].append(value)
     }
 }

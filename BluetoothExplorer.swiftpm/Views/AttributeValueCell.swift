@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import Bluetooth
 import SwiftUI
 
 struct AttributeValueCell: View {
+    
+    let uuid: BluetoothUUID
     
     let attributeValue: AttributeValue
     
@@ -50,8 +53,6 @@ extension AttributeValueCell {
     }
     
     var data: String {
-        attributeValue.data.description
+        uuid.description(for: attributeValue.data) ?? (attributeValue.data as NSData).description
     }
 }
-
-

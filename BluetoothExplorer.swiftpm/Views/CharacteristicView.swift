@@ -51,7 +51,10 @@ struct CharacteristicView: View {
                 }
             }
             if values.isEmpty == false {
-                AttributeValuesSection(values: values)
+                AttributeValuesSection(
+                    uuid: characteristic.uuid,
+                    values: values
+                )
             }
             if descriptors.isEmpty == false {
                 Section(content: {

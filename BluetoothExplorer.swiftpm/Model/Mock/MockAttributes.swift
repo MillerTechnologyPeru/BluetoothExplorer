@@ -18,8 +18,16 @@ extension MockService {
     
     static var deviceInformation: MockService {
         Service(
-            id: 0,
+            id: 10,
             uuid: .deviceInformation,
+            peripheral: .beacon
+        )
+    }
+    
+    static var battery: MockService {
+        Service(
+            id: 20,
+            uuid: .batteryService,
             peripheral: .beacon
         )
     }
@@ -29,10 +37,46 @@ extension MockCharacteristic {
     
     static var deviceName: MockCharacteristic {
         Characteristic(
-            id: 1,
+            id: 11,
             uuid: .deviceName,
             peripheral: .beacon,
             properties: [.read]
+        )
+    }
+    
+    static var manufacturerName: MockCharacteristic {
+        Characteristic(
+            id: 12,
+            uuid: .manufacturerNameString,
+            peripheral: .beacon,
+            properties: [.read]
+        )
+    }
+    
+    static var modelNumber: MockCharacteristic {
+        Characteristic(
+            id: 13,
+            uuid: .modelNumberString,
+            peripheral: .beacon,
+            properties: [.read]
+        )
+    }
+    
+    static var serialNumber: MockCharacteristic {
+        Characteristic(
+            id: 14,
+            uuid: .serialNumberString,
+            peripheral: .beacon,
+            properties: [.read]
+        )
+    }
+    
+    static var batteryLevel: MockCharacteristic {
+        Characteristic(
+            id: 21,
+            uuid: .batteryLevel,
+            peripheral: .beacon,
+            properties: [.read, .notify]
         )
     }
 }
@@ -41,7 +85,7 @@ extension MockDescriptor {
     
     static var clientCharacteristicConfiguration: MockDescriptor {
         Descriptor(
-            id: 3,
+            id: 19,
             uuid: .clientCharacteristicConfiguration,
             peripheral: .beacon
         )

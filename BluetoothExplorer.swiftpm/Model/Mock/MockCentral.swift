@@ -91,7 +91,7 @@ internal final class MockCentral: CentralManager {
     ) async throws -> [Service<Peripheral, AttributeID>] {
         return _state.characteristics
             .keys
-            .sorted(by: { $0.id > $1.id })
+            .sorted(by: { $0.id < $1.id })
     }
     
     public func discoverIncludedServices(
@@ -113,7 +113,7 @@ internal final class MockCentral: CentralManager {
             throw CentralError.invalidAttribute(service.uuid)
         }
         return characteristics
-            .sorted(by: { $0.id > $1.id })
+            .sorted(by: { $0.id < $1.id })
     }
     
     /// Read Characteristic Value
@@ -187,10 +187,18 @@ internal final class MockCentral: CentralManager {
             throw CentralError.disconnected
         }
         return AsyncThrowingStream<Data, Error> { continuation in
-            _state.notifications[characteristic]?.forEach {
-                continuation.yield($0)
-            }
             self.continuation.notifications[characteristic] = continuation
+            if let notifications = _state.notifications[characteristic] {
+                Task {
+                    for notification in notifications {
+                        guard let continuation = self.continuation.notifications[characteristic] else {
+                            break
+                        }
+                        continuation.yield(notification)
+                        try! await Task.sleep(nanoseconds: 1_000_000_000)
+                    }
+                }
+            }
         }
     }
     
@@ -224,19 +232,47 @@ internal extension MockCentral {
         var scanData: [MockScanData] = [.beacon]
         var connected = Set<Peripheral>()
         var characteristics: [MockService: [MockCharacteristic]] = [
-            .deviceInformation: [.deviceName]
+            .deviceInformation: [
+                .deviceName,
+                .manufacturerName,
+                .modelNumber,
+                .serialNumber
+            ],
+            .battery: [
+                .batteryLevel
+            ]
         ]
         var descriptors: [MockCharacteristic: [MockDescriptor]] = [
-            .deviceName: [.clientCharacteristicConfiguration]
+            .batteryLevel: [.clientCharacteristicConfiguration]
         ]
         var characteristicValues: [MockCharacteristic: Data] = [
-            .deviceName: Data("iBeacon".utf8)
+            .deviceName: Data("iBeacon".utf8),
+            .manufacturerName: Data("Apple Inc.".utf8),
+            .modelNumber: Data("iPhone11.8".utf8),
+            .serialNumber: Data(UUID().uuidString.utf8),
+            .batteryLevel: Data([100])
         ]
         var descriptorValues: [MockDescriptor: Data] = [
             .clientCharacteristicConfiguration: Data([0x00])
         ]
         var notifications: [MockCharacteristic: [Data]] = [
-            .deviceName: [Data("iBeacon 2".utf8)]
+            .batteryLevel: [
+                Data([99]),
+                Data([98]),
+                Data([97]),
+                Data([96]),
+                Data([95]),
+                Data([80]),
+                Data([75]),
+                Data([55]),
+                Data([50]),
+                Data([45]),
+                Data([35]),
+                Data([25]),
+                Data([20]),
+                Data([5]),
+                Data([1]),
+            ]
         ]
     }
     

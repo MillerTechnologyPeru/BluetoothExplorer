@@ -23,7 +23,6 @@ internal struct Cache<T> {
         if values.count > capacity {
             values.removeFirst()
         }
-        assert(values.capacity == capacity)
     }
     
     mutating func removeAll() {

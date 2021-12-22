@@ -49,7 +49,10 @@ struct ServiceView: View {
                 Section(content: {
                     ForEach(characteristics) { characteristic in
                         NavigationLink(destination: {
-                            Text(characteristic.uuid.description)
+                            CharacteristicView(
+                                store: store,
+                                characteristic: characteristic
+                            )
                         }, label: {
                             AttributeCell(uuid: characteristic.uuid)
                         })

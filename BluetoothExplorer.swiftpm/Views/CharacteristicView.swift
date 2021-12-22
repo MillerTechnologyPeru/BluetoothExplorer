@@ -109,7 +109,8 @@ extension CharacteristicView {
     }
     
     var actions: [Action] {
-        return Action.allCases.filter({ canPerform($0) })
+        return Action.allCases
+            .filter { canPerform($0) } 
     }
 }
 

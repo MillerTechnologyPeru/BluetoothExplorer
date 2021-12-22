@@ -17,10 +17,34 @@ struct PeripheralView: View {
     
     let peripheral: NativePeripheral
     
+    @State
+    var isRefreshing = false
+    
     var body: some View {
-        ServicesList(store: store, peripheral: peripheral)
+        if let scanData = store.scanResults[peripheral] {
+            ScanDataView(scanData: scanData)
+        }
+        List {
+            ForEach(services) { service in
+                NavigationLink(destination: {
+                    CharacteristicsList(store: store, service: service)
+                }, label: {
+                    AttributeCell(uuid: service.uuid)
+                })
+            }
+        }
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)
+        .task {
+            if services.isEmpty {
+                await reload()
+            }
+        }
+        .refreshable {
+            isRefreshing = true
+            await reload()
+            isRefreshing = false
+        }
     }
 }
 
@@ -43,7 +67,7 @@ extension PeripheralView {
     }
     
     var leftBarButtonItem: some View {
-        if showActivity {
+        if showActivity, isRefreshing == false {
             return AnyView(
                 ProgressView()
                     .progressViewStyle(.circular)
@@ -78,5 +102,15 @@ extension PeripheralView {
             print("Unable to connect", error)
             return
         }
+    }
+    
+    func reload() async {
+        do {
+            if isConnected == false {
+                try await store.connect(to: peripheral)
+            }
+            try await store.discoverServices(for: peripheral)
+        }
+        catch { print("Unable to load services", error) }
     }
 }

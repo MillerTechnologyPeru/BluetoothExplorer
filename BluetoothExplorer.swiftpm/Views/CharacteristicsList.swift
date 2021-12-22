@@ -16,6 +16,9 @@ struct CharacteristicsList: View {
     
     let service: NativeService
     
+    @State
+    var isRefreshing = false
+    
     var body: some View {
         List {
             ForEach(characteristics) { characteristic in
@@ -34,7 +37,9 @@ struct CharacteristicsList: View {
             }
         }
         .refreshable {
+            isRefreshing = true
             await reload()
+            isRefreshing = false
         }
     }
 }
@@ -62,7 +67,7 @@ extension CharacteristicsList {
     }
     
     var leftBarButtonItem: some View {
-        if showActivity {
+        if showActivity, isRefreshing == false {
             return AnyView(
                 ProgressView()
                     .progressViewStyle(.circular)

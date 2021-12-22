@@ -16,6 +16,9 @@ struct ServicesList: View {
     
     let peripheral: NativePeripheral
     
+    @State
+    var isRefreshing = false
+    
     var body: some View {
         List {
             ForEach(services) { service in
@@ -57,4 +60,3 @@ extension ServicesList {
         catch { print("Unable to load services", error) }
     }
 }
-

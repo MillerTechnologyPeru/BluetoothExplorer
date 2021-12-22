@@ -18,28 +18,44 @@ final class Store: ObservableObject {
     
     typealias Central = DarwinCentral
     
+    typealias Peripheral = Central.Peripheral
+    
+    typealias ScanData = GATT.ScanData<Central.Peripheral, Central.Advertisement>
+    
+    typealias Service = GATT.Service<Central.Peripheral, Central.AttributeID>
+    
+    typealias Characteristic = GATT.Characteristic<Central.Peripheral, Central.AttributeID>
+    
+    typealias Descriptor = GATT.Descriptor<Central.Peripheral, Central.AttributeID>
+    
     // MARK: - Properties
     
     @Published
-    private(set) var activity = [Central.Peripheral: Bool]()
+    private(set) var activity = [Peripheral: Bool]()
     
     @Published
     private(set) var state: DarwinBluetoothState = .unknown
     
     @Published
-    private(set) var scanResults = [Central.Peripheral: ScanData<Central.Peripheral, Central.Advertisement>]()
+    private(set) var scanResults = [Peripheral: ScanData]()
     
     @Published
     private(set) var isScanning = false
     
     @Published
-    private(set) var connected = Set<Central.Peripheral>()
+    private(set) var connected = Set<Peripheral>()
     
     @Published
-    private(set) var services = [Central.Peripheral: [Service<Central.Peripheral, Central.AttributeID>]]()
+    private(set) var services = [Peripheral: [Service]]()
     
     @Published
-    private(set) var characteristics = [Service<Central.Peripheral, Central.AttributeID>: [Characteristic<Central.Peripheral, Central.AttributeID>]]()
+    private(set) var characteristics = [Service: [Characteristic]]()
+    
+    @Published
+    private(set) var includedServices = [Service: [Service]]()
+    
+    @Published
+    private(set) var descriptors = [Characteristic: [Descriptor]]()
     
     private let central: Central
     
@@ -120,11 +136,27 @@ final class Store: ObservableObject {
         self.services[peripheral] = services
     }
     
-    func discoverCharacteristics(for service: Service<Central.Peripheral, Central.AttributeID>) async throws {
+    func discoverCharacteristics(for service: Service) async throws {
         activity[service.peripheral] = true
         defer { activity[service.peripheral] = false }
         let characteristics = try await central.discoverCharacteristics([], for: service)
         assert(Thread.isMainThread)
         self.characteristics[service] = characteristics
+    }
+    
+    func discoverIncludedServices(for service: Service) async throws {
+        activity[service.peripheral] = true
+        defer { activity[service.peripheral] = false }
+        let includedServices = try await central.discoverIncludedServices(for: service)
+        assert(Thread.isMainThread)
+        self.includedServices[service] = includedServices
+    }
+    
+    func discoverDescriptors(for characteristic: Characteristic) async throws {
+        activity[characteristic.peripheral] = true
+        defer { activity[characteristic.peripheral] = false }
+        let includedServices = try await central.discoverDescriptors(for: characteristic)
+        assert(Thread.isMainThread)
+        self.descriptors[characteristic] = includedServices
     }
 }

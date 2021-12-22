@@ -44,7 +44,7 @@ struct AdvertisementDataView_Preview: PreviewProvider {
         Group {
             AdvertisementDataView(
                 advertisementData: MockAdvertisementData.beacon
-            )
+            ).previewLayout(.sizeThatFits)
             AdvertisementDataView(
                 advertisementData: MockAdvertisementData.beacon
             )

@@ -34,7 +34,11 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
 extension CentralCell {
     
     var name: String? {
+        #if targetEnvironment(simulator)
+        scanData.advertisementData.localName ?? scanData.peripheral.description
+        #else
         scanData.advertisementData.localName
+        #endif
     }
     
     var company: String? {
@@ -45,7 +49,13 @@ extension CentralCell {
 #if DEBUG
 struct CentralCell_Preview: PreviewProvider {
     static var previews: some View {
-        CentralCell(scanData: MockScanData.beacon)
+        NavigationView {
+            List {
+                CentralCell(scanData: MockScanData.beacon)
+                CentralCell(scanData: MockScanData.beacon)
+                CentralCell(scanData: MockScanData.beacon)
+            }
+        }
     }
 }
 #endif

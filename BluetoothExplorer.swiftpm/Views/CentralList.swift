@@ -82,7 +82,11 @@ extension CentralList {
 #if DEBUG
 struct CentralList_Preview: PreviewProvider {
     static var previews: some View {
-        CentralList(store: .shared)
+        Group {
+            NavigationView {
+                CentralList(store: .shared)
+            }
+        }
     }
 }
 #endif

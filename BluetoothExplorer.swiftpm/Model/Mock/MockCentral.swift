@@ -28,16 +28,16 @@ internal final class MockCentral: CentralManager {
         //self.continuation
     }
     
-    lazy var state = AsyncStream<DarwinBluetoothState> { [unowned self] _ in
-        //self.continuation
+    lazy var state = AsyncStream<DarwinBluetoothState> { [unowned self]  in
+        $0.yield(.poweredOn)
     }
     
     lazy var log = AsyncStream<String> { [unowned self] _ in
         //self.continuation
     }
     
-    lazy var isScanning = AsyncStream<Bool> { [unowned self] _ in
-        //self.continuation
+    lazy var isScanning = AsyncStream<Bool> { [unowned self] in
+        self.continuation.isScanning = $0
     }
     
     var _state = State()
@@ -49,6 +49,8 @@ internal final class MockCentral: CentralManager {
     /// Scans for peripherals that are advertising services.
     func scan(filterDuplicates: Bool) -> AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error> {
         _state.isScanning = true
+        let _ = isScanning
+        continuation.isScanning?.yield(true)
         return AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error> { continuation in
             _state.scanData.forEach {
                 continuation.yield($0)
@@ -60,6 +62,8 @@ internal final class MockCentral: CentralManager {
     /// Stops scanning for peripherals.
     func stopScan() async {
         _state.isScanning = false
+        let _ = isScanning
+        continuation.isScanning?.yield(false)
         continuation.scan?.finish(throwing: nil)
         continuation.scan = nil
     }
@@ -238,6 +242,7 @@ internal extension MockCentral {
     
     struct Continuation {
         var scan: AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error>.Continuation?
+        var isScanning: AsyncStream<Bool>.Continuation?
         var notifications = [MockCharacteristic: AsyncThrowingStream<Data, Error>.Continuation]()
     }
 }

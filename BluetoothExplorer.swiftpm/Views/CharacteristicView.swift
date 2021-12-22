@@ -203,3 +203,18 @@ extension CharacteristicView {
         catch { print("Unable to \(isEnabled ? "enable" : "disable") value", error) }
     }
 }
+
+#if DEBUG && targetEnvironment(simulator)
+struct CharacteristicView_Preview: PreviewProvider {
+    static var previews: some View {
+        Group {
+            NavigationView {
+                CharacteristicView(
+                    store: .shared,
+                    characteristic: .deviceName
+                )
+            }
+        }
+    }
+}
+#endif

@@ -123,3 +123,18 @@ extension PeripheralView {
         catch { print("Unable to load services", error) }
     }
 }
+
+#if DEBUG && targetEnvironment(simulator)
+struct PeripheralView_Preview: PreviewProvider {
+    static var previews: some View {
+        Group {
+            NavigationView {
+                PeripheralView(
+                    store: .shared,
+                    peripheral: .beacon
+                )
+            }
+        }
+    }
+}
+#endif

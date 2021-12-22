@@ -127,3 +127,18 @@ extension ServiceView {
         catch { print("Unable to load characteristics", error) }
     }
 }
+
+#if DEBUG && targetEnvironment(simulator)
+struct ServiceView_Preview: PreviewProvider {
+    static var previews: some View {
+        Group {
+            NavigationView {
+                ServiceView(
+                    store: .shared,
+                    service: .deviceInformation
+                )
+            }
+        }
+    }
+}
+#endif

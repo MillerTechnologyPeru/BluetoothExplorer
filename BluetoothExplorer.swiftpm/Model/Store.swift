@@ -57,6 +57,12 @@ final class Store: ObservableObject {
     @Published
     private(set) var descriptors = [Characteristic: [Descriptor]]()
     
+    @Published
+    private(set) var characteristicValues = [Characteristic: [AttributeValue]]()
+    
+    @Published
+    private(set) var descriptorValues = [Descriptor: [AttributeValue]]()
+    
     private let central: Central
     
     // MARK: - Initialization
@@ -158,5 +164,57 @@ final class Store: ObservableObject {
         let includedServices = try await central.discoverDescriptors(for: characteristic)
         assert(Thread.isMainThread)
         self.descriptors[characteristic] = includedServices
+    }
+    
+    func readValue(for characteristic: Characteristic) async throws {
+        activity[characteristic.peripheral] = true
+        defer { activity[characteristic.peripheral] = false }
+        let data = try await central.readValue(for: characteristic)
+        assert(Thread.isMainThread)
+        let value = AttributeValue(
+            date: Date(),
+            type: .read,
+            data: data
+        )
+        self.characteristicValues[characteristic, default: []].append(value)
+    }
+    
+    func writeValue(_ data: Data, for characteristic: Characteristic) async throws {
+        activity[characteristic.peripheral] = true
+        defer { activity[characteristic.peripheral] = false }
+        try await central.writeValue(data, for: characteristic)
+        assert(Thread.isMainThread)
+        let value = AttributeValue(
+            date: Date(),
+            type: .write,
+            data: data
+        )
+        self.characteristicValues[characteristic, default: []].append(value)
+    }
+    
+    func readValue(for descriptor: Descriptor) async throws {
+        activity[descriptor.peripheral] = true
+        defer { activity[descriptor.peripheral] = false }
+        let data = try await central.readValue(for: descriptor)
+        assert(Thread.isMainThread)
+        let value = AttributeValue(
+            date: Date(),
+            type: .read,
+            data: data
+        )
+        self.descriptorValues[descriptor, default: []].append(value)
+    }
+    
+    func writeValue(_ data: Data, for descriptor: Descriptor) async throws {
+        activity[descriptor.peripheral] = true
+        defer { activity[descriptor.peripheral] = false }
+        try await central.writeValue(data, for: descriptor)
+        assert(Thread.isMainThread)
+        let value = AttributeValue(
+            date: Date(),
+            type: .write,
+            data: data
+        )
+        self.descriptorValues[descriptor, default: []].append(value)
     }
 }

@@ -25,15 +25,19 @@ struct PeripheralView: View {
             if let scanData = store.scanResults[peripheral] {
                 ScanDataView(scanData: scanData)
             }
-            Section(content: {
-                ForEach(services) { service in
-                    NavigationLink(destination: {
-                        CharacteristicsList(store: store, service: service)
-                    }, label: {
-                        AttributeCell(uuid: service.uuid)
-                    })
-                }
-            })
+            if services.isEmpty == false {
+                Section(content: {
+                    ForEach(services) { service in
+                        NavigationLink(destination: {
+                            ServiceView(store: store, service: service)
+                        }, label: {
+                            AttributeCell(uuid: service.uuid)
+                        })
+                    }
+                }, header: {
+                    Text("Services")
+                })
+            }
         }
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)

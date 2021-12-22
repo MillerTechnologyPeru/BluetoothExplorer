@@ -63,6 +63,9 @@ final class Store: ObservableObject {
     @Published
     private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
     
+    @Published
+    private(set) var isNotifying = [Characteristic: Bool]()
+    
     private let central: Central
     
     // MARK: - Initialization
@@ -97,10 +100,16 @@ final class Store: ObservableObject {
             }
         }
         Task { [unowned self] in
-            for await value in self.central.didDisconnect {
+            for await peripheral in self.central.didDisconnect {
                 assert(Thread.isMainThread)
-                if self.connected.contains(value) {
-                    self.connected.remove(value)
+                if self.connected.contains(peripheral) {
+                    // update state
+                    self.connected.remove(peripheral)
+                    let notifications = self.isNotifying
+                        .keys
+                        .filter { $0.peripheral == peripheral }
+                    notifications
+                        .forEach { self.isNotifying.removeValue(forKey: $0) }
                 }
             }
         }
@@ -197,6 +206,7 @@ final class Store: ObservableObject {
         defer { activity[characteristic.peripheral] = false }
         if isEnabled {
             let stream = try await central.notify(for: characteristic)
+            isNotifying[characteristic] = isEnabled
             Task.detached(priority: .low) { [unowned self] in
                 for try await notification in stream {
                     await self.notification(notification, for: characteristic)
@@ -204,6 +214,7 @@ final class Store: ObservableObject {
             }
         } else {
             try await central.stopNotifications(for: characteristic)
+            isNotifying[characteristic] = false
         }
     }
     

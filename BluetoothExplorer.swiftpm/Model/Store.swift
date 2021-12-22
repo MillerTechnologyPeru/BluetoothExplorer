@@ -192,6 +192,31 @@ final class Store: ObservableObject {
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
+    func notify(_ isEnabled: Bool, for characteristic: Characteristic) async throws {
+        activity[characteristic.peripheral] = true
+        defer { activity[characteristic.peripheral] = false }
+        if isEnabled {
+            let stream = try await central.notify(for: characteristic)
+            Task.detached(priority: .low) { [unowned self] in
+                for try await notification in stream {
+                    await self.notification(notification, for: characteristic)
+                }
+            }
+        } else {
+            try await central.stopNotifications(for: characteristic)
+        }
+    }
+    
+    private func notification(_ data: Data, for characteristic: Characteristic) async {
+        assert(Thread.isMainThread)
+        let value = AttributeValue(
+            date: Date(),
+            type: .notification,
+            data: data
+        )
+        self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
+    }
+    
     func readValue(for descriptor: Descriptor) async throws {
         activity[descriptor.peripheral] = true
         defer { activity[descriptor.peripheral] = false }

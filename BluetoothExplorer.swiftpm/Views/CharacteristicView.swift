@@ -44,8 +44,8 @@ struct CharacteristicView: View {
                         }
                     }
                     if canPerform(.notify) {
-                        Button("Notify") {
-                            
+                        Button(notifyActionTitle) {
+                            Task { await notify() }
                         }
                     }
                 }
@@ -132,6 +132,14 @@ extension CharacteristicView {
         store.activity[peripheral] ?? false
     }
     
+    var isNotifying: Bool {
+        store.isNotifying[characteristic] ?? false
+    }
+    
+    var notifyActionTitle: LocalizedStringKey {
+        isNotifying ? "Stop Notifications" : "Notify"
+    }
+    
     var values: [AttributeValue] {
         store.characteristicValues[characteristic]?.values ?? []
     }
@@ -181,12 +189,13 @@ extension CharacteristicView {
     }
     
     func notify() async {
+        let isEnabled = !isNotifying
         do {
             if isConnected == false {
                 try await store.connect(to: peripheral)
             }
-            try await store.readValue(for: characteristic)
+            try await store.notify(isEnabled, for: characteristic)
         }
-        catch { print("Unable to read value", error) }
+        catch { print("Unable to \(isEnabled ? "enable" : "disable") value", error) }
     }
 }

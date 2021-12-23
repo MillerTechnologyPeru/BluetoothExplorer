@@ -214,6 +214,12 @@ struct CharacteristicView_Preview: PreviewProvider {
                     characteristic: .deviceName
                 )
             }
+            NavigationView {
+                CharacteristicView(
+                    store: .shared,
+                    characteristic: .batteryLevel
+                )
+            }
         }
     }
 }

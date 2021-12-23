@@ -91,6 +91,7 @@ internal final class MockCentral: CentralManager {
     ) async throws -> [Service<Peripheral, AttributeID>] {
         return _state.characteristics
             .keys
+            .filter { $0.peripheral == peripheral }
             .sorted(by: { $0.id < $1.id })
     }
     
@@ -229,7 +230,7 @@ internal extension MockCentral {
     
     struct State {
         var isScanning = false
-        var scanData: [MockScanData] = [.beacon]
+        var scanData: [MockScanData] = [.beacon, .smartThermostat]
         var connected = Set<Peripheral>()
         var characteristics: [MockService: [MockCharacteristic]] = [
             .deviceInformation: [
@@ -240,38 +241,44 @@ internal extension MockCentral {
             ],
             .battery: [
                 .batteryLevel
+            ],
+            .savantSystems: [
+                .savantTest
             ]
         ]
         var descriptors: [MockCharacteristic: [MockDescriptor]] = [
-            .batteryLevel: [.clientCharacteristicConfiguration]
+            .batteryLevel: [.clientCharacteristicConfiguration(.beacon)],
+            .savantTest: [.clientCharacteristicConfiguration(.smartThermostat)],
         ]
         var characteristicValues: [MockCharacteristic: Data] = [
             .deviceName: Data("iBeacon".utf8),
             .manufacturerName: Data("Apple Inc.".utf8),
             .modelNumber: Data("iPhone11.8".utf8),
             .serialNumber: Data(UUID().uuidString.utf8),
-            .batteryLevel: Data([100])
+            .batteryLevel: Data([100]),
+            .savantTest: Data(UUID().uuidString.utf8)
         ]
         var descriptorValues: [MockDescriptor: Data] = [
-            .clientCharacteristicConfiguration: Data([0x00])
+            .clientCharacteristicConfiguration(.beacon): Data([0x00]),
+            .clientCharacteristicConfiguration(.smartThermostat): Data([0x00]),
         ]
         var notifications: [MockCharacteristic: [Data]] = [
             .batteryLevel: [
                 Data([99]),
                 Data([98]),
-                Data([97]),
-                Data([96]),
                 Data([95]),
                 Data([80]),
                 Data([75]),
-                Data([55]),
-                Data([50]),
-                Data([45]),
-                Data([35]),
                 Data([25]),
                 Data([20]),
                 Data([5]),
                 Data([1]),
+            ],
+            .savantTest: [
+                Data(UUID().uuidString.utf8),
+                Data(UUID().uuidString.utf8),
+                Data(UUID().uuidString.utf8),
+                Data(UUID().uuidString.utf8),
             ]
         ]
     }

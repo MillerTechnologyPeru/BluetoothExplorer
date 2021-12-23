@@ -31,6 +31,14 @@ extension MockService {
             peripheral: .beacon
         )
     }
+    
+    static var savantSystems: MockService {
+        Service(
+            id: 30,
+            uuid: .savantSystems2,
+            peripheral: .smartThermostat
+        )
+    }
 }
 
 extension MockCharacteristic {
@@ -79,15 +87,22 @@ extension MockCharacteristic {
             properties: [.read, .notify]
         )
     }
+    
+    static let savantTest: MockCharacteristic = Characteristic(
+        id: 31,
+        uuid: BluetoothUUID(),
+        peripheral: .smartThermostat,
+        properties: [.read, .write, .writeWithoutResponse, .notify]
+    )
 }
 
 extension MockDescriptor {
     
-    static var clientCharacteristicConfiguration: MockDescriptor {
+    static func clientCharacteristicConfiguration(_ peripheral: Peripheral) -> MockDescriptor {
         Descriptor(
-            id: 19,
+            id: 99,
             uuid: .clientCharacteristicConfiguration,
-            peripheral: .beacon
+            peripheral: peripheral
         )
     }
 }

@@ -145,7 +145,10 @@ extension CharacteristicView {
     }
     
     var values: [AttributeValue] {
-        store.characteristicValues[characteristic]?.values ?? []
+        store.characteristicValues[characteristic]?
+            .values
+            .sorted(by: { $0.date > $1.date })
+        ?? []
     }
     
     var leftBarButtonItem: some View {

@@ -11,7 +11,7 @@ import GATT
 
 struct CharacteristicView: View {
     
-    @StateObject
+    @ObservedObject
     var store: Store
     
     let characteristic: Store.Characteristic

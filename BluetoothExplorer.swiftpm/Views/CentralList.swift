@@ -12,7 +12,7 @@ import GATT
 
 struct CentralList: View {
     
-    @StateObject
+    @ObservedObject
     var store: Store
     
     var scanResults: [Store.ScanData] {

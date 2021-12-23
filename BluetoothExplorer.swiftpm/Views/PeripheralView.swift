@@ -12,7 +12,7 @@ import GATT
 
 struct PeripheralView: View {
     
-    @StateObject
+    @ObservedObject
     var store: Store
     
     let peripheral: Store.Peripheral

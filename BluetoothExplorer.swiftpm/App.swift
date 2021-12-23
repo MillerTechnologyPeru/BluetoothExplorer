@@ -11,17 +11,19 @@ import SwiftUI
 
 @main
 struct BluetoothExplorerApp: App {
-  var body: some Scene {
-    WindowGroup {
-      NavigationView {
-          CentralList(store: .shared)
-      }.onAppear {
-          Task {
-              for await message in NativeCentral.shared.log {
-                  print("Central: \(message)")
-              }
-          }
-      }
+    
+    let store = Store.shared
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationView {
+                CentralList(store: store)
+                Text("Scan for devices")
+            }.task {
+                for await message in NativeCentral.shared.log {
+                    print("Central: \(message)")
+                }
+            }
+        }
     }
-  }
 }

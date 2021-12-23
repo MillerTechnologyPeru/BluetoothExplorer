@@ -11,7 +11,7 @@ import GATT
 
 struct ServiceView: View {
     
-    @StateObject
+    @ObservedObject
     var store: Store
     
     let service: Store.Service

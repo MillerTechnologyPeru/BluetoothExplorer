@@ -61,6 +61,6 @@ internal extension WriteAttributeView {
     }
     
     func generateData() -> Data? {
-        return [UInt8](hexadecimal: text).flatMap { Data($0) }
+        return Data(hexadecimal: text)
     }
 }

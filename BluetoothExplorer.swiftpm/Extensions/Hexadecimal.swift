@@ -6,6 +6,8 @@
 //  Copyright © 2016 PureSwift. All rights reserved.
 //
 
+import Foundation
+
 internal extension FixedWidthInteger {
     
     func toHexadecimal() -> String {
@@ -35,12 +37,12 @@ internal extension Collection where Element: FixedWidthInteger {
     }
 }
 
-internal extension Array where Element: FixedWidthInteger {
+internal extension Data {
     
     init?(hexadecimal string: String) {
         let elementStringSize = MemoryLayout<Element>.size * 2 // 2 for UInt8
         guard string.isEmpty == false else {
-            self = []
+            self.init()
             return
         }
         guard string.count % elementStringSize == 0 else {

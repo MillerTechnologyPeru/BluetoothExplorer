@@ -68,7 +68,7 @@ struct CharacteristicView: View {
                 Section(content: {
                     ForEach(descriptors) { descriptor in
                         NavigationLink(destination: {
-                            Text(descriptor.uuid.description)
+                            DescriptorView(store: store, descriptor: descriptor)
                         }, label: {
                             AttributeCell(uuid: descriptor.uuid)
                         })
@@ -81,7 +81,7 @@ struct CharacteristicView: View {
         .navigationTitle(title)
         .navigationBarItems(trailing: leftBarButtonItem)
         .task {
-            if descriptors.isEmpty {
+            if values.isEmpty || descriptors.isEmpty  {
                 await reload()
             }
         }
@@ -96,7 +96,7 @@ struct CharacteristicView: View {
             content: {
                 WriteAttributeView(
                     uuid: characteristic.uuid,
-                    text: store.characteristicValues[characteristic]?.values.last?.data.toHexadecimal() ?? "",
+                    text: values.last?.data.toHexadecimal() ?? "",
                     cancel: {
                         showSheet = false
                     },

@@ -53,7 +53,7 @@ extension AttributeValueCell {
     }
     
     var data: String {
-        uuid.description(for: attributeValue.data) ?? (attributeValue.data as NSData).description
+        uuid.description(for: attributeValue.data) ?? "0x" + attributeValue.data.toHexadecimal()
     }
 }
 

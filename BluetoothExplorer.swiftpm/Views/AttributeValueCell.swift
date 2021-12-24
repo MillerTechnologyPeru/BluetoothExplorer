@@ -17,7 +17,7 @@ struct AttributeValueCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
-            Text(verbatim: data)
+            data
             Text(type)
                 .font(.subheadline)
                 .foregroundColor(.gray)
@@ -37,6 +37,12 @@ extension AttributeValueCell {
         return formatter
     }()
     
+    static let byteCountFormatter: ByteCountFormatter = {
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .memory
+        return formatter
+    }()
+    
     var date: String {
         Self.dateFormatter.string(from: attributeValue.date)
     }
@@ -52,8 +58,23 @@ extension AttributeValueCell {
         }
     }
     
-    var data: String {
-        uuid.description(for: attributeValue.data) ?? "0x" + attributeValue.data.toHexadecimal()
+    var data: some View {
+        // empty data
+        guard attributeValue.data.isEmpty == false else {
+            return AnyView(Text("Empty data"))
+        }
+        if let description = uuid.description(for: attributeValue.data) {
+            return AnyView(Text(verbatim: description))
+        } else {
+            return AnyView(
+                VStack(alignment: .leading, spacing: nil) {
+                    Text(verbatim: "0x" + attributeValue.data.toHexadecimal())
+                    Text(verbatim: Self.byteCountFormatter.string(fromByteCount: numericCast(attributeValue.data.count)))
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            )
+        }
     }
 }
 

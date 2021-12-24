@@ -49,7 +49,8 @@ internal extension Array where Element: FixedWidthInteger {
         let elementsCount = string.count / elementStringSize
         let elements = (0 ..< elementsCount)
             .lazy
-            .map { string.index(string.startIndex, offsetBy: $0) ..< string.index(string.startIndex, offsetBy: $0 + elementStringSize) }
+            .map { ($0 * elementStringSize, ($0+1) * elementStringSize) }
+            .map { string.index(string.startIndex, offsetBy: $0.0) ..< string.index(string.startIndex, offsetBy: $0.1) }
             .map { string[$0] }
         self.init()
         self.reserveCapacity(elementsCount)

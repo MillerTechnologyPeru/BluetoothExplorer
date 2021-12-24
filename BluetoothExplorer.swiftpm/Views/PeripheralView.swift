@@ -23,7 +23,26 @@ struct PeripheralView: View {
     var body: some View {
         List {
             if let scanData = store.scanResults[peripheral] {
-                ScanDataView(scanData: scanData)
+                if let manufacturerData = scanData.advertisementData.manufacturerData {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(verbatim: manufacturerData.companyIdentifier.name ?? manufacturerData.companyIdentifier.description)
+                        if manufacturerData.additionalData.isEmpty == false {
+                            Text(verbatim: "0x" + manufacturerData.additionalData.toHexadecimal())
+                        }
+                        Text("Manufacturer Data")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+                if let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+                    serviceUUIDs.isEmpty == false {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(verbatim: ListFormatter().string(from: serviceUUIDs.map({ $0.rawValue })) ?? "")
+                        Text("Service UUIDs")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
             }
             if services.isEmpty == false {
                 Section(content: {

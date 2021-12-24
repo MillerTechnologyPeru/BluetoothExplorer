@@ -188,10 +188,10 @@ final class Store: ObservableObject {
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
-    func writeValue(_ data: Data, for characteristic: Characteristic) async throws {
+    func writeValue(_ data: Data, for characteristic: Characteristic, withResponse: Bool = true) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
-        try await central.writeValue(data, for: characteristic)
+        try await central.writeValue(data, for: characteristic, withResponse: withResponse)
         assert(Thread.isMainThread)
         let value = AttributeValue(
             date: Date(),

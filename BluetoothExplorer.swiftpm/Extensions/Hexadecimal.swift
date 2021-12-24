@@ -38,7 +38,11 @@ internal extension Collection where Element: FixedWidthInteger {
 internal extension Array where Element: FixedWidthInteger {
     
     init?(hexadecimal string: String) {
-        let elementStringSize = MemoryLayout<Self>.size * 2 // 2 for UInt8
+        let elementStringSize = MemoryLayout<Element>.size * 2 // 2 for UInt8
+        guard string.isEmpty == false else {
+            self = []
+            return
+        }
         guard string.count % elementStringSize == 0 else {
             return nil
         }

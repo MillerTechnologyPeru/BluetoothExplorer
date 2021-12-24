@@ -19,6 +19,12 @@ struct CharacteristicView: View {
     @State
     var isRefreshing = false
     
+    @State
+    var showSheet = false
+    
+    @State
+    var willWriteWithResponse = true
+    
     var body: some View {
         List {
             VStack(alignment: .leading, spacing: nil) {
@@ -35,12 +41,14 @@ struct CharacteristicView: View {
                     }
                     if canPerform(.write) {
                         Button("Write") {
-                            
+                            willWriteWithResponse = true
+                            showSheet = true
                         }
                     }
                     if canPerform(.writeWithoutResponse) {
                         Button("Write without response") {
-                            
+                            willWriteWithResponse = false
+                            showSheet = true
                         }
                     }
                     if canPerform(.notify) {
@@ -82,6 +90,24 @@ struct CharacteristicView: View {
             await reload()
             isRefreshing = false
         }
+        .sheet(
+            isPresented: $showSheet,
+            onDismiss: { },
+            content: {
+                WriteAttributeView(
+                    uuid: characteristic.uuid,
+                    text: store.characteristicValues[characteristic]?.values.last?.data.toHexadecimal() ?? "",
+                    cancel: {
+                        showSheet = false
+                    },
+                    done: { data in
+                        showSheet = false
+                        Task {
+                            await write(data)
+                        }
+                    }
+                )
+            })
     }
 }
 
@@ -204,6 +230,16 @@ extension CharacteristicView {
             try await store.notify(isEnabled, for: characteristic)
         }
         catch { print("Unable to \(isEnabled ? "enable" : "disable") value", error) }
+    }
+    
+    func write(_ data: Data) async {
+        do {
+            if isConnected == false {
+                try await store.connect(to: peripheral)
+            }
+            try await store.writeValue(data, for: characteristic, withResponse: willWriteWithResponse)
+        }
+        catch { print("Unable to write value", error) }
     }
 }
 

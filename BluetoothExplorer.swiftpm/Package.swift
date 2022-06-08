@@ -36,18 +36,11 @@ let package = Package(
                 .bluetoothAlways(purposeString: "Bluetooth is needed to scan for devices.")
             ],
             appCategory: .developerTools
-        ),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/PureSwift/GATT.git", .branch("master"))
+        )
     ],
     targets: [
         .executableTarget(
             name: "BluetoothExplorer",
-            dependencies: [
-                .product(name: "DarwinGATT", package: "gatt"),
-                .product(name: "GATT", package: "gatt")
-            ],
             path: "."
         )
     ]

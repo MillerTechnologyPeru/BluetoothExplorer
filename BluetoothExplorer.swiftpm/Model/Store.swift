@@ -68,6 +68,8 @@ final class Store: ObservableObject {
     
     private let central: Central
     
+    private var scanStream: AsyncCentralScan<NativeCentral>?
+    
     // MARK: - Initialization
     
     init(central: Central) {
@@ -80,21 +82,25 @@ final class Store: ObservableObject {
     // MARK: - Methods
     
     private func observeValues() {
-        /*
-        Task { [unowned self] in
-            for await value in self.central.state {
-                assert(Thread.isMainThread)
-                self.state = value
-                
-                // start scanning when powered on
-                guard state == .poweredOn else {
-                    continue
+        
+        Task.detached { [unowned self] in
+            repeat {
+                let oldValue = await self.state
+                let newValue = await self.central.state
+                if newValue != oldValue {
+                    await self.setState(newValue)
+                    // start scanning when powered on
+                    guard newValue == .poweredOn else {
+                        continue
+                    }
+                    do { try await self.scan() }
+                    catch { } // ignore error
                 }
-                do { try await self.scan() }
-                catch { } // ignore error
-            }
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+            } while true
         }
-        Task { [unowned self] in
+        /*
+        Task.detached { [unowned self] in
             for await peripheral in self.central.didDisconnect {
                 assert(Thread.isMainThread)
                 if self.connected.contains(peripheral) {
@@ -110,24 +116,30 @@ final class Store: ObservableObject {
         }*/
     }
     
+    private func setState(_ newValue: DarwinBluetoothState) {
+        self.state = newValue
+    }
+    
     func scan() async throws {
         scanResults.removeAll(keepingCapacity: true)
         let stream = try await central.scan(filterDuplicates: true)
-        for try await scanData in stream {
-            assert(Thread.isMainThread)
-            scanResults[scanData.peripheral] = scanData
+        self.scanStream = stream
+        Task {
+            for try await scanData in stream {
+                scanResults[scanData.peripheral] = scanData
+            }
         }
     }
     
     func stopScan() async {
-        //await central.stopScan()
+        scanStream?.stop()
     }
     
     func connect(to peripheral: Central.Peripheral) async throws {
         activity[peripheral] = true
         defer { activity[peripheral] = false }
         if isScanning {
-            //await central.stopScan()
+            scanStream?.stop()
         }
         try await central.connect(to: peripheral)
         assert(Thread.isMainThread)

@@ -38,9 +38,18 @@ let package = Package(
             appCategory: .developerTools
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/PureSwift/GATT.git", "3.0.3"..<"4.0.0"),
+        .package(url: "https://github.com/PureSwift/Bluetooth.git", "6.0.4"..<"7.0.0")
+    ],
     targets: [
         .executableTarget(
             name: "BluetoothExplorer",
+            dependencies: [
+                .product(name: "GATT", package: "GATT"),
+                .product(name: "DarwinGATT", package: "GATT"),
+                .product(name: "Bluetooth", package: "Bluetooth")
+            ],
             path: "."
         )
     ]

@@ -93,12 +93,7 @@ final class Store: ObservableObject {
                 catch { } // ignore error
             }
         }
-        Task { [unowned self] in
-            for await value in self.central.isScanning {
-                assert(Thread.isMainThread)
-                self.isScanning = value
-            }
-        }
+        /*
         Task { [unowned self] in
             for await peripheral in self.central.didDisconnect {
                 assert(Thread.isMainThread)
@@ -112,7 +107,7 @@ final class Store: ObservableObject {
                         .forEach { self.isNotifying.removeValue(forKey: $0) }
                 }
             }
-        }
+        }*/
     }
     
     func scan() async throws {
@@ -125,14 +120,14 @@ final class Store: ObservableObject {
     }
     
     func stopScan() async {
-        await central.stopScan()
+        //await central.stopScan()
     }
     
     func connect(to peripheral: Central.Peripheral) async throws {
         activity[peripheral] = true
         defer { activity[peripheral] = false }
         if isScanning {
-            await central.stopScan()
+            //await central.stopScan()
         }
         try await central.connect(to: peripheral)
         assert(Thread.isMainThread)
@@ -213,7 +208,7 @@ final class Store: ObservableObject {
                 }
             }
         } else {
-            try await central.stopNotifications(for: characteristic)
+            //try await central.stopNotifications(for: characteristic)
             isNotifying[characteristic] = false
         }
     }

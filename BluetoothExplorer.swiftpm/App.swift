@@ -19,10 +19,9 @@ struct BluetoothExplorerApp: App {
             NavigationView {
                 CentralList(store: store)
                 Text("Scan for devices")
-            }.task {
-                for await message in NativeCentral.shared.log {
-                    print("Central: \(message)")
-                }
+            }
+            .onAppear {
+                NativeCentral.shared.log = { print("Central: \($0)") }
             }
         }
     }

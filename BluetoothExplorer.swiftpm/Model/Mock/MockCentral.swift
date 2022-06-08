@@ -22,22 +22,14 @@ internal final class MockCentral: CentralManager {
     /// Central Attribute ID (Handle)
     typealias AttributeID = UInt16
     
-    /// Disconnected peripheral callback
-    lazy var didDisconnect = AsyncStream<Peripheral> { [unowned self] _ in
-        // TODO:
-        //self.continuation
-    }
-    
     lazy var state = AsyncStream<DarwinBluetoothState> { [unowned self]  in
         $0.yield(.poweredOn)
     }
     
-    lazy var log = AsyncStream<String> { [unowned self] _ in
-        //self.continuation
-    }
+    var log: ((String) -> ())?
     
-    lazy var isScanning = AsyncStream<Bool> { [unowned self] in
-        self.continuation.isScanning = $0
+    var peripherals: Set<GATT.Peripheral> {
+        return Set(_state.scanData.lazy.map { $0.peripheral })
     }
     
     var _state = State()
@@ -47,30 +39,16 @@ internal final class MockCentral: CentralManager {
     init() { }
     
     /// Scans for peripherals that are advertising services.
-    func scan(filterDuplicates: Bool) -> AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error> {
-        _state.isScanning = true
-        let _ = isScanning
-        continuation.isScanning?.yield(true)
-        return AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error> { continuation in
-            _state.scanData.forEach {
-                continuation.yield($0)
+    func scan(filterDuplicates: Bool) -> AsyncCentralScan<MockCentral> {
+        return AsyncCentralScan { continuation in
+            self._state.scanData.forEach {
+                continuation($0)
             }
-            self.continuation.scan = continuation
         }
-    }
-    
-    /// Stops scanning for peripherals.
-    func stopScan() async {
-        _state.isScanning = false
-        let _ = isScanning
-        continuation.isScanning?.yield(false)
-        continuation.scan?.finish(throwing: nil)
-        continuation.scan = nil
     }
     
     /// Connect to the specified device
     func connect(to peripheral: Peripheral) async throws {
-        await stopScan()
         _state.connected.insert(peripheral)
     }
     
@@ -180,36 +158,20 @@ internal final class MockCentral: CentralManager {
         _state.descriptorValues[descriptor] = data
     }
     
-    /// Start Notifications
     func notify(
-        for characteristic: Characteristic<Peripheral, AttributeID>
-    ) async throws -> AsyncThrowingStream<Data, Error> {
+        for characteristic: GATT.Characteristic<GATT.Peripheral, AttributeID>
+    ) async throws -> AsyncCentralNotifications<MockCentral> {
         guard _state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
-        return AsyncThrowingStream<Data, Error> { continuation in
-            self.continuation.notifications[characteristic] = continuation
-            if let notifications = _state.notifications[characteristic] {
-                Task {
-                    for notification in notifications {
-                        guard let continuation = self.continuation.notifications[characteristic] else {
-                            break
-                        }
-                        continuation.yield(notification)
-                        try! await Task.sleep(nanoseconds: 1_000_000_000)
-                    }
+        return AsyncCentralNotifications { [unowned self] continuation in
+            if let notifications = self._state.notifications[characteristic] {
+                for notification in notifications {
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    continuation(notification)
                 }
             }
         }
-    }
-    
-    // Stop Notifications
-    func stopNotifications(for characteristic: Characteristic<Peripheral, AttributeID>) async throws {
-        guard _state.connected.contains(characteristic.peripheral) else {
-            throw CentralError.disconnected
-        }
-        continuation.notifications[characteristic]?.finish(throwing: nil)
-        continuation.notifications[characteristic] = nil
     }
     
     /// Read MTU
@@ -286,7 +248,6 @@ internal extension MockCentral {
     struct Continuation {
         var scan: AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error>.Continuation?
         var isScanning: AsyncStream<Bool>.Continuation?
-        var notifications = [MockCharacteristic: AsyncThrowingStream<Data, Error>.Continuation]()
     }
 }
 #endif

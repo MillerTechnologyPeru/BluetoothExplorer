@@ -80,6 +80,7 @@ final class Store: ObservableObject {
     // MARK: - Methods
     
     private func observeValues() {
+        /*
         Task { [unowned self] in
             for await value in self.central.state {
                 assert(Thread.isMainThread)
@@ -93,7 +94,6 @@ final class Store: ObservableObject {
                 catch { } // ignore error
             }
         }
-        /*
         Task { [unowned self] in
             for await peripheral in self.central.didDisconnect {
                 assert(Thread.isMainThread)
@@ -112,7 +112,7 @@ final class Store: ObservableObject {
     
     func scan() async throws {
         scanResults.removeAll(keepingCapacity: true)
-        let stream = central.scan(filterDuplicates: true)
+        let stream = try await central.scan(filterDuplicates: true)
         for try await scanData in stream {
             assert(Thread.isMainThread)
             scanResults[scanData.peripheral] = scanData

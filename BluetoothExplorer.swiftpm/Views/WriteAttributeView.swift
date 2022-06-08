@@ -26,7 +26,9 @@ struct WriteAttributeView: View {
                 TextField("0x00", text: $text, prompt: nil)
             }
             .navigationTitle("Write")
+            #if os(iOS)
             .navigationBarItems(leading: leftBarButtonItem, trailing: rightBarButtonItem)
+            #endif
         }
     }
 }

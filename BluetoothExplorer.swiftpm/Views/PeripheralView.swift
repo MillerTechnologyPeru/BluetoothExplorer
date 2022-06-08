@@ -62,7 +62,9 @@ struct PeripheralView: View {
             }
         }
         .navigationTitle(title)
+        #if os(iOS)
         .navigationBarItems(trailing: leftBarButtonItem)
+        #endif
         .task {
             if services.isEmpty {
                 await reload()

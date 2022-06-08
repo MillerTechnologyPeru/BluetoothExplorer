@@ -51,7 +51,9 @@ struct DescriptorView: View {
             }
         }
         .navigationTitle(title)
+        #if os(iOS)
         .navigationBarItems(trailing: leftBarButtonItem)
+        #endif
         .task {
             if values.isEmpty {
                 await reload()

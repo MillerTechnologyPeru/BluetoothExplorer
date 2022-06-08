@@ -79,7 +79,9 @@ struct CharacteristicView: View {
             }
         }
         .navigationTitle(title)
+        #if os(iOS)
         .navigationBarItems(trailing: leftBarButtonItem)
+        #endif
         .task {
             if values.isEmpty || descriptors.isEmpty  {
                 await reload()

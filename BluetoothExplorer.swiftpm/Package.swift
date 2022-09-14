@@ -40,7 +40,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/PureSwift/GATT.git", "3.0.3"..<"4.0.0"),
-        .package(url: "https://github.com/PureSwift/Bluetooth.git", "6.0.4"..<"7.0.0")
+        .package(url: "https://github.com/PureSwift/Bluetooth.git", .exact("6.0.5"))
     ],
     targets: [
         .executableTarget(

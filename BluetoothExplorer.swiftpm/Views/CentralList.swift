@@ -34,12 +34,14 @@ struct CentralList: View {
 extension CentralList {
     
     var list: some View {
-        List {
-            ForEach(scanResults) { scanData in
-                NavigationLink(
-                    destination: { PeripheralView(store: store, peripheral: scanData.peripheral) },
-                    label: { CentralCell(scanData: scanData) }
-                )
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                ForEach(scanResults) { scanData in
+                    NavigationLink(
+                        destination: { PeripheralView(store: store, peripheral: scanData.peripheral) },
+                        label: { CentralCell(scanData: scanData) }
+                    )
+                }
             }
         }
     }

@@ -39,8 +39,12 @@ final class Store: ObservableObject {
     @Published
     private(set) var scanResults = [Peripheral: ScanData]()
     
-    @Published
-    private(set) var isScanning = false
+    var isScanning: Bool {
+        guard let scanStream = self.scanStream, scanStream.isScanning else {
+            return false
+        }
+        return true
+    }
     
     @Published
     private(set) var connected = Set<Peripheral>()
@@ -68,60 +72,59 @@ final class Store: ObservableObject {
     
     private let central: Central
     
+    @Published
     private var scanStream: AsyncCentralScan<NativeCentral>?
     
+    private var centralObserver: AnyCancellable?
+    
     // MARK: - Initialization
+    
+    deinit {
+        centralObserver?.cancel()
+    }
     
     init(central: Central) {
         self.central = central
         observeValues()
+        setupLog()
     }
     
     static let shared = Store(central: .shared)
     
     // MARK: - Methods
     
-    private func observeValues() {
-        
-        Task.detached { [unowned self] in
-            repeat {
-                let oldValue = await self.state
-                let newValue = await self.central.state
-                if newValue != oldValue {
-                    await self.setState(newValue)
-                    // start scanning when powered on
-                    guard newValue == .poweredOn else {
-                        continue
-                    }
-                    do { try await self.scan() }
-                    catch { } // ignore error
-                }
-                try await Task.sleep(nanoseconds: 1_000_000_000)
-            } while true
-        }
-        /*
-        Task.detached { [unowned self] in
-            for await peripheral in self.central.didDisconnect {
-                assert(Thread.isMainThread)
-                if self.connected.contains(peripheral) {
-                    // update state
-                    self.connected.remove(peripheral)
-                    let notifications = self.isNotifying
-                        .keys
-                        .filter { $0.peripheral == peripheral }
-                    notifications
-                        .forEach { self.isNotifying.removeValue(forKey: $0) }
-                }
-            }
-        }*/
+    private func setupLog() {
+        central.log = { print("Central: \($0)") }
     }
     
-    private func setState(_ newValue: DarwinBluetoothState) {
+    private func observeValues() {
+        centralObserver = central.objectWillChange.sink { _ in
+            Task { [unowned self] in
+                await self.updateState()
+            }
+        }
+    }
+    
+    private func updateState() async {
+        assert(Thread.isMainThread)
+        let oldValue = self.state
+        let newValue = await self.central.state
+        guard newValue != oldValue else {
+            return
+        }
+        // update value
         self.state = newValue
+        // start scanning when powered on
+        guard newValue == .poweredOn else {
+            return
+        }
+        do { try await self.scan() }
+        catch { } // ignore error
     }
     
     func scan() async throws {
         scanResults.removeAll(keepingCapacity: true)
+        self.scanStream = nil
         let stream = try await central.scan(filterDuplicates: true)
         self.scanStream = stream
         Task {
@@ -132,7 +135,7 @@ final class Store: ObservableObject {
     }
     
     func stopScan() async {
-        scanStream?.stop()
+        scanStream = nil
     }
     
     func connect(to peripheral: Central.Peripheral) async throws {

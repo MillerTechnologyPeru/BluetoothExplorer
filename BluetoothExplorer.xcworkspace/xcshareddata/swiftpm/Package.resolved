@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
-        "revision" : "1c73155186f93402cf20bc9798e224e56bffd8f5",
-        "version" : "3.0.4"
+        "revision" : "0fae18058831665fdde3bc671c6ab6c2624fc46c",
+        "version" : "3.0.5"
       }
     }
   ],

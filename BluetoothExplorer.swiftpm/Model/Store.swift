@@ -40,10 +40,7 @@ final class Store: ObservableObject {
     private(set) var scanResults = [Peripheral: ScanData]()
     
     var isScanning: Bool {
-        guard let scanStream = self.scanStream, scanStream.isScanning else {
-            return false
-        }
-        return true
+        self.scanStream?.isScanning ?? false
     }
     
     @Published
@@ -101,6 +98,7 @@ final class Store: ObservableObject {
         centralObserver = central.objectWillChange.sink { _ in
             Task { [unowned self] in
                 await self.updateState()
+                await self.updateConnected()
             }
         }
     }
@@ -120,6 +118,16 @@ final class Store: ObservableObject {
         }
         do { try await self.scan() }
         catch { } // ignore error
+    }
+    
+    private func updateConnected() async {
+        assert(Thread.isMainThread)
+        let oldValue = self.connected
+        let newValue = await Set(central.peripherals.compactMap { $0.value ? $0.key : nil })
+        guard oldValue != newValue else {
+            return
+        }
+        self.connected = newValue
     }
     
     func scan() async throws {

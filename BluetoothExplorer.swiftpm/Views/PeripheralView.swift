@@ -105,7 +105,9 @@ extension PeripheralView {
         } else if isConnected {
             return AnyView(Button(action: {
                 assert(Thread.isMainThread)
-                store.disconnect(peripheral)
+                Task {
+                    await store.disconnect(peripheral)
+                }
             }) {
                 Text("Disconnect")
             })

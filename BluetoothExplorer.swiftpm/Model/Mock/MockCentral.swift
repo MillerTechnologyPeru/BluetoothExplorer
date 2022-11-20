@@ -28,8 +28,14 @@ internal final class MockCentral: CentralManager {
     
     var log: ((String) -> ())?
     
-    var peripherals: Set<GATT.Peripheral> {
-        return Set(_state.scanData.lazy.map { $0.peripheral })
+    var peripherals: [GATT.Peripheral : Bool] {
+        get async {
+            var peripherals = [Peripheral: Bool]()
+            for scanData in _state.scanData {
+                peripherals[scanData.peripheral] = _state.connected.contains(scanData.peripheral)
+            }
+            return peripherals
+        }
     }
     
     var _state = State()

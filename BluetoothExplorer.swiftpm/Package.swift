@@ -10,7 +10,8 @@ import AppleProductTypes
 let package = Package(
     name: "BluetoothExplorer",
     platforms: [
-        .iOS("15.2")
+        .iOS("15.2"),
+        .macOS("12.0")
     ],
     products: [
         .iOSApplication(
@@ -19,7 +20,7 @@ let package = Package(
             bundleIdentifier: "com.pureswift.bluetooth-explorer",
             teamIdentifier: "4W79SG34MW",
             displayVersion: "1.0",
-            bundleVersion: "2",
+            bundleVersion: "3",
             appIcon: .asset("AppIcon"),
             accentColor: .asset("AccentColor"),
             supportedDeviceFamilies: [
@@ -39,16 +40,14 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/PureSwift/GATT.git", "3.0.3"..<"4.0.0"),
-        .package(url: "https://github.com/PureSwift/Bluetooth.git", .exact("6.0.5"))
+        .package(url: "https://github.com/PureSwift/GATT.git", "3.0.4"..<"4.0.0")
     ],
     targets: [
         .executableTarget(
             name: "BluetoothExplorer",
             dependencies: [
                 .product(name: "GATT", package: "GATT"),
-                .product(name: "DarwinGATT", package: "GATT"),
-                .product(name: "Bluetooth", package: "Bluetooth")
+                .product(name: "DarwinGATT", package: "GATT")
             ],
             path: "."
         )

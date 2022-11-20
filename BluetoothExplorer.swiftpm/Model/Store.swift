@@ -146,8 +146,8 @@ final class Store: ObservableObject {
         connected.insert(peripheral)
     }
     
-    func disconnect(_ peripheral: Central.Peripheral) {
-        central.disconnect(peripheral)
+    func disconnect(_ peripheral: Central.Peripheral) async {
+        await central.disconnect(peripheral)
     }
     
     func discoverServices(for peripheral: Central.Peripheral) async throws {

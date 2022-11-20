@@ -26,7 +26,7 @@ extension NativeCentral {
     }
 }
 
-#else
+#elseif canImport(Darwin)
 typealias NativeCentral = DarwinCentral
 
 extension NativeCentral {
@@ -41,5 +41,6 @@ extension NativeCentral {
         return Cache.central
     }
 }
-
+#else
+#error("Platform not supported")
 #endif

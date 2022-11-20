@@ -17,12 +17,10 @@ struct BluetoothExplorerApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                CentralList(store: store)
+                CentralList()
                 Text("Scan for devices")
             }
-            .onAppear {
-                NativeCentral.shared.log = { print("Central: \($0)") }
-            }
+            .environmentObject(Store.shared)
         }
     }
 }

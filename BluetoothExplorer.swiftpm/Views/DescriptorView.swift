@@ -11,7 +11,7 @@ import GATT
 
 struct DescriptorView: View {
     
-    @ObservedObject
+    @EnvironmentObject
     var store: Store
     
     let descriptor: Store.Descriptor

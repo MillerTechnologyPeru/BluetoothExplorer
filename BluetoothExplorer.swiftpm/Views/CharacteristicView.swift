@@ -11,7 +11,7 @@ import GATT
 
 struct CharacteristicView: View {
     
-    @ObservedObject
+    @EnvironmentObject
     var store: Store
     
     let characteristic: Store.Characteristic
@@ -68,7 +68,7 @@ struct CharacteristicView: View {
                 Section(content: {
                     ForEach(descriptors) { descriptor in
                         NavigationLink(destination: {
-                            DescriptorView(store: store, descriptor: descriptor)
+                            DescriptorView(descriptor: descriptor)
                         }, label: {
                             AttributeCell(uuid: descriptor.uuid)
                         })

@@ -11,7 +11,7 @@ import GATT
 
 struct ServiceView: View {
     
-    @ObservedObject
+    @EnvironmentObject
     var store: Store
     
     let service: Store.Service
@@ -34,7 +34,6 @@ struct ServiceView: View {
                     ForEach(includedServices) { service in
                         NavigationLink(destination: {
                             ServiceView(
-                                store: store,
                                 service: service
                             )
                         }, label: {
@@ -50,7 +49,6 @@ struct ServiceView: View {
                     ForEach(characteristics) { characteristic in
                         NavigationLink(destination: {
                             CharacteristicView(
-                                store: store,
                                 characteristic: characteristic
                             )
                         }, label: {

@@ -12,7 +12,7 @@ import GATT
 
 struct CentralList: View {
     
-    @ObservedObject
+    @EnvironmentObject
     var store: Store
     
     var scanResults: [Store.ScanData] {
@@ -38,7 +38,7 @@ extension CentralList {
             LazyVStack(alignment: .leading) {
                 ForEach(scanResults) { scanData in
                     NavigationLink(
-                        destination: { PeripheralView(store: store, peripheral: scanData.peripheral) },
+                        destination: { PeripheralView(peripheral: scanData.peripheral) },
                         label: { CentralCell(scanData: scanData) }
                     )
                 }
@@ -86,8 +86,9 @@ struct CentralList_Preview: PreviewProvider {
     static var previews: some View {
         Group {
             NavigationView {
-                CentralList(store: .shared)
+                CentralList()
             }
+            .environmentObject(Store.shared)
         }
     }
 }

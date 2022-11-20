@@ -12,7 +12,7 @@ import GATT
 
 struct PeripheralView: View {
     
-    @ObservedObject
+    @EnvironmentObject
     var store: Store
     
     let peripheral: Store.Peripheral
@@ -49,7 +49,6 @@ struct PeripheralView: View {
                     ForEach(services) { service in
                         NavigationLink(destination: {
                             ServiceView(
-                                store: store,
                                 service: service
                             )
                         }, label: {

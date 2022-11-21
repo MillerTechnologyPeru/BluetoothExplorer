@@ -67,7 +67,7 @@ final class Store: ObservableObject {
     @Published
     private(set) var isNotifying = [Characteristic: Bool]()
     
-    private let central: Central
+    internal let central: Central
     
     @Published
     private var scanStream: AsyncCentralScan<NativeCentral>?
@@ -130,10 +130,16 @@ final class Store: ObservableObject {
         self.connected = newValue
     }
     
-    func scan() async throws {
+    func scan(
+        with services: Set<BluetoothUUID> = [],
+        filterDuplicates: Bool = true
+    ) async throws {
         scanResults.removeAll(keepingCapacity: true)
-        self.scanStream = nil
-        let stream = try await central.scan(filterDuplicates: true)
+        self.scanStream = nil // end previous scan
+        let stream = central.scan(
+            with: services,
+            filterDuplicates: filterDuplicates
+        )
         self.scanStream = stream
         Task {
             for try await scanData in stream {

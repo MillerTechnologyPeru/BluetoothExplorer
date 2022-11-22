@@ -149,6 +149,7 @@ final class Store: ObservableObject {
     }
     
     func stopScan() async {
+        scanStream?.stop()
         scanStream = nil
     }
     

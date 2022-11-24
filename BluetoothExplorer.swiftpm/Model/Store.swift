@@ -13,6 +13,7 @@ import Bluetooth
 import GATT
 import DarwinGATT
 
+/// Store
 @MainActor
 final class Store: ObservableObject {
     
@@ -95,12 +96,16 @@ final class Store: ObservableObject {
     }
     
     private func observeValues() {
-        centralObserver = central.objectWillChange.sink { _ in
-            Task { [unowned self] in
-                await self.updateState()
-                await self.updateConnected()
+        centralObserver = central.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] _ in
+                self.objectWillChange.send()
+                Task { [unowned self] in
+                    await self.updateState()
+                    await self.updateConnected()
+                }
             }
-        }
+        
     }
     
     private func updateState() async {

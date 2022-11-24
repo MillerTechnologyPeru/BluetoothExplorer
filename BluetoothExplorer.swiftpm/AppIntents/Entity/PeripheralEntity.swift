@@ -28,7 +28,6 @@ struct PeripheralEntity: AppEntity, Identifiable {
     
     /// The Manufacturer data of a peripheral.
     let manufacturerData: ManufacturerDataEntity?
-    
 }
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)

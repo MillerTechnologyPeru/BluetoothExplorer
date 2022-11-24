@@ -36,7 +36,8 @@ let package = Package(
             capabilities: [
                 .bluetoothAlways(purposeString: "Bluetooth is needed to scan for devices.")
             ],
-            appCategory: .utilities
+            appCategory: .utilities,
+            additionalInfoPlistContentFilePath: "Info.plist"
         )
     ],
     dependencies: [

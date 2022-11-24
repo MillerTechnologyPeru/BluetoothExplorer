@@ -13,7 +13,7 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct ScanIntent: AppIntent {
     
-    static var title: LocalizedStringResource { "Scan for nearby Bluetooth devices" }
+    static var title: LocalizedStringResource { "Bluetooth scan" }
     
     static var description: IntentDescription {
         IntentDescription(

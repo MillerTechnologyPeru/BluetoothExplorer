@@ -13,13 +13,13 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct DiscoverCharacteristicsIntent: AppIntent {
     
-    static var title: LocalizedStringResource { "Discover characteristics for a specified service." }
+    static var title: LocalizedStringResource { "Discover characteristics" }
     
     static var description: IntentDescription {
         IntentDescription(
-            "Discover services for a specified device.",
+            "Discover characteristics for a specified service.",
             categoryName: "Utility",
-            searchKeywords: ["discovery", "services", "bluetooth"]
+            searchKeywords: ["discovery", "characteristics", "bluetooth"]
         )
     }
     

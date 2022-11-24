@@ -13,7 +13,7 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct DiscoverServicesIntent: AppIntent {
     
-    static var title: LocalizedStringResource { "Discover services for a specified device." }
+    static var title: LocalizedStringResource { "Discover services" }
     
     static var description: IntentDescription {
         IntentDescription(

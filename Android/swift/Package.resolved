@@ -6,7 +6,7 @@
       "location" : "https://github.com/PureSwift/Android.git",
       "state" : {
         "branch" : "master",
-        "revision" : "14932c09843c26781c9fe956e60af71be6743d1c"
+        "revision" : "f00c184a7f8f66acad8d58b85c4f64bd89ff423a"
       }
     },
     {
@@ -16,6 +16,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "1060ec56432a8e87ed0fdc679718233c92fa3506"
+      }
+    },
+    {
+      "identity" : "anycodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/AnyCodable.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8a76e18827e16765d234650d849c1c47a8e3edf2"
       }
     },
     {
@@ -60,7 +69,7 @@
       "location" : "https://github.com/PureSwift/java_swift.git",
       "state" : {
         "branch" : "master",
-        "revision" : "9c918d1d4c17cbb9476332c8494b1caa6cb10d89"
+        "revision" : "e6b10cc6cdc82a8b31f84f2c390ccf8f20ea4369"
       }
     },
     {
@@ -70,6 +79,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "b4240b5ec498d2edde73b579f2ade0dbf821a2ac"
+      }
+    },
+    {
+      "identity" : "javacoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/JavaCoder.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "4b46425644f5aa424893f15705ee88c08b1d5030"
       }
     },
     {

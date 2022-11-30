@@ -3,6 +3,7 @@ import Android
 import AndroidBluetooth
 import Bluetooth
 import GATT
+import JavaCoder
 
 final class BluetoothExplorerApp: SwiftApplication {
     
@@ -15,6 +16,12 @@ final class BluetoothExplorerApp: SwiftApplication {
         return formatter
     }()
     
+    class override var runtimeConfiguration: RuntimeConfiguration {
+        var configuration = RuntimeConfiguration.default
+        configuration.componentActivity = MainActivity.self
+        return configuration
+    }
+    
     override func onCreate() {
         super.onCreate()
         
@@ -22,17 +29,11 @@ final class BluetoothExplorerApp: SwiftApplication {
     }
     
     func didLaunch() {
-        
         NSLog("Launching BluetoothExplorer Android app \(Self.formatter.string(from: launchDate))")
         
-        
+        // register coder
+        JavaCoderConfig.RegisterBasicJavaTypes()
     }
-}
-
-@_silgen_name("SwiftAndroidMainActivity")
-public func SwiftAndroidMainActivity() -> SwiftSupportAppCompatActivity.Type {
-    NSLog("\(#function)")
-    fatalError()
 }
 
 @_silgen_name("SwiftAndroidMainApplication")
@@ -40,6 +41,7 @@ public func SwiftAndroidMainApplication() -> SwiftApplication.Type {
     NSLog("\(#function)")
     return BluetoothExplorerApp.self
 }
+
 /*
 extension BluetoothExplorerApp {
     

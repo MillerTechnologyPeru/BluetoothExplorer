@@ -1,0 +1,86 @@
+{
+  "pins" : [
+    {
+      "identity" : "android",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/Android.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "14932c09843c26781c9fe956e60af71be6743d1c"
+      }
+    },
+    {
+      "identity" : "androidbluetooth",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/AndroidBluetooth.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1060ec56432a8e87ed0fdc679718233c92fa3506"
+      }
+    },
+    {
+      "identity" : "bluetooth",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/Bluetooth.git",
+      "state" : {
+        "revision" : "d493bd427c95913ea1f78091384dfa5321ac8593",
+        "version" : "6.2.2"
+      }
+    },
+    {
+      "identity" : "cjavavm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/CJavaVM.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "3b19893aa50a724c467d341c482087c30323b190"
+      }
+    },
+    {
+      "identity" : "gatt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/GATT.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0bf40a7e52cfed3d8740b0a1fea776f9f338aa9c"
+      }
+    },
+    {
+      "identity" : "java_lang",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/java_lang.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "71188f8a81d641f80da2135037a336b9bddbe988"
+      }
+    },
+    {
+      "identity" : "java_swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/java_swift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9c918d1d4c17cbb9476332c8494b1caa6cb10d89"
+      }
+    },
+    {
+      "identity" : "java_util",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/java_util.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b4240b5ec498d2edde73b579f2ade0dbf821a2ac"
+      }
+    },
+    {
+      "identity" : "jni",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/JNI.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a2901c1b7b9f1dad967517b63502174a40f4cc9b"
+      }
+    }
+  ],
+  "version" : 2
+}

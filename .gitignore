@@ -22,6 +22,7 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+*.DS_Store
 
 ## Obj-C/Swift specific
 *.hmap
@@ -36,9 +37,7 @@ playground.xcworkspace
 # Swift Package Manager
 #
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
+*.swiftpm
 .build/
 
 # CocoaPods
@@ -67,11 +66,11 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-# SPM-generated Xcode projects
-Android/app/src/main/swift/BluetoothExplorer.xcodeproj/*
-BluetoothExplorer.xcodeproj/*
-Android/app/src/main/swift/.swiftpm
-
 # Android Studio
 .idea/*
 
+# Swift Android Toolchain
+Android/swift/toolchain
+Android/swift/.build
+Android/swift/.swiftpm
+Android/app/src/main/jniLibs

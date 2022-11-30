@@ -1,4 +1,4 @@
-package org.millertechnology.BluetoothExplorer.ui.theme
+package org.millertechnology.bluetoothexplorer.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

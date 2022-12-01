@@ -17,17 +17,21 @@ import java_lang
 import CJavaVM
 
 @available(macOS 13.0, *)
+@MainActor
 final class MainActivity: SwiftComponentActivity {
     
     var foundDevices = [String: BluetoothDevice]()
     
-    override func onCreate(savedInstanceState: Android.OS.Bundle?) {
+    override nonisolated func onCreate(savedInstanceState: Android.OS.Bundle?) {
         super.onCreate(savedInstanceState: savedInstanceState)
         
+        drainMainQueue()
+        
+        // setup activity
         didLoad()
     }
     
-    private func didLoad() {
+    private nonisolated func drainMainQueue() {
         // drain main queue
         Task { [weak self] in
             while let self = self {
@@ -37,6 +41,9 @@ final class MainActivity: SwiftComponentActivity {
                 }
             }
         }
+    }
+    
+    private nonisolated func didLoad() {
         
         // TODO: Request Bluetooth permissions
         
@@ -107,10 +114,8 @@ final class MainActivity: SwiftComponentActivity {
                 company: scanData.advertisementData.manufacturerData?.companyIdentifier.name
             )
             // update UI
-            await MainActor.run {
-                self.foundDevices[device.id] = device
-                self.updateView()
-            }
+            self.foundDevices[device.id] = device
+            self.updateView()
         }
     }
 }

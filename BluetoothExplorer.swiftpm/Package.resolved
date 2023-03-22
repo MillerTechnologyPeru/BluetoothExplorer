@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Bluetooth.git",
       "state" : {
-        "revision" : "d493bd427c95913ea1f78091384dfa5321ac8593",
-        "version" : "6.2.2"
+        "revision" : "0e1e2527835a72df5cb27ca0d0566770813cb327",
+        "version" : "6.3.0"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
-        "revision" : "0fae18058831665fdde3bc671c6ab6c2624fc46c",
-        "version" : "3.0.5"
+        "revision" : "e96654aefeaa8fba58d926c31d220b4e6acb4ba6",
+        "version" : "3.1.0"
       }
     }
   ],

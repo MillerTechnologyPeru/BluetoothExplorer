@@ -18,25 +18,25 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
             nameText
                 .font(.title3)
                 .foregroundColor(.primary)
+            #if DEBUG
+            Text(verbatim: scanData.id.description)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+            #endif
             if let beacon = self.beacon {
                 Text("\(beacon.uuid)")
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("Major: \(beacon.major)")
+                Text("Major: 0x\(beacon.major.toHexadecimal())")
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("Minor: \(beacon.minor)")
+                Text("Minor: 0x\(beacon.minor.toHexadecimal())")
                     .font(.subheadline)
                     .foregroundColor(.primary)
                 Text("RSSI: \(beacon.rssi)")
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
-            #if DEBUG
-            Text(verbatim: scanData.id.description)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-            #endif
             if let company = self.company, beacon == nil {
                 Text(verbatim: company)
                     .font(.subheadline)

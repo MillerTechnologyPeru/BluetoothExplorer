@@ -11,11 +11,13 @@ import GATT
 
 struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
     
+    let name: String?
+    
     let scanData: ScanData<Peripheral, Advertisement>
     
     var body: some View {
         VStack(alignment: .leading, spacing: 2.0) {
-            Text(verbatim: name)
+            nameText
                 .font(.title3)
                 .foregroundColor(.primary)
             if let beacon = self.beacon {
@@ -58,8 +60,8 @@ private struct CentralCellCache {
 
 extension CentralCell {
     
-    var name: String {
-        scanData.advertisementData.localName ?? (beacon != nil ? "iBeacon" : "Unknown")
+    var nameText: Text {
+        name.flatMap { Text(verbatim: $0) } ?? (beacon != nil ? Text("iBeacon") : Text("Unknown"))
     }
     
     var company: String? {
@@ -76,7 +78,7 @@ extension CentralCell {
     }
     
     var beacon: AppleBeacon? {
-        return scanData.advertisementData.manufacturerData.flatMap { AppleBeacon(manufacturerData: $0) }
+        return scanData.advertisementData.beacon
     }
 }
 
@@ -85,10 +87,10 @@ struct CentralCell_Preview: PreviewProvider {
     static var previews: some View {
         NavigationView {
             List {
-                CentralCell(scanData: MockScanData.beacon)
-                CentralCell(scanData: MockScanData.beacon)
-                CentralCell(scanData: MockScanData.beacon)
-                CentralCell(scanData: MockScanData.smartThermostat)
+                CentralCell(name: nil, scanData: MockScanData.beacon)
+                CentralCell(name: nil, scanData: MockScanData.beacon)
+                CentralCell(name: "My Beacon", scanData: MockScanData.beacon)
+                CentralCell(name: "CLI-W200", scanData: MockScanData.smartThermostat)
             }
         }
     }

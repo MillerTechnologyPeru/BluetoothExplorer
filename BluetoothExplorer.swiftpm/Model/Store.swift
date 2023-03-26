@@ -40,6 +40,9 @@ final class Store: ObservableObject {
     @Published
     private(set) var scanResults = [Peripheral: ScanData]()
     
+    @Published
+    private(set) var nameCache = [Peripheral: String]()
+    
     var isScanning: Bool {
         self.scanStream?.isScanning ?? false
     }
@@ -149,6 +152,7 @@ final class Store: ObservableObject {
         Task {
             for try await scanData in stream {
                 scanResults[scanData.peripheral] = scanData
+                nameCache[scanData.peripheral] = try? await central.name(for: scanData.peripheral)
             }
         }
     }

@@ -34,7 +34,7 @@ extension CentralList {
                 ForEach(scanResults) { scanData in
                     NavigationLink(
                         destination: { PeripheralView(peripheral: scanData.peripheral) },
-                        label: { CentralCell(scanData: scanData) }
+                        label: { CentralCell(name: store.nameCache[scanData.peripheral], scanData: scanData) }
                     )
                 }
             }

@@ -16,7 +16,7 @@ internal extension AppleBeacon {
         let data = manufacturerData.additionalData
         
         guard manufacturerData.companyIdentifier == type(of: self).companyIdentifier,
-            data.count == type(of: self).additionalDataLength
+            data.count > 2
             else { return nil }
         
         let dataType = data[0]
@@ -26,7 +26,8 @@ internal extension AppleBeacon {
         
         let length = data[1]
         
-        guard length == type(of: self).length
+        guard length == type(of: self).length,
+            data.count == type(of: self).additionalDataLength
             else { return nil }
         
         let uuid = UUID(UInt128(bigEndian: UInt128(data: data.subdataNoCopy(in: 2 ..< 18))!))
@@ -47,4 +48,11 @@ internal extension AppleBeacon {
     static var length: UInt8 { return 0x15 } // length: 21 = 16 byte UUID + 2 bytes major + 2 bytes minor + 1 byte RSSI
     
     static var additionalDataLength: Int { return Int(length) + 2 }
+}
+
+internal extension GATT.AdvertisementData {
+    
+    var beacon: AppleBeacon? {
+        manufacturerData.flatMap { AppleBeacon(manufacturerData: $0) }
+    }
 }

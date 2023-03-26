@@ -40,6 +40,7 @@ playground.xcworkspace
 # Package.pins
 # Package.resolved
 .build/
+.swiftpm
 
 # CocoaPods
 #
@@ -74,4 +75,7 @@ Android/app/src/main/swift/.swiftpm
 
 # Android Studio
 .idea/*
+
+# VS Code
+.vscode
 

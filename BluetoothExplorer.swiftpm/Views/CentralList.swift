@@ -20,14 +20,9 @@ struct CentralList: View {
     }
     
     var body: some View {
-        #if os(iOS)
         list
-        .navigationBarTitle(Text("Central"), displayMode: .automatic)
-        .navigationBarItems(trailing: leftBarButtonItem)
-        #elseif os(macOS)
-        list
-        .navigationTitle(Text("Central"))
-        #endif
+            .navigationTitle(Text("Central"))
+            .toolbar { leftBarButtonItem }
     }
 }
 

@@ -13,7 +13,7 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct ScanIntent: AppIntent {
     
-    static var title: LocalizedStringResource { "Bluetooth scan" }
+    static var title: LocalizedStringResource { "Scan for nearby Bluetooth devices." }
     
     static var description: IntentDescription {
         IntentDescription(
@@ -21,6 +21,10 @@ struct ScanIntent: AppIntent {
             categoryName: "Utility",
             searchKeywords: ["scan", "bluetooth"]
         )
+    }
+    
+    static var parameterSummary: some ParameterSummary {
+        Summary("Scan nearby devices for \(\.$duration) seconds with duplicate filtering set to \(\.$filterDuplicates) and filtering by the specified services \(\.$services).")
     }
     
     @Parameter(

@@ -22,7 +22,7 @@ struct PeripheralView: View {
     
     var body: some View {
         List {
-            if let scanData = store.scanResults[peripheral] {
+            if let scanData = store.scanResults[peripheral]?.scanData {
                 if let manufacturerData = scanData.advertisementData.manufacturerData {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(verbatim: manufacturerData.companyIdentifier.name ?? manufacturerData.companyIdentifier.description)
@@ -80,7 +80,7 @@ struct PeripheralView: View {
 extension PeripheralView {
     
     var title: String {
-        store.scanResults[peripheral]?.advertisementData.localName ?? "Device"
+        store.scanResults[peripheral]?.name ?? "Device"
     }
     
     var isConnected: Bool {

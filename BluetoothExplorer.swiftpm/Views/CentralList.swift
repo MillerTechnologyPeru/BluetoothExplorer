@@ -15,8 +15,8 @@ struct CentralList: View {
     @EnvironmentObject
     var store: Store
     
-    var scanResults: [Store.ScanData] {
-        return store.scanResults.values.sorted(by: { $0.peripheral.description < $1.peripheral.description })
+    var scanResults: [Store.ScanResult] {
+        return store.scanResults.values.sorted(by: { ($0.name ?? $0.id.description) < ($1.name ?? $1.id.description) })
     }
     
     var body: some View {
@@ -31,10 +31,10 @@ extension CentralList {
     var list: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
-                ForEach(scanResults) { scanData in
+                ForEach(scanResults) { item in
                     NavigationLink(
-                        destination: { PeripheralView(peripheral: scanData.peripheral) },
-                        label: { CentralCell(name: store.nameCache[scanData.peripheral], scanData: scanData) }
+                        destination: { PeripheralView(peripheral: item.scanData.peripheral) },
+                        label: { CentralCell(scanData: item) }
                     )
                 }
             }

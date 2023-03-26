@@ -10,10 +10,8 @@ import Bluetooth
 import GATT
 
 struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
-    
-    let name: String?
-    
-    let scanData: ScanData<Peripheral, Advertisement>
+        
+    let scanData: ScanDataCache<Peripheral, Advertisement>
     
     var body: some View {
         VStack(alignment: .leading, spacing: 2.0) {
@@ -35,7 +33,7 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
                     .foregroundColor(.primary)
             }
             #if DEBUG
-            Text(verbatim: scanData.peripheral.description)
+            Text(verbatim: scanData.id.description)
                 .font(.footnote)
                 .foregroundColor(.secondary)
             #endif
@@ -61,15 +59,15 @@ private struct CentralCellCache {
 extension CentralCell {
     
     var nameText: Text {
-        name.flatMap { Text(verbatim: $0) } ?? (beacon != nil ? Text("iBeacon") : Text("Unknown"))
+        scanData.name.flatMap { Text(verbatim: $0) } ?? (beacon != nil ? Text("iBeacon") : Text("Unknown"))
     }
     
     var company: String? {
-        scanData.advertisementData.manufacturerData?.companyIdentifier.name
+        scanData.manufacturerData?.companyIdentifier.name
     }
     
     var services: String? {
-        let services = (scanData.advertisementData.serviceUUIDs ?? [])
+        let services = scanData.serviceUUIDs
             .sorted(by: { $0.description < $1.description })
             .map { $0.name ?? $0.rawValue }
         guard services.isEmpty == false
@@ -78,7 +76,7 @@ extension CentralCell {
     }
     
     var beacon: AppleBeacon? {
-        return scanData.advertisementData.beacon
+        return scanData.beacon
     }
 }
 
@@ -87,10 +85,10 @@ struct CentralCell_Preview: PreviewProvider {
     static var previews: some View {
         NavigationView {
             List {
-                CentralCell(name: nil, scanData: MockScanData.beacon)
-                CentralCell(name: nil, scanData: MockScanData.beacon)
-                CentralCell(name: "My Beacon", scanData: MockScanData.beacon)
-                CentralCell(name: "CLI-W200", scanData: MockScanData.smartThermostat)
+                CentralCell(scanData: .init(scanData: MockScanData.beacon))
+                CentralCell(scanData: .init(scanData: MockScanData.beacon))
+                CentralCell(scanData: .init(scanData: MockScanData.beacon))
+                CentralCell(scanData: .init(scanData: MockScanData.smartThermostat))
             }
         }
     }

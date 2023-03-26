@@ -62,7 +62,7 @@ struct ManufacturerDataQuery: EntityQuery {
         return Store.shared.scanResults
             .values
             .lazy
-            .compactMap { $0.advertisementData.manufacturerData }
+            .compactMap { $0.manufacturerData }
             .map { .init($0) }
     }
 }

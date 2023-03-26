@@ -77,7 +77,7 @@ struct PeripheralQuery: EntityQuery {
         let scanResults = Store.shared.scanResults.values
         return identifiers.compactMap { id in
             scanResults.first(where: { $0.id == id })
-                .map { PeripheralEntity($0) }
+                .map { PeripheralEntity($0.scanData) }
         }
     }
     
@@ -85,7 +85,7 @@ struct PeripheralQuery: EntityQuery {
     func suggestedEntities() throws -> [PeripheralEntity] {
         Store.shared.scanResults
             .values
-            .sorted(by: { $0.peripheral.id.description < $1.peripheral.id.description })
-            .map { .init($0) }
+            .sorted(by: { ($0.name ?? $0.id.description) < ($1.name ?? $1.id.description) })
+            .map { .init($0.scanData) }
     }
 }

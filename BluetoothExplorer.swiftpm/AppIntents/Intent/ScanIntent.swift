@@ -61,8 +61,8 @@ struct ScanIntent: AppIntent {
         await store.stopScan()
         let peripherals = store.scanResults
             .values
-            .sorted(by: { $0.peripheral.id.description < $1.peripheral.id.description })
-            .map { PeripheralEntity($0) }
+            .sorted(by: { ($0.name ?? $0.id.description) < ($1.name ?? $1.id.description) })
+            .map { PeripheralEntity($0.scanData) }
         return .result(
             value: peripherals,
             view: view(for: peripherals)

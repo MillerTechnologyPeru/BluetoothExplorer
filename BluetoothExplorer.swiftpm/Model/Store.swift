@@ -29,6 +29,8 @@ final class Store: ObservableObject {
     
     typealias Descriptor = GATT.Descriptor<Central.Peripheral, Central.AttributeID>
     
+    typealias ScanResult = ScanDataCache<Central.Peripheral, Central.Advertisement>
+    
     // MARK: - Properties
     
     @Published
@@ -38,10 +40,7 @@ final class Store: ObservableObject {
     private(set) var state: DarwinBluetoothState = .unknown
     
     @Published
-    private(set) var scanResults = [Peripheral: ScanData]()
-    
-    @Published
-    private(set) var nameCache = [Peripheral: String]()
+    private(set) var scanResults = [Peripheral: ScanResult]()
     
     var isScanning: Bool {
         self.scanStream?.isScanning ?? false
@@ -151,10 +150,22 @@ final class Store: ObservableObject {
         self.scanStream = stream
         Task {
             for try await scanData in stream {
-                scanResults[scanData.peripheral] = scanData
-                nameCache[scanData.peripheral] = try? await central.name(for: scanData.peripheral)
+                await found(scanData: scanData)
             }
         }
+    }
+    
+    /// Cache discovered values
+    private func found(scanData: ScanData) async {
+        var cache = scanResults[scanData.peripheral] ?? ScanDataCache(scanData: scanData)
+        cache += scanData
+        #if canImport(CoreBluetooth)
+        cache.name = try? await central.name(for: scanData.peripheral)
+        for serviceUUID in scanData.advertisementData.overflowServiceUUIDs ?? [] {
+            cache.serviceUUIDs.insert(serviceUUID)
+        }
+        #endif
+        scanResults[scanData.peripheral] = cache
     }
     
     func stopScan() async {
@@ -286,5 +297,71 @@ final class Store: ObservableObject {
             data: data
         )
         self.descriptorValues[descriptor, default: .init(capacity: 10)].append(value)
+    }
+}
+
+// MARK: - Supporting Types
+
+struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>: Equatable, Hashable {
+    
+    var scanData: GATT.ScanData<Peripheral, Advertisement>
+    
+    /// GAP or advertised name
+    var name: String?
+    
+    /// Advertised name
+    var advertisedName: String?
+    
+    var manufacturerData: GATT.ManufacturerSpecificData?
+    
+    /// This value is available if the broadcaster (peripheral) provides its Tx power level in its advertising packet.
+    /// Using the RSSI value and the Tx power level, it is possible to calculate path loss.
+    var txPowerLevel: Double?
+    
+    /// Service-specific advertisement data.
+    var serviceData = [BluetoothUUID: Data]()
+    
+    /// An array of service UUIDs
+    var serviceUUIDs = Set<BluetoothUUID>()
+    
+    /// An array of one or more ``BluetoothUUID``, representing Service UUIDs.
+    var solicitedServiceUUIDs = Set<BluetoothUUID>()
+    
+    /// An array of one or more ``BluetoothUUID``, representing Service UUIDs that were found in the “overflow” area of the advertisement data.
+    var overflowServiceUUIDs = Set<BluetoothUUID>()
+    
+    /// Advertised iBeacon
+    var beacon: AppleBeacon?
+    
+    init(scanData: GATT.ScanData<Peripheral, Advertisement>) {
+        self.scanData = scanData
+        self += scanData
+    }
+    
+    static func += (cache: inout ScanDataCache, scanData: GATT.ScanData<Peripheral, Advertisement>) {
+        cache.scanData = scanData
+        cache.advertisedName = scanData.advertisementData.localName
+        if cache.name == nil {
+            cache.name = scanData.advertisementData.localName
+        }
+        cache.txPowerLevel = scanData.advertisementData.txPowerLevel
+        if let beacon = scanData.advertisementData.beacon {
+            cache.beacon = beacon
+        } else {
+            cache.manufacturerData = scanData.advertisementData.manufacturerData
+        }
+        for serviceUUID in scanData.advertisementData.serviceUUIDs ?? [] {
+            cache.serviceUUIDs.insert(serviceUUID)
+        }
+        for (serviceUUID, serviceData) in scanData.advertisementData.serviceData ?? [:] {
+            cache.serviceData[serviceUUID] = serviceData
+        }
+    }
+}
+
+extension ScanDataCache: Identifiable {
+    
+    var id: Peripheral.ID {
+        scanData.id
     }
 }

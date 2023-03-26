@@ -20,7 +20,7 @@ let package = Package(
             bundleIdentifier: "com.pureswift.bluetooth-explorer",
             teamIdentifier: "4W79SG34MW",
             displayVersion: "1.0",
-            bundleVersion: "3",
+            bundleVersion: "4",
             appIcon: .asset("AppIcon"),
             accentColor: .asset("AccentColor"),
             supportedDeviceFamilies: [

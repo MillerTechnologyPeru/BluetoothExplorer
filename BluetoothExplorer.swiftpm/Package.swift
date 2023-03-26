@@ -20,7 +20,7 @@ let package = Package(
             bundleIdentifier: "com.pureswift.bluetooth-explorer",
             teamIdentifier: "4W79SG34MW",
             displayVersion: "1.0",
-            bundleVersion: "4",
+            bundleVersion: "5",
             appIcon: .asset("AppIcon"),
             accentColor: .asset("AccentColor"),
             supportedDeviceFamilies: [
@@ -54,3 +54,9 @@ let package = Package(
         )
     ]
 )
+
+// Xcode only settings
+#if os(macOS)
+package.dependencies[0] = .package(url: "https://github.com/PureSwift/GATT.git", branch: "master")
+package.platforms = [.iOS("15.0")] //[.iOS("14.0")]
+#endif

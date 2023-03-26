@@ -16,7 +16,12 @@ struct CentralList: View {
     var store: Store
     
     var scanResults: [Store.ScanResult] {
-        return store.scanResults.values.sorted(by: { ($0.name ?? $0.id.description) < ($1.name ?? $1.id.description) })
+        return store.scanResults
+            .values
+            .sorted(by: { $0.id.description < $1.id.description })
+            .sorted(by: { ($0.name ?? "") < ($1.name ?? "") })
+            .sorted(by: { $0.name != nil && $1.name == nil })
+            .sorted(by: { $0.beacon != nil && $1.beacon == nil })
     }
     
     var body: some View {

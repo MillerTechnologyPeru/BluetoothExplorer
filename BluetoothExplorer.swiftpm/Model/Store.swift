@@ -162,7 +162,7 @@ final class Store: ObservableObject {
         #if canImport(CoreBluetooth)
         cache.name = try? await central.name(for: scanData.peripheral)
         for serviceUUID in scanData.advertisementData.overflowServiceUUIDs ?? [] {
-            cache.serviceUUIDs.insert(serviceUUID)
+            cache.overflowServiceUUIDs.insert(serviceUUID)
         }
         #endif
         scanResults[scanData.peripheral] = cache

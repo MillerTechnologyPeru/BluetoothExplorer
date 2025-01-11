@@ -18,7 +18,7 @@ struct MockAdvertisementData: AdvertisementData {
     let localName: String?
     
     /// The Manufacturer data of a peripheral.
-    let manufacturerData: ManufacturerSpecificData?
+    let manufacturerData: ManufacturerSpecificData<Data>?
     
     /// This value is available if the broadcaster (peripheral) provides its Tx power level in its advertising packet.
     /// Using the RSSI value and the Tx power level, it is possible to calculate path loss.
@@ -34,7 +34,7 @@ struct MockAdvertisementData: AdvertisementData {
     let solicitedServiceUUIDs: [BluetoothUUID]?
     
     init(localName: String? = nil,
-         manufacturerData: ManufacturerSpecificData? = nil,
+         manufacturerData: ManufacturerSpecificData<Data>? = nil,
          txPowerLevel: Double? = nil,
          serviceData: [BluetoothUUID : Data]? = nil,
          serviceUUIDs: [BluetoothUUID]? = nil,

@@ -26,7 +26,7 @@ struct ManufacturerDataEntity: AppEntity {
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension ManufacturerDataEntity {
     
-    init(_ manufacturerData: GATT.ManufacturerSpecificData) {
+    init(_ manufacturerData: GATT.ManufacturerSpecificData<Data>) {
         
         self.company = manufacturerData.companyIdentifier.rawValue
         self.additionalData = manufacturerData.additionalData

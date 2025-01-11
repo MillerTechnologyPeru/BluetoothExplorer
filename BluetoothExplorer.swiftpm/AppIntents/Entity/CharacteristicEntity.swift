@@ -69,7 +69,7 @@ extension CharacteristicEntity {
             title: "\(BluetoothUUID(rawValue: uuid)?.name ?? uuid)",
             subtitle: """
                 Peripheral \(id.peripheral.description)
-                Properties \(BitMaskOptionSet<Store.Characteristic.Property>.init(rawValue: properties).description)
+                Properties \(Store.Characteristic.Properties(rawValue: properties).description)
             """
         )
     }

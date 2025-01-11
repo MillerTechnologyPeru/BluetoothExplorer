@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Combine
+@preconcurrency import Combine
 import SwiftUI
 import Bluetooth
 import GATT
@@ -15,7 +15,7 @@ import DarwinGATT
 
 /// Store
 @MainActor
-final class Store: ObservableObject {
+final class Store: ObservableObject, @unchecked Sendable {
     
     typealias Central = NativeCentral
     
@@ -312,14 +312,14 @@ struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>: Equat
     /// Advertised name
     var advertisedName: String?
     
-    var manufacturerData: GATT.ManufacturerSpecificData?
+    var manufacturerData: GATT.ManufacturerSpecificData<Advertisement.Data>?
     
     /// This value is available if the broadcaster (peripheral) provides its Tx power level in its advertising packet.
     /// Using the RSSI value and the Tx power level, it is possible to calculate path loss.
     var txPowerLevel: Double?
     
     /// Service-specific advertisement data.
-    var serviceData = [BluetoothUUID: Data]()
+    var serviceData = [BluetoothUUID: Advertisement.Data]()
     
     /// An array of service UUIDs
     var serviceUUIDs = Set<BluetoothUUID>()

@@ -11,7 +11,7 @@ import Bluetooth
 import GATT
 import DarwinGATT
 
-internal final class MockCentral: CentralManager {
+internal final class MockCentral: CentralManager, @unchecked Sendable {
     
     /// Central Peripheral Type
     typealias Peripheral = GATT.Peripheral
@@ -26,7 +26,7 @@ internal final class MockCentral: CentralManager {
         $0.yield(.poweredOn)
     }
     
-    var log: ((String) -> ())?
+    var log: (@Sendable (String) -> ())?
     
     var peripherals: [GATT.Peripheral : Bool] {
         get async {

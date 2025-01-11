@@ -19,7 +19,7 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
                 .font(.title3)
                 .foregroundColor(.primary)
             #if DEBUG
-            Text(verbatim: scanData.id.description)
+            Text(verbatim: "\(scanData.id)")
                 .font(.footnote)
                 .foregroundColor(.secondary)
             #endif
@@ -53,7 +53,7 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
 }
 
 private struct CentralCellCache {
-    static let listFormatter = ListFormatter()
+    static var listFormatter: ListFormatter { ListFormatter() }
 }
 
 extension CentralCell {

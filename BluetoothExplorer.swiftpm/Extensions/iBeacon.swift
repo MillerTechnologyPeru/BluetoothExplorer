@@ -11,7 +11,7 @@ import GATT
 
 internal extension AppleBeacon {
     
-    init?(manufacturerData: GATT.ManufacturerSpecificData) {
+    init?<Data>(manufacturerData: GATT.ManufacturerSpecificData<Data>) where Data: DataContainer {
         
         let data = manufacturerData.additionalData
         
@@ -30,7 +30,7 @@ internal extension AppleBeacon {
             data.count == type(of: self).additionalDataLength
             else { return nil }
         
-        let uuid = UUID(UInt128(bigEndian: UInt128(data: data.subdataNoCopy(in: 2 ..< 18))!))
+        let uuid = UUID(UInt128(bigEndian: UInt128(data: data.subdata(in: 2 ..< 18))!))
         let major = UInt16(bigEndian: UInt16(bytes: (data[18], data[19])))
         let minor = UInt16(bigEndian: UInt16(bytes: (data[20], data[21])))
         let rssi = Int8(bitPattern: data[22])
@@ -42,12 +42,12 @@ internal extension AppleBeacon {
 internal extension AppleBeacon {
         
     /// Apple iBeacon data type.
-    static var appleDataType: UInt8 { return 0x02 } // iBeacon
+    static var appleDataType: UInt8 { 0x02 } // iBeacon
     
     /// The length of the TLV encoded data.
-    static var length: UInt8 { return 0x15 } // length: 21 = 16 byte UUID + 2 bytes major + 2 bytes minor + 1 byte RSSI
+    static var length: UInt8 { 0x15 } // length: 21 = 16 byte UUID + 2 bytes major + 2 bytes minor + 1 byte RSSI
     
-    static var additionalDataLength: Int { return Int(length) + 2 }
+    static var additionalDataLength: Int { Int(length) + 2 }
 }
 
 internal extension GATT.AdvertisementData {

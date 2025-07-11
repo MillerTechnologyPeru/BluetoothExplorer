@@ -10,14 +10,14 @@ import AppleProductTypes
 let package = Package(
     name: "BluetoothExplorer",
     platforms: [
-        .iOS("15.2"),
-        .macOS("12.0")
+        .iOS("17.0"),
+        .macOS("15.0")
     ],
     products: [
         .iOSApplication(
             name: "BluetoothExplorer",
             targets: ["BluetoothExplorer"],
-            bundleIdentifier: "com.pureswift.bluetooth-explorer",
+            bundleIdentifier: "org.pureswift.bluetoothexplorer",
             teamIdentifier: "4W79SG34MW",
             displayVersion: "1.0",
             bundleVersion: "5",
@@ -59,5 +59,5 @@ let package = Package(
 // Xcode only settings
 #if os(macOS)
 package.dependencies[0] = .package(url: "https://github.com/PureSwift/GATT.git", branch: "master")
-package.platforms = [.iOS("15.0")]
+package.platforms = [.iOS("17.0")]
 #endif

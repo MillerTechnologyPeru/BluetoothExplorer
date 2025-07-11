@@ -31,15 +31,15 @@ struct DiscoverCharacteristicsIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let store = Store.shared
+        let store = BluetoothExplorerApp.store
         guard let peripheral = store.scanResults.keys.first(where: { $0.id == service.id.peripheral }) else {
             throw CentralError.unknownPeripheral
         }
         guard let service = store.services[peripheral, default: []].first(where: { $0.id.hashValue == service.id.attributeID && $0.peripheral.id == service.id.peripheral }) else {
             throw CentralError.invalidAttribute(BluetoothUUID(rawValue: service.uuid) ?? .bit128(.zero))
         }
-        try await store.central.wait(for: .poweredOn, warning: 1, timeout: 2)
-        if store.connected.contains(peripheral) == false {
+        try await store.central.wait(warning: 1, timeout: 2)
+        if await store.connected.contains(peripheral) == false {
             try await store.connect(to: peripheral)
         }
         try await store.discoverCharacteristics(for: service)

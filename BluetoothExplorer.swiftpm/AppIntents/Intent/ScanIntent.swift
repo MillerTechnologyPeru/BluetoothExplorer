@@ -51,8 +51,8 @@ struct ScanIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult {
         let services = Set(self.services.compactMap({ BluetoothUUID(rawValue: $0) }))
-        let store = Store.shared
-        try await store.central.wait(for: .poweredOn, warning: 1, timeout: 2)
+        let store = BluetoothExplorerApp.store
+        try await store.central.wait(warning: 1, timeout: 2)
         try await store.scan(
             with: services,
             filterDuplicates: filterDuplicates

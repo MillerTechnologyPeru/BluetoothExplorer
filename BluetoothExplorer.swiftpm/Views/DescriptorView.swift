@@ -11,7 +11,7 @@ import GATT
 
 struct DescriptorView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let descriptor: Store.Descriptor
@@ -128,7 +128,9 @@ extension DescriptorView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        // FIXME
+        //store.connected.contains(peripheral)
+        false
     }
     
     var showActivity: Bool {
@@ -191,9 +193,9 @@ struct DescriptorView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 DescriptorView(
-                    store: .shared,
                     descriptor: .clientCharacteristicConfiguration(.beacon)
                 )
+                .environment(Store())
             }
         }
     }

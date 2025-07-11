@@ -12,7 +12,7 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct PeripheralEntity: AppEntity, Identifiable {
     
-    let id: UUID
+    let id: NativeCentral.Peripheral.ID
     
     /// Timestamp for when device was scanned.
     let date: Date
@@ -73,8 +73,8 @@ extension PeripheralEntity {
 struct PeripheralQuery: EntityQuery {
     
     @MainActor
-    func entities(for identifiers: [UUID]) -> [PeripheralEntity] {
-        let scanResults = Store.shared.scanResults.values
+    func entities(for identifiers: [PeripheralEntity.ID]) -> [PeripheralEntity] {
+        let scanResults = BluetoothExplorerApp.store.scanResults.values
         return identifiers.compactMap { id in
             scanResults.first(where: { $0.id == id })
                 .map { PeripheralEntity($0.scanData) }
@@ -83,9 +83,22 @@ struct PeripheralQuery: EntityQuery {
     
     @MainActor
     func suggestedEntities() throws -> [PeripheralEntity] {
-        Store.shared.scanResults
+        BluetoothExplorerApp.store.scanResults
             .values
             .sorted(by: { ($0.name ?? $0.id.description) < ($1.name ?? $1.id.description) })
             .map { .init($0.scanData) }
+    }
+}
+
+// MARK: - EntityIdentifierConvertible
+
+extension BluetoothAddress: @retroactive EntityIdentifierConvertible {
+    
+    public var entityIdentifierString: String {
+        rawValue
+    }
+    
+    public static func entityIdentifier(for entityIdentifierString: String) -> Bluetooth.BluetoothAddress? {
+        .init(rawValue: entityIdentifierString)
     }
 }

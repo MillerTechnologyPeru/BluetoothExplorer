@@ -16,7 +16,7 @@ struct CentralList: View {
     var store: Store
     
     var scanResults: [Store.ScanResult] {
-        return store.scanResults
+        store.scanResults
             .values
             .sorted(by: { $0.id.description < $1.id.description })
             .sorted(by: { ($0.name ?? "") < ($1.name ?? "") })
@@ -47,18 +47,13 @@ extension CentralList {
     }
     
     var leftBarButtonItem: some View {
-        switch store.state {
-        case .unknown:
-            return AnyView(EmptyView())
-        case .poweredOff,
-             .resetting,
-             .unauthorized,
-             .unsupported:
+        switch store.isEnabled {
+        case false:
             return AnyView(
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundColor(.red)
             )
-        case .poweredOn:
+        case true:
             if store.isScanning {
                 return AnyView(Button(action: {
                     Task {

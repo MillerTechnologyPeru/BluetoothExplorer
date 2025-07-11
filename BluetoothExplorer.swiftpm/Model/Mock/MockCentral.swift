@@ -45,7 +45,14 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     
     private var continuation = Continuation()
     
-    init() { }
+    init() {
+        Task {
+            try await Task.sleep(for: .seconds(1))
+            updateState {
+                $0.isEnabled = true
+            }
+        }
+    }
     
     /// Scans for peripherals that are advertising services.
     func scan(

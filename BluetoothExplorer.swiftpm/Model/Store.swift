@@ -36,7 +36,7 @@ final class Store: @unchecked Sendable {
     
     private(set) var activity = [Peripheral: Bool]()
     
-    private(set) var state: DarwinBluetoothState = .unknown
+    private(set) var isEnabled = false
     
     private(set) var scanResults = [Peripheral: ScanResult]()
     
@@ -44,11 +44,7 @@ final class Store: @unchecked Sendable {
         self.scanStream?.isScanning ?? false
     }
     
-    var connected: Set<Peripheral> {
-        get async {
-            await Set(central.peripherals.compactMap { $0.value ? $0.key : nil })
-        }
-    }
+    private(set) var connected: Set<Peripheral> = []
     
     private(set) var services = [Peripheral: [Service]]()
     
@@ -67,18 +63,60 @@ final class Store: @unchecked Sendable {
     internal let central: Central
 
     private var scanStream: AsyncCentralScan<NativeCentral>?
-    
+        
     // MARK: - Initialization
     
     init(central: Central = Central()) {
         self.central = central
         setupLog()
+        observeValues()
     }
         
     // MARK: - Methods
     
     private func setupLog() {
         central.log = { print("Central: \($0)") }
+    }
+    
+    private func observeValues() {
+        Task { [weak self] in
+            do {
+                while let self {
+                    try await Task.sleep(for: .seconds(1))
+                    await self.updateState()
+                }
+            }
+            catch {
+                
+            }
+        }
+    }
+    
+    private func updateState() async {
+        assert(Thread.isMainThread)
+        let oldValue = self.isEnabled
+        let newValue = await self.central.isEnabled
+        guard newValue != oldValue else {
+            return
+        }
+        // update value
+        self.isEnabled = newValue
+        // start scanning when powered on
+        guard newValue else {
+            return
+        }
+        do { try await self.scan() }
+        catch { } // ignore error
+    }
+    
+    private func updateConnected() async {
+        assert(Thread.isMainThread)
+        let oldValue = self.connected
+        let newValue = await Set(central.peripherals.compactMap { $0.value ? $0.key : nil })
+        guard oldValue != newValue else {
+            return
+        }
+        self.connected = newValue
     }
     
     func scan(

@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct BluetoothExplorerApp: App {
     
-    let store = Store.shared
+    static let store = Store()
     
     var body: some Scene {
         WindowGroup {
@@ -20,7 +20,7 @@ struct BluetoothExplorerApp: App {
                 CentralList()
                 Text("Scan for devices")
             }
-            .environmentObject(Store.shared)
+            .environment(Self.store)
         }
     }
 }

@@ -25,18 +25,20 @@ extension CharacteristicEntity {
     
     struct ID: Equatable, Hashable, EntityIdentifierConvertible, Sendable {
         
-        let peripheral: UUID
+        typealias Peripheral = NativeCentral.Peripheral.ID
+        
+        let peripheral: Peripheral
         
         let attributeID: Int
         
         var entityIdentifierString: String {
-            return peripheral.uuidString + "/" + attributeID.description
+            return peripheral.description + "/" + attributeID.description
         }
         
         static func entityIdentifier(for string: String) -> ID? {
             let components = string.components(separatedBy: "/")
             guard components.count == 2,
-                let peripheral = UUID(uuidString: components[0]),
+                let peripheral = Peripheral(components[0]),
                 let attributeID = Int(components[1]) else {
                 return nil
             }
@@ -80,7 +82,7 @@ struct CharacteristicQuery: EntityQuery {
     
     @MainActor
     func entities(for identifiers: [CharacteristicEntity.ID]) -> [CharacteristicEntity] {
-        let allServices = Store.shared.characteristics.values.lazy.reduce([], { $0 + $1 })
+        let allServices = BluetoothExplorerApp.store.characteristics.values.lazy.reduce([], { $0 + $1 })
         return identifiers.compactMap { id in
             allServices
                 .first(where: { $0.peripheral.id == id.peripheral && $0.id.hashValue == id.attributeID })

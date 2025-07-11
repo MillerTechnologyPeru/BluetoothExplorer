@@ -24,18 +24,20 @@ extension ServiceEntity {
     
     struct ID: Equatable, Hashable, EntityIdentifierConvertible, Sendable {
         
-        let peripheral: UUID
+        let peripheral: PeripheralEntity.ID
         
         let attributeID: Int
         
         var entityIdentifierString: String {
-            return peripheral.uuidString + "/" + attributeID.description
+            return peripheral.description + "/" + attributeID.description
         }
 
         /// Identifiers should be able to initialize via a `String` format.
         static func entityIdentifier(for string: String) -> ID? {
             let components = string.components(separatedBy: "/")
-            guard components.count == 2, let peripheral = UUID(uuidString: components[0]), let attributeID = Int(components[1]) else {
+            guard components.count == 2,
+                let peripheral = PeripheralEntity.ID(components[0]),
+                let attributeID = Int(components[1]) else {
                 return nil
             }
             return ServiceEntity.ID.init(peripheral: peripheral, attributeID: attributeID)
@@ -75,7 +77,7 @@ struct ServiceQuery: EntityQuery {
     
     @MainActor
     func entities(for identifiers: [ServiceEntity.ID]) -> [ServiceEntity] {
-        let allServices = Store.shared.services.values.lazy.reduce([], { $0 + $1 })
+        let allServices = BluetoothExplorerApp.store.services.values.lazy.reduce([], { $0 + $1 })
         return identifiers.compactMap { id in
             allServices
                 .first(where: { $0.peripheral.id == id.peripheral && $0.id.hashValue == id.attributeID })

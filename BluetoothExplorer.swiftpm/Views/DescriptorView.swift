@@ -94,17 +94,17 @@ extension DescriptorView {
     
     func canPerform(_ action: Action) -> Bool {
         switch (descriptor.uuid, action) {
-        case (.clientCharacteristicConfiguration, .write):
+        case (BluetoothUUID.Descriptor.clientCharacteristicConfiguration, .write):
             return false
-        case (.serverCharacteristicConfiguration, .write):
+        case (BluetoothUUID.Descriptor.serverCharacteristicConfiguration, .write):
             return false
-        case (.characteristicFormat, .write):
+        case (BluetoothUUID.Descriptor.characteristicPresentationFormat, .write):
             return false
-        case (.characteristicAggregateFormat, .write):
+        case (BluetoothUUID.Descriptor.characteristicAggregateFormat, .write):
             return false
-        case (.characteristicExtendedProperties, .write):
+        case (BluetoothUUID.Descriptor.characteristicExtendedProperties, .write):
             return false
-        case (.characteristicUserDescription, _):
+        case (BluetoothUUID.Descriptor.characteristicUserDescription, _):
             return true
         default:
             return true
@@ -120,7 +120,7 @@ extension DescriptorView {
 extension DescriptorView {
     
     var title: String {
-        descriptor.uuid.name ?? "Descriptor"
+        descriptor.uuid.metadata?.name ?? "Descriptor"
     }
     
     var peripheral: Store.Peripheral {

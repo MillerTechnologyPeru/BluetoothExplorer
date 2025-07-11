@@ -28,7 +28,7 @@ struct AttributeValuesSection: View {
         })
     }
 }
-
+/*
 #if DEBUG
 struct AttributeValuesSection_Preview: PreviewProvider {
     static var previews: some View {
@@ -99,3 +99,4 @@ struct AttributeValuesSection_Preview: PreviewProvider {
     }
 }
 #endif
+*/

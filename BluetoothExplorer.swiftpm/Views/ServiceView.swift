@@ -80,7 +80,7 @@ struct ServiceView: View {
 extension ServiceView {
     
     var title: String {
-        service.uuid.name ?? "Service"
+        service.uuid.metadata?.name ?? "Service"
     }
     
     var peripheral: Store.Peripheral {

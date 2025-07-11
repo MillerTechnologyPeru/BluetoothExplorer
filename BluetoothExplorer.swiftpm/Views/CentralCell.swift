@@ -69,7 +69,7 @@ extension CentralCell {
     var services: String? {
         let services = scanData.serviceUUIDs
             .sorted(by: { $0.description < $1.description })
-            .map { $0.name ?? $0.rawValue }
+            .map { $0.metadata?.name ?? $0.rawValue }
         guard services.isEmpty == false
             else { return nil }
         return CentralCellCache.listFormatter.string(from: services)

@@ -66,7 +66,7 @@ extension CharacteristicEntity {
     
     var displayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
-            title: "\(BluetoothUUID(rawValue: uuid)?.name ?? uuid)",
+            title: "\(BluetoothUUID(rawValue: uuid)?.metadata?.name ?? uuid)",
             subtitle: """
                 Peripheral \(id.peripheral.description)
                 Properties \(Store.Characteristic.Properties(rawValue: properties).description)

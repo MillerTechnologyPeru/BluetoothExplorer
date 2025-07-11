@@ -12,7 +12,7 @@ import Bluetooth
 import GATT
 import DarwinGATT
 
-#if os(iOS) && targetEnvironment(simulator)
+#if os(Android) || os(iOS) && targetEnvironment(simulator)
 typealias NativeCentral = MockCentral
 
 extension NativeCentral {

@@ -145,7 +145,7 @@ extension CharacteristicView {
 extension CharacteristicView {
     
     var title: String {
-        characteristic.uuid.name ?? "Characteristic"
+        characteristic.uuid.metadata?.name ?? "Characteristic"
     }
     
     var peripheral: Store.Peripheral {

@@ -65,7 +65,7 @@ extension MockAdvertisementData {
         manufacturerData: ManufacturerSpecificData(data: Data([0xd9, 0x01, 0x01, 0x02, 0x00, 0x00, 0x8c, 0x85, 0x90, 0xcb, 0x31, 0x74, 0x00, 0x60])),
         txPowerLevel: nil,
         serviceData: nil,
-        serviceUUIDs: [.savantSystems2],
+        serviceUUIDs: [BluetoothUUID.Member.savantSystems2],
         solicitedServiceUUIDs: nil
     )
 }

@@ -79,43 +79,38 @@ extension AttributeValueCell {
 }
 
 #if DEBUG
-struct AttributeValueCell_Preview: PreviewProvider {
-    static var previews: some View {
-        Group {
-            AttributeValueCell(
-                uuid: .deviceName,
-                attributeValue: AttributeValue(
-                    date: Date(),
-                    type: .read,
-                    data: Data("iPhone".utf8)
-                )
+#Preview("Read") {
+    AttributeValueCell(
+        uuid: BluetoothUUID.Characteristic.deviceName,
+        attributeValue: AttributeValue(
+            date: Date(),
+            type: .read,
+            data: Data("iPhone".utf8)
+        )
+    )
+}
+
+#Preview("Write") {
+    
+    AttributeValueCell(
+        uuid: BluetoothUUID(),
+        attributeValue: AttributeValue(
+            date: Date(),
+            type: .write,
+            data: Data("12345".utf8)
+        )
+    )
+}
+
+#Preview("Notification") {
+    AttributeValueCell(
+        uuid: BluetoothUUID.Characteristic.batteryLevel,
+        attributeValue:
+            AttributeValue(
+                date: Date(),
+                type: .notification,
+                data: Data([99])
             )
-            .previewLayout(.sizeThatFits)
-            .previewDisplayName("Read")
-            
-            AttributeValueCell(
-                uuid: BluetoothUUID(),
-                attributeValue: AttributeValue(
-                    date: Date(),
-                    type: .write,
-                    data: Data("12345".utf8)
-                )
-            )
-            .previewLayout(.sizeThatFits)
-            .previewDisplayName("Write")
-            
-            AttributeValueCell(
-                uuid: .batteryLevel,
-                attributeValue:
-                    AttributeValue(
-                        date: Date(),
-                        type: .notification,
-                        data: Data([99])
-                    )
-            )
-            .previewLayout(.sizeThatFits)
-            .previewDisplayName("Notification")
-        }
-    }
+    )
 }
 #endif

@@ -16,7 +16,7 @@ struct AttributeCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
             Text(uuid.rawValue)
-            if let name = uuid.name {
+            if let name = uuid.metadata?.name {
                 Text(name)
                     .font(.subheadline)
                     .foregroundColor(.gray)
@@ -29,19 +29,19 @@ struct AttributeCell: View {
 struct AttributeCell_Preview: PreviewProvider {
     static var previews: some View {
         Group {
-            AttributeCell(uuid: .deviceInformation)
+            AttributeCell(uuid: BluetoothUUID.Service.deviceInformation)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .deviceInformation)
+            AttributeCell(uuid: BluetoothUUID.Service.deviceInformation)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .deviceName)
+            AttributeCell(uuid: BluetoothUUID.Characteristic.deviceName)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .modelNumberString)
+            AttributeCell(uuid: BluetoothUUID.Characteristic.modelNumberString)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .serialNumberString)
+            AttributeCell(uuid: BluetoothUUID.Characteristic.serialNumberString)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .batteryLevel)
+            AttributeCell(uuid: BluetoothUUID.Characteristic.batteryLevel)
                 .previewLayout(.sizeThatFits)
-            AttributeCell(uuid: .clientCharacteristicConfiguration)
+            AttributeCell(uuid: BluetoothUUID.Descriptor.clientCharacteristicConfiguration)
                 .previewLayout(.sizeThatFits)
         }
     }

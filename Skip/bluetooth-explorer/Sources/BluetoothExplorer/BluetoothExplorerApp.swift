@@ -1,6 +1,9 @@
 import Foundation
 import OSLog
 import SwiftUI
+import Bluetooth
+import GATT
+import BluetoothExplorerModel
 
 /// A logger for the BluetoothExplorer module.
 let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", category: "BluetoothExplorer")
@@ -9,14 +12,19 @@ let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", catego
 ///
 /// The default implementation merely loads the `ContentView` for the app and logs a message.
 public struct BluetoothExplorerRootView : View {
+    
+    @State var store = Store()
+    
     public init() {
     }
 
     public var body: some View {
-        ContentView()
+        CentralList()
+            .environment(store)
             .task {
                 logger.info("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
             }
+            
     }
 }
 

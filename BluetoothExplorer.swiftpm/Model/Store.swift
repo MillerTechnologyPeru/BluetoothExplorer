@@ -15,7 +15,8 @@ import DarwinGATT
 
 /// Store
 @MainActor
-final class Store: ObservableObject, @unchecked Sendable {
+@Observable
+final class Store: @unchecked Sendable {
     
     typealias Central = NativeCentral
     
@@ -33,108 +34,51 @@ final class Store: ObservableObject, @unchecked Sendable {
     
     // MARK: - Properties
     
-    @Published
     private(set) var activity = [Peripheral: Bool]()
     
-    @Published
     private(set) var state: DarwinBluetoothState = .unknown
     
-    @Published
     private(set) var scanResults = [Peripheral: ScanResult]()
     
     var isScanning: Bool {
         self.scanStream?.isScanning ?? false
     }
     
-    @Published
-    private(set) var connected = Set<Peripheral>()
+    var connected: Set<Peripheral> {
+        get async {
+            await Set(central.peripherals.compactMap { $0.value ? $0.key : nil })
+        }
+    }
     
-    @Published
     private(set) var services = [Peripheral: [Service]]()
     
-    @Published
     private(set) var characteristics = [Service: [Characteristic]]()
     
-    @Published
     private(set) var includedServices = [Service: [Service]]()
-    
-    @Published
+
     private(set) var descriptors = [Characteristic: [Descriptor]]()
-    
-    @Published
+
     private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
-    
-    @Published
+
     private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
-    
-    @Published
+
     private(set) var isNotifying = [Characteristic: Bool]()
     
     internal let central: Central
-    
-    @Published
+
     private var scanStream: AsyncCentralScan<NativeCentral>?
-    
-    private var centralObserver: AnyCancellable?
     
     // MARK: - Initialization
     
-    deinit {
-        centralObserver?.cancel()
-    }
-    
-    init(central: Central) {
+    init(central: Central = Central()) {
         self.central = central
-        observeValues()
         setupLog()
     }
-    
-    static let shared = Store(central: .shared)
-    
+        
     // MARK: - Methods
     
     private func setupLog() {
         central.log = { print("Central: \($0)") }
-    }
-    
-    private func observeValues() {
-        centralObserver = central.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [unowned self] _ in
-                self.objectWillChange.send()
-                Task { [unowned self] in
-                    await self.updateState()
-                    await self.updateConnected()
-                }
-            }
-        
-    }
-    
-    private func updateState() async {
-        assert(Thread.isMainThread)
-        let oldValue = self.state
-        let newValue = await self.central.state
-        guard newValue != oldValue else {
-            return
-        }
-        // update value
-        self.state = newValue
-        // start scanning when powered on
-        guard newValue == .poweredOn else {
-            return
-        }
-        do { try await self.scan() }
-        catch { } // ignore error
-    }
-    
-    private func updateConnected() async {
-        assert(Thread.isMainThread)
-        let oldValue = self.connected
-        let newValue = await Set(central.peripherals.compactMap { $0.value ? $0.key : nil })
-        guard oldValue != newValue else {
-            return
-        }
-        self.connected = newValue
     }
     
     func scan(
@@ -159,7 +103,11 @@ final class Store: ObservableObject, @unchecked Sendable {
     private func found(scanData: ScanData) async {
         var cache = scanResults[scanData.peripheral] ?? ScanDataCache(scanData: scanData)
         cache += scanData
-        #if canImport(CoreBluetooth)
+        #if os(Android)
+        
+        #elseif os(iOS) && targetEnvironment(simulator)
+        
+        #elseif canImport(CoreBluetooth)
         cache.name = try? await central.name(for: scanData.peripheral)
         for serviceUUID in scanData.advertisementData.overflowServiceUUIDs ?? [] {
             cache.overflowServiceUUIDs.insert(serviceUUID)
@@ -180,8 +128,6 @@ final class Store: ObservableObject, @unchecked Sendable {
             scanStream?.stop()
         }
         try await central.connect(to: peripheral)
-        assert(Thread.isMainThread)
-        connected.insert(peripheral)
     }
     
     func disconnect(_ peripheral: Central.Peripheral) async {

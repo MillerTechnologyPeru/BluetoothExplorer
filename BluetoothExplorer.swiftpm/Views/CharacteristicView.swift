@@ -11,7 +11,7 @@ import GATT
 
 struct CharacteristicView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let characteristic: Store.Characteristic
@@ -153,7 +153,8 @@ extension CharacteristicView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        //store.connected.contains(peripheral)
+        true
     }
     
     var descriptors: [Store.Descriptor] {
@@ -251,16 +252,17 @@ struct CharacteristicView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 CharacteristicView(
-                    store: .shared,
                     characteristic: .deviceName
                 )
             }
+            .environment(Store())
+            
             NavigationView {
                 CharacteristicView(
-                    store: .shared,
                     characteristic: .batteryLevel
                 )
             }
+            .environment(Store())
         }
     }
 }

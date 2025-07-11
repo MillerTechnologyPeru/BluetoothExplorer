@@ -11,7 +11,7 @@ import GATT
 
 struct ServiceView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let service: Store.Service
@@ -88,7 +88,8 @@ extension ServiceView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        //store.connected.contains(peripheral)
+        true
     }
     
     var characteristics: [Store.Characteristic] {
@@ -134,10 +135,10 @@ struct ServiceView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 ServiceView(
-                    store: .shared,
                     service: .deviceInformation
                 )
             }
+            .environment(Store())
         }
     }
 }

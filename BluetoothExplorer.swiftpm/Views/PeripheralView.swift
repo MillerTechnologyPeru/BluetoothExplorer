@@ -12,7 +12,7 @@ import GATT
 
 struct PeripheralView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let peripheral: Store.Peripheral
@@ -84,7 +84,8 @@ extension PeripheralView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        //store.connected.contains(peripheral)
+        true
     }
     
     var services: [Store.Service] {
@@ -152,10 +153,10 @@ struct PeripheralView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 PeripheralView(
-                    store: .shared,
                     peripheral: .beacon
                 )
             }
+            .environment(Store())
         }
     }
 }

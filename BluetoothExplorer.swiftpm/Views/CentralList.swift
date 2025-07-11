@@ -12,7 +12,7 @@ import GATT
 
 struct CentralList: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     var scanResults: [Store.ScanResult] {
@@ -88,7 +88,7 @@ struct CentralList_Preview: PreviewProvider {
             NavigationView {
                 CentralList()
             }
-            .environmentObject(Store.shared)
+            .environment(Store())
         }
     }
 }

@@ -17,7 +17,7 @@ let package = Package(
         .iOSApplication(
             name: "BluetoothExplorer",
             targets: ["BluetoothExplorer"],
-            bundleIdentifier: "com.pureswift.bluetooth-explorer",
+            bundleIdentifier: "org.pureswift.bluetoothexplorer",
             teamIdentifier: "4W79SG34MW",
             displayVersion: "1.0",
             bundleVersion: "5",

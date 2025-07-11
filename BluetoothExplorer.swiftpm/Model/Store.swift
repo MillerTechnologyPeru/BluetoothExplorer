@@ -61,7 +61,7 @@ final class Store: @unchecked Sendable {
     private(set) var isNotifying = [Characteristic: Bool]()
     
     internal let central: Central
-
+    
     private var scanStream: AsyncCentralScan<NativeCentral>?
         
     // MARK: - Initialization
@@ -134,6 +134,7 @@ final class Store: @unchecked Sendable {
             for try await scanData in stream {
                 await found(scanData: scanData)
             }
+            self.scanStream = nil
         }
     }
     

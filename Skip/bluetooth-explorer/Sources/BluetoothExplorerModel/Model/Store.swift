@@ -7,10 +7,10 @@
 //
 
 import Foundation
-@preconcurrency import Combine
 import SwiftUI
 import Bluetooth
 import GATT
+import SkipFuse
 
 /// Store
 @MainActor

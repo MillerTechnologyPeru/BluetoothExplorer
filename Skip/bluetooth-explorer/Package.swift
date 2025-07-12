@@ -12,14 +12,17 @@ let package = Package(
     dependencies: [
         .package(url: "https://source.skip.tools/skip.git", from: "1.6.5"),
         .package(url: "https://source.skip.tools/skip-ui.git", from: "1.0.0"),
-        .package(url: "https://github.com/PureSwift/GATT.git", branch: "master")
+        .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0"),
+        .package(url: "https://source.skip.tools/skip-fuse.git", "0.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/PureSwift/GATT.git", branch: "feature/skip")
     ],
     targets: [
         .target(
             name: "BluetoothExplorer",
             dependencies: [
                 .product(name: "SkipUI", package: "skip-ui"),
-                .product(name: "GATT", package: "GATT"),
+                .product(name: "SkipFuse", package: "skip-fuse"),
+                .product(name: "SkipModel", package: "skip-model"),
                 "BluetoothExplorerModel"
             ],
             resources: [.process("Resources")],
@@ -28,8 +31,11 @@ let package = Package(
         .target(
             name: "BluetoothExplorerModel",
             dependencies: [
-                .product(name: "GATT", package: "GATT")
-            ]
+                .product(name: "GATT", package: "GATT"),
+                .product(name: "SkipFuse", package: "skip-fuse"),
+                .product(name: "SkipModel", package: "skip-model")
+            ],
+            plugins: [.plugin(name: "skipstone", package: "skip")]
         ),
         .testTarget(
             name: "BluetoothExplorerTests",

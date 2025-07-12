@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension FixedWidthInteger {
+internal extension FixedWidthInteger {
     
     func toHexadecimal() -> String {
         
@@ -25,7 +25,7 @@ public extension FixedWidthInteger {
     }
 }
 
-public extension Collection where Element: FixedWidthInteger {
+internal extension Collection where Element: FixedWidthInteger {
     
     func toHexadecimal() -> String {
         let length = count * MemoryLayout<Element>.size * 2
@@ -37,7 +37,7 @@ public extension Collection where Element: FixedWidthInteger {
     }
 }
 
-public extension Data {
+internal extension Data {
     
     init?(hexadecimal string: String) {
         let elementStringSize = MemoryLayout<Element>.size * 2 // 2 for UInt8

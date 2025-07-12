@@ -1,8 +1,6 @@
 import Foundation
 import OSLog
 import SwiftUI
-import Bluetooth
-import GATT
 import BluetoothExplorerModel
 
 /// A logger for the BluetoothExplorer module.

@@ -6,45 +6,47 @@
 //
 
 import SwiftUI
-import Bluetooth
-import GATT
 import BluetoothExplorerModel
 
-struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
+public struct CentralCell: View {
         
-    let scanData: ScanDataCache<Peripheral, Advertisement>
+    let item: CentralListViewModel.ScanResult
     
-    var body: some View {
+    public init(_ item: CentralListViewModel.ScanResult) {
+        self.item = item
+    }
+    
+    public var body: some View {
         VStack(alignment: .leading, spacing: 2.0) {
-            nameText
+            Text(verbatim: item.name)
                 .font(.title3)
                 .foregroundColor(.primary)
             #if DEBUG
-            Text(verbatim: "\(scanData.id)")
+            Text(verbatim: item.id)
                 .font(.footnote)
                 .foregroundColor(.secondary)
             #endif
-            if let beacon = self.beacon {
-                Text("\(beacon.uuid)")
+            if let beacon = item.beacon {
+                Text(verbatim: beacon.uuid)
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("Major: 0x\(beacon.major.toHexadecimal())")
+                Text(verbatim: beacon.major)
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("Minor: 0x\(beacon.minor.toHexadecimal())")
+                Text(verbatim: beacon.minor)
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("RSSI: \(beacon.rssi)")
+                Text(verbatim: beacon.rssi)
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
-            if let company = self.company, beacon == nil {
+            if let company = item.company, item.beacon == nil {
                 Text(verbatim: company)
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
-            if let services = services {
-                Text("Services: \(services)")
+            if let services = item.services {
+                Text(verbatim: services)
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
@@ -52,46 +54,3 @@ struct CentralCell <Peripheral: Peer, Advertisement: AdvertisementData> : View {
         .padding()
     }
 }
-
-private struct CentralCellCache {
-    static var listFormatter: ListFormatter { ListFormatter() }
-}
-
-extension CentralCell {
-    
-    var nameText: Text {
-        scanData.name.flatMap { Text(verbatim: $0) } ?? (beacon != nil ? Text("iBeacon") : Text("Unknown"))
-    }
-    
-    var company: String? {
-        scanData.manufacturerData?.companyIdentifier.name
-    }
-    
-    var services: String? {
-        let services = scanData.serviceUUIDs
-            .sorted(by: { $0.description < $1.description })
-            .map { $0.metadata?.name ?? $0.rawValue }
-        guard services.isEmpty == false
-            else { return nil }
-        return CentralCellCache.listFormatter.string(from: services)
-    }
-    
-    var beacon: AppleBeacon? {
-        return scanData.beacon
-    }
-}
-
-#if DEBUG
-struct CentralCell_Preview: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            List {
-                CentralCell(scanData: .init(scanData: MockScanData.beacon))
-                CentralCell(scanData: .init(scanData: MockScanData.beacon))
-                CentralCell(scanData: .init(scanData: MockScanData.beacon))
-                CentralCell(scanData: .init(scanData: MockScanData.smartThermostat))
-            }
-        }
-    }
-}
-#endif

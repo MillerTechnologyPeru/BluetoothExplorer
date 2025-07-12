@@ -14,7 +14,7 @@ let package = Package(
         .package(url: "https://source.skip.tools/skip-ui.git", from: "1.0.0"),
         .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0"),
         .package(url: "https://source.skip.tools/skip-fuse.git", "0.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/PureSwift/GATT.git", branch: "feature/skip")
+        .package(url: "https://github.com/PureSwift/GATT.git", branch: "master")
     ],
     targets: [
         .target(

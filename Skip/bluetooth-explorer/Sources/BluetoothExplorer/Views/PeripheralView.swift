@@ -7,10 +7,9 @@
 //
 
 import SwiftUI
-import Bluetooth
-import GATT
 import BluetoothExplorerModel
 
+/*
 struct PeripheralView: View {
     
     @Environment(Store.self)
@@ -147,18 +146,4 @@ extension PeripheralView {
         catch { print("Unable to load services", error) }
     }
 }
-
-#if DEBUG && targetEnvironment(simulator)
-struct PeripheralView_Preview: PreviewProvider {
-    static var previews: some View {
-        Group {
-            NavigationView {
-                PeripheralView(
-                    peripheral: .beacon
-                )
-            }
-            .environment(Store())
-        }
-    }
-}
-#endif
+*/

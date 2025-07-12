@@ -1,5 +1,9 @@
 import Foundation
+#if os(Android)
+import AndroidLogging
+#else
 import OSLog
+#endif
 import SwiftUI
 import BluetoothExplorerModel
 

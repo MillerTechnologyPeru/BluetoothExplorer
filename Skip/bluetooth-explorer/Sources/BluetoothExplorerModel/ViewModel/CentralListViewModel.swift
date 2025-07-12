@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import Observation
 import Bluetooth
 import GATT
 import SkipFuse
+import SkipUI
+import SkipModel
 
 @MainActor
 @Observable
@@ -63,9 +66,6 @@ public final class CentralListViewModel {
     
     public struct ScanResult: Equatable, Hashable, Sendable, Identifiable {
         
-        @MainActor
-        static let listFormatter = ListFormatter()
-        
         typealias ScanData = ScanDataCache<NativeCentral.Peripheral, NativeCentral.Advertisement>
         
         let scanData: ScanData
@@ -86,16 +86,13 @@ public final class CentralListViewModel {
             scanData.manufacturerData?.companyIdentifier.name
         }
         
-        @MainActor
         public var services: String? {
             let services = scanData.serviceUUIDs
                 .sorted(by: { $0.description < $1.description })
                 .map { $0.metadata?.name ?? $0.rawValue }
             guard services.isEmpty == false
                 else { return nil }
-            return Self.listFormatter
-                .string(from: services)
-                .map { "Services: " + $0 }
+            return "Services: " + services.reduce("", { ($0.isEmpty ? "" : ", ") + $1 })
         }
         
         public var beacon: CentralListViewModel.Beacon? {

@@ -20,8 +20,8 @@ struct AsyncButton<Label: View>: View {
     
     @ViewBuilder var label: () -> Label
     
-    @State private var isDisabled = false
-    @State private var showProgressView = false
+    @State var isDisabled = false
+    @State var showProgressView = false
     
     var body: some View {
         Button(

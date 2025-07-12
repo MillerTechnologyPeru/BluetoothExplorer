@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import Observation
 import Bluetooth
 import GATT
 import SkipFuse
+import SkipUI
+import SkipModel
 
 /// Store
 @MainActor
@@ -53,7 +56,7 @@ public final class Store: @unchecked Sendable {
     private(set) var descriptors = [Characteristic: [Descriptor]]()
 
     private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
-
+    
     private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
 
     private(set) var isNotifying = [Characteristic: Bool]()

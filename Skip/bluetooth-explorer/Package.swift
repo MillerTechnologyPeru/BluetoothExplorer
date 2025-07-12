@@ -23,7 +23,7 @@ let package = Package(
                 .product(name: "SkipUI", package: "skip-ui"),
                 .product(name: "SkipFuse", package: "skip-fuse"),
                 .product(name: "SkipModel", package: "skip-model"),
-                "BluetoothExplorerModel"
+                .target(name: "BluetoothExplorerModel")
             ],
             resources: [.process("Resources")],
             plugins: [.plugin(name: "skipstone", package: "skip")]

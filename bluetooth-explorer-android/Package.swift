@@ -26,6 +26,10 @@ let package = Package(
             url: "https://github.com/PureSwift/GATT.git",
             branch: "master"
         ),
+        .package(
+          url: "https://github.com/PureSwift/OpenCombine.git",
+          branch: "feature/android"
+        )
     ],
     targets: [
         .target(
@@ -52,6 +56,10 @@ let package = Package(
                 .product(
                     name: "JavaKit",
                     package: "swift-java"
+                ),
+                .product(
+                    name: "OpenCombine",
+                    package: "OpenCombine"
                 )
             ],
             swiftSettings: [

@@ -15,8 +15,13 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/PureSwift/Android.git", branch: "master"
-        )
+            url: "https://github.com/PureSwift/Android.git",
+            branch: "master"
+        ),
+        .package(
+            url: "https://github.com/PureSwift/GATT.git",
+            branch: "master"
+        ),
     ],
     targets: [
         .target(
@@ -25,9 +30,23 @@ let package = Package(
                 .product(
                     name: "AndroidKit",
                     package: "Android"
+                ),
+                "BluetoothExplorerModel"
+            ],
+            path: "./app/src/main/swift/app",
+            swiftSettings: [
+              .swiftLanguageMode(.v5)
+            ]
+        ),
+        .target(
+            name: "BluetoothExplorerModel",
+            dependencies: [
+                .product(
+                    name: "GATT",
+                    package: "GATT"
                 )
             ],
-            path: "./app/src/main/swift",
+            path: "./app/src/main/swift/model",
             swiftSettings: [
               .swiftLanguageMode(.v5)
             ]

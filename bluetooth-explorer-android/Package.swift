@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "BluetoothExplorer",
+    name: "bluetooth-explorer-android",
     platforms: [
       .macOS(.v15),
     ],

@@ -6,20 +6,34 @@
 //
 
 import Foundation
-import Observation
 import Bluetooth
 import GATT
+#if canImport(Combine)
+import Combine
+#else
+import OpenCombine
+#endif
 
 @MainActor
-@Observable
-public final class CentralListViewModel {
+public final class CentralListViewModel: ObservableObject {
         
     let store: Store
     
+    @Published
     var scanToggleTask: Task<Void, Never>?
+    
+    private var storeObserver: AnyCancellable?
     
     public init(store: Store) {
         self.store = store
+        observeStore()
+    }
+    
+    private func observeStore() {
+        // observe store
+        self.storeObserver = store.objectWillChange.sink(receiveValue: { [weak self] in
+            self?.objectWillChange.send()
+        })
     }
     
     var state: State {

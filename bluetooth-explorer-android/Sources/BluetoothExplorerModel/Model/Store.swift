@@ -7,14 +7,17 @@
 //
 
 import Foundation
-import Observation
 import Bluetooth
 import GATT
+#if canImport(Combine)
+import Combine
+#else
+import OpenCombine
+#endif
 
 /// Store
 @MainActor
-@Observable
-public final class Store: @unchecked Sendable {
+public final class Store: ObservableObject, @unchecked Sendable {
     
     typealias Central = NativeCentral
     
@@ -32,34 +35,46 @@ public final class Store: @unchecked Sendable {
     
     // MARK: - Properties
     
+    @Published
     private(set) var activity = [Peripheral: Bool]()
     
+    @Published
     private(set) var isEnabled = false
     
+    @Published
     private(set) var scanResults = [Peripheral: ScanResult]()
     
     var isScanning: Bool {
         self.scanStream?.isScanning ?? false
     }
     
+    @Published
     private(set) var connected: Set<Peripheral> = []
     
+    @Published
     private(set) var services = [Peripheral: [Service]]()
     
+    @Published
     private(set) var characteristics = [Service: [Characteristic]]()
     
+    @Published
     private(set) var includedServices = [Service: [Service]]()
 
+    @Published
     private(set) var descriptors = [Characteristic: [Descriptor]]()
 
+    @Published
     private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
     
+    @Published
     private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
 
+    @Published
     private(set) var isNotifying = [Characteristic: Bool]()
     
     internal let central: Central
     
+    @Published
     private var scanStream: AsyncCentralScan<NativeCentral>?
         
     // MARK: - Initialization

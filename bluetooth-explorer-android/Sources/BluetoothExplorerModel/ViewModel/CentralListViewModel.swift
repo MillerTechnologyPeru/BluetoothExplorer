@@ -66,7 +66,7 @@ public final class CentralListViewModel {
 
 public extension CentralListViewModel {
     
-    struct State: Equatable, Hashable, Sendable {
+    struct State: Sendable {
         
         let input: Input
         
@@ -101,9 +101,9 @@ public extension CentralListViewModel {
 
 public extension CentralListViewModel.State {
     
-    struct Input: Equatable, Hashable, Sendable {
+    struct Input Sendable {
         
-        let scanResults: [Peripheral: Store.ScanResult]
+        let scanResults: [Store.Peripheral: Store.ScanResult]
         
         let isEnabled: Bool
         
@@ -111,7 +111,7 @@ public extension CentralListViewModel.State {
         
         let didToggle: Bool
         
-        init(scanResults: [Peripheral : Store.ScanResult], isEnabled: Bool, isScanning: Bool, didToggle: Bool) {
+        init(scanResults: [Store.Peripheral : Store.ScanResult], isEnabled: Bool, isScanning: Bool, didToggle: Bool) {
             self.scanResults = scanResults
             self.isEnabled = isEnabled
             self.isScanning = isScanning
@@ -130,7 +130,7 @@ public extension CentralListViewModel.State {
 
 public extension CentralListViewModel {
     
-    struct ScanResult: Equatable, Hashable, Sendable, Identifiable {
+    struct ScanResult: Identifiable {
         
         typealias ScanData = ScanDataCache<NativeCentral.Peripheral, NativeCentral.Advertisement>
         
@@ -169,7 +169,7 @@ public extension CentralListViewModel {
 
 public extension CentralListViewModel {
     
-    struct Beacon: Equatable, Hashable, Sendable {
+    struct Beacon: Sendable {
         
         let beacon: AppleBeacon
         

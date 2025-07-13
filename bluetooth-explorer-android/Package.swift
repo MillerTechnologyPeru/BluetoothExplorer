@@ -46,7 +46,6 @@ let package = Package(
                     package: "GATT"
                 )
             ],
-            path: "./app/src/main/swift/model",
             swiftSettings: [
               .swiftLanguageMode(.v5)
             ]

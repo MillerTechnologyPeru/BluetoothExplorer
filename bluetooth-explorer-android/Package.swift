@@ -48,6 +48,10 @@ let package = Package(
                 .product(
                     name: "GATT",
                     package: "GATT"
+                ),
+                .product(
+                    name: "JavaKit",
+                    package: "swift-java"
                 )
             ],
             swiftSettings: [

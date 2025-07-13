@@ -20,9 +20,9 @@ public struct AttributeValue: Equatable, Hashable {
     
     public let type: AttributeValueType
     
-    public let data: Data
+    internal let data: Data
     
-    public init(
+    internal init(
         date: Date,
         type: AttributeValueType,
         data: Data

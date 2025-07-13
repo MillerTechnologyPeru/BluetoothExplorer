@@ -7,13 +7,13 @@
 
 import SwiftUI
 
+enum ActionOption: CaseIterable {
+    case disableButton
+    case showProgressView
+}
+
 // https://www.swiftbysundell.com/articles/building-an-async-swiftui-button/
 struct AsyncButton<Label: View>: View {
-    
-    enum ActionOption: CaseIterable {
-        case disableButton
-        case showProgressView
-    }
     
     var action: () async -> Void
     var actionOptions = Set(ActionOption.allCases)

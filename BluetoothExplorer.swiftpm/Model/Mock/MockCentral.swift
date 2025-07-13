@@ -59,8 +59,9 @@ final class MockCentral: CentralManager, @unchecked Sendable {
         filterDuplicates: Bool
     ) -> AsyncCentralScan<MockCentral> {
         return AsyncCentralScan { continuation in
-            await self.state.scanData.forEach {
-                continuation($0)
+            for scanData in await self.state.scanData {
+                try await Task.sleep(for: .seconds(1))
+                continuation(scanData)
             }
         }
     }

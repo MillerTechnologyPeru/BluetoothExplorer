@@ -13,7 +13,7 @@ import GATT
 
 struct PeripheralView: View {
     
-    @Environment(Store.self)
+    @EnvironmentObject
     var store: Store
     
     let peripheral: Store.Peripheral
@@ -157,7 +157,7 @@ struct PeripheralView_Preview: PreviewProvider {
                     peripheral: .beacon
                 )
             }
-            .environment(Store())
+            .environmentObject(Store())
         }
     }
 }

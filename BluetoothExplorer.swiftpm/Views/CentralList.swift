@@ -13,7 +13,7 @@ public struct CentralList: View {
     
     typealias ViewModel = CentralListViewModel
     
-    @Environment(Store.self)
+    @EnvironmentObject
     var store: Store
     
     public init() { }

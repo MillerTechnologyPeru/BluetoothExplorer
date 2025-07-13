@@ -12,7 +12,7 @@ import GATT
 
 struct CharacteristicView: View {
     
-    @Environment(Store.self)
+    @EnvironmentObject
     var store: Store
     
     let characteristic: Store.Characteristic
@@ -256,14 +256,14 @@ struct CharacteristicView_Preview: PreviewProvider {
                     characteristic: .deviceName
                 )
             }
-            .environment(Store())
+            .environmentObject(Store())
             
             NavigationView {
                 CharacteristicView(
                     characteristic: .batteryLevel
                 )
             }
-            .environment(Store())
+            .environmentObject(Store())
         }
     }
 }

@@ -20,7 +20,7 @@ struct BluetoothExplorerApp: App {
                 CentralList()
                 Text("Scan for devices")
             }
-            .environment(Self.store)
+            .environmentObject(Self.store)
         }
     }
 }

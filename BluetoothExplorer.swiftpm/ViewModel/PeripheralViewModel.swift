@@ -6,17 +6,22 @@
 //
 
 import Foundation
-import Observation
 import Bluetooth
 import GATT
+#if canImport(Combine)
+import Combine
+#else
+import OpenCombine
+#endif
 
 @MainActor
-@Observable
-public final class PeripheralViewModel {
+public final class PeripheralViewModel: ObservableObject {
     
     let store: Store
     
     let peripheral: Store.Peripheral
+    
+    private var storeObserver: AnyCancellable?
         
     init(store: Store, peripheral: Peripheral) {
         self.store = store
@@ -30,11 +35,18 @@ public final class PeripheralViewModel {
         self.init(store: store, peripheral: peripheral)
     }
     
-    var title: String {
+    private func observeStore() {
+        // observe store
+        self.storeObserver = store.objectWillChange.sink(receiveValue: { [weak self] in
+            self?.objectWillChange.send()
+        })
+    }
+    
+    public var title: String {
         store.scanResults[peripheral]?.name ?? "Device"
     }
     
-    var isConnected: Bool {
+    public var isConnected: Bool {
         store.connected.contains(peripheral)
     }
     
@@ -42,7 +54,7 @@ public final class PeripheralViewModel {
         store.services[peripheral] ?? []
     }
     
-    var showActivity: Bool {
+    public var showActivity: Bool {
         store.activity[peripheral] ?? false
     }
     

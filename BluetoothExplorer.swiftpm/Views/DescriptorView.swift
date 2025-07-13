@@ -12,7 +12,7 @@ import GATT
 
 struct DescriptorView: View {
     
-    @Environment(Store.self)
+    @EnvironmentObject
     var store: Store
     
     let descriptor: Store.Descriptor
@@ -196,7 +196,7 @@ struct DescriptorView_Preview: PreviewProvider {
                 DescriptorView(
                     descriptor: .clientCharacteristicConfiguration(.beacon)
                 )
-                .environment(Store())
+                .environmentObject(Store())
             }
         }
     }

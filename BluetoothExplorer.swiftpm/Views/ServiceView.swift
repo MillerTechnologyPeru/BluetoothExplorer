@@ -12,7 +12,7 @@ import GATT
 
 struct ServiceView: View {
     
-    @Environment(Store.self)
+    @EnvironmentObject
     var store: Store
     
     let service: Store.Service
@@ -139,7 +139,7 @@ struct ServiceView_Preview: PreviewProvider {
                     service: .deviceInformation
                 )
             }
-            .environment(Store())
+            .environmentObject(Store())
         }
     }
 }

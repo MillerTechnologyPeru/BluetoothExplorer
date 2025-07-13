@@ -12,28 +12,28 @@ import Bluetooth
 import GATT
 
 /// Mock Advertisement Data
-public struct MockAdvertisementData: AdvertisementData {
+internal struct MockAdvertisementData: AdvertisementData {
     
     /// The local name of a peripheral.
-    public let localName: String?
+    internal let localName: String?
     
     /// The Manufacturer data of a peripheral.
-    public let manufacturerData: ManufacturerSpecificData<Data>?
+    internal let manufacturerData: ManufacturerSpecificData<Data>?
     
     /// This value is available if the broadcaster (peripheral) provides its Tx power level in its advertising packet.
     /// Using the RSSI value and the Tx power level, it is possible to calculate path loss.
-    public let txPowerLevel: Double?
+    internal let txPowerLevel: Double?
     
     /// Service-specific advertisement data.
-    public let serviceData: [BluetoothUUID: Data]?
+    internal let serviceData: [BluetoothUUID: Data]?
     
     /// An array of service UUIDs
-    public let serviceUUIDs: [BluetoothUUID]?
+    internal let serviceUUIDs: [BluetoothUUID]?
     
     /// An array of one or more `BluetoothUUID`, representing Service UUIDs.
-    public let solicitedServiceUUIDs: [BluetoothUUID]?
+    internal let solicitedServiceUUIDs: [BluetoothUUID]?
     
-    public init(
+    internal init(
         localName: String? = nil,
         manufacturerData: ManufacturerSpecificData<Data>? = nil,
         txPowerLevel: Double? = nil,
@@ -52,7 +52,7 @@ public struct MockAdvertisementData: AdvertisementData {
 
 extension MockAdvertisementData {
     
-    public static let beacon = MockAdvertisementData(
+    internal static let beacon = MockAdvertisementData(
         localName: nil,
         manufacturerData: ManufacturerSpecificData(data: Data([0x4c, 0x00, 0x02, 0x15, 0xb9, 0x40, 0x7f, 0x30, 0xf5, 0xf8, 0x46, 0x6e, 0xaf, 0xf9, 0x25, 0x55, 0x6b, 0x57, 0xfe, 0x6d, 0x29, 0x4c, 0x90, 0x39, 0x74])),
         txPowerLevel: nil,
@@ -61,7 +61,7 @@ extension MockAdvertisementData {
         solicitedServiceUUIDs: nil
     )
     
-    public static let smartThermostat = MockAdvertisementData(
+    internal static let smartThermostat = MockAdvertisementData(
         localName: "CLI-W200",
         manufacturerData: ManufacturerSpecificData(data: Data([0xd9, 0x01, 0x01, 0x02, 0x00, 0x00, 0x8c, 0x85, 0x90, 0xcb, 0x31, 0x74, 0x00, 0x60])),
         txPowerLevel: nil,

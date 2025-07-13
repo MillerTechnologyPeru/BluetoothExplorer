@@ -9,11 +9,11 @@
 import Bluetooth
 import GATT
 
-public typealias MockService = GATT.Service<GATT.Peripheral, UInt16>
-public typealias MockCharacteristic = GATT.Characteristic<GATT.Peripheral, UInt16>
-public typealias MockDescriptor = GATT.Descriptor<GATT.Peripheral, UInt16>
+internal typealias MockService = GATT.Service<GATT.Peripheral, UInt16>
+internal typealias MockCharacteristic = GATT.Characteristic<GATT.Peripheral, UInt16>
+internal typealias MockDescriptor = GATT.Descriptor<GATT.Peripheral, UInt16>
 
-public extension MockService {
+internal extension MockService {
     
     static var deviceInformation: MockService {
         Service(
@@ -40,7 +40,7 @@ public extension MockService {
     }
 }
 
-public extension MockCharacteristic {
+internal extension MockCharacteristic {
     
     static var deviceName: MockCharacteristic {
         Characteristic(
@@ -95,7 +95,7 @@ public extension MockCharacteristic {
     )
 }
 
-public extension MockDescriptor {
+internal extension MockDescriptor {
     
     static func clientCharacteristicConfiguration(_ peripheral: Peripheral) -> MockDescriptor {
         Descriptor(

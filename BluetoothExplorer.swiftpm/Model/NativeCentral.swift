@@ -13,10 +13,12 @@ import GATT
 import DarwinGATT
 #endif
 
-#if os(Android) || os(iOS) && targetEnvironment(simulator)
-public typealias NativeCentral = MockCentral
+#if os(Android)
+typealias NativeCentral = MockCentral
+#elseif os(iOS) && targetEnvironment(simulator)
+typealias NativeCentral = MockCentral
 #elseif canImport(Darwin)
-public typealias NativeCentral = DarwinCentral
+typealias NativeCentral = DarwinCentral
 #else
 #error("Platform not supported")
 #endif

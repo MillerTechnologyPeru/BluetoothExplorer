@@ -101,7 +101,7 @@ public extension CentralListViewModel {
 
 public extension CentralListViewModel.State {
     
-    struct Input Sendable {
+    struct Input: Sendable {
         
         let scanResults: [Store.Peripheral: Store.ScanResult]
         

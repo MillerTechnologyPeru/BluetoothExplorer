@@ -15,6 +15,10 @@ let package = Package(
     ],
     dependencies: [
         .package(
+            url: "https://github.com/PureSwift/swift-java.git",
+            branch: "feature/android-shim"
+        ),
+        .package(
             url: "https://github.com/PureSwift/Android.git",
             branch: "master"
         ),
@@ -48,6 +52,9 @@ let package = Package(
             ],
             swiftSettings: [
               .swiftLanguageMode(.v5)
+            ],
+            plugins: [
+                .plugin(name: "JExtractSwiftPlugin", package: "swift-java")
             ]
         )
     ]

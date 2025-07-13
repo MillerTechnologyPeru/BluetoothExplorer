@@ -1,6 +1,6 @@
 //
 //  UnitEmitter.swift
-//  SwiftAndroidApp
+//  BluetoothExplorerApp
 //
 //  Created by Alsey Coleman Miller on 7/13/25.
 //

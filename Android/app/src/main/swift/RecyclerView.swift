@@ -1,6 +1,6 @@
 //
 //  RecyclerView.swift
-//  SwiftAndroidApp
+//  BluetoothExplorerApp
 //
 //  Created by Alsey Coleman Miller on 6/13/25.
 //

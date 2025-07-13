@@ -1,6 +1,6 @@
 //
 //  SwiftApp.swift
-//  SwiftAndroidApp
+//  BluetoothExplorerApp
 //
 //  Created by Alsey Coleman Miller on 6/8/25.
 //

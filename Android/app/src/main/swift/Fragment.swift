@@ -1,6 +1,6 @@
 //
 //  Fragment.swift
-//  SwiftAndroidApp
+//  BluetoothExplorerApp
 //
 //  Created by Alsey Coleman Miller on 6/22/25.
 //

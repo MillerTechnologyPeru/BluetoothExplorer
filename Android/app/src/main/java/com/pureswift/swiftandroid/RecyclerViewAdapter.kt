@@ -16,7 +16,7 @@ class RecyclerViewAdapter(val swiftObject: SwiftObject) :
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewAdapter.ViewHolder {
-        Log.d("RecyclerViewAdapter", "SwiftAndroidApp.RecyclerViewAdapter.onCreateViewHolderSwift(_:_:) $viewType")
+        Log.d("RecyclerViewAdapter", "BluetoothExplorerApp.RecyclerViewAdapter.onCreateViewHolderSwift(_:_:) $viewType")
         val view = LinearLayout(parent.context)
         val viewHolder = ViewHolder(view)
         checkNotNull(viewHolder)

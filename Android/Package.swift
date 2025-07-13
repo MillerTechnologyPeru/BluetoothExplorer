@@ -2,25 +2,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftAndroidApp",
+    name: "BluetoothExplorer",
     platforms: [
       .macOS(.v15),
     ],
     products: [
         .library(
-            name: "SwiftAndroidApp",
+            name: "BluetoothExplorerApp",
             type: .dynamic,
-            targets: ["SwiftAndroidApp"]
+            targets: ["BluetoothExplorerApp"]
         ),
     ],
     dependencies: [
         .package(
-            path: "../"
+            url: "https://github.com/PureSwift/Android.git", branch: "master"
         )
     ],
     targets: [
         .target(
-            name: "SwiftAndroidApp",
+            name: "BluetoothExplorerApp",
             dependencies: [
                 .product(
                     name: "AndroidKit",

@@ -24,7 +24,7 @@ class NativeLibrary private constructor() {
 
     private fun loadNativeLibrary() {
         try {
-            System.loadLibrary("SwiftAndroidApp")
+            System.loadLibrary("BluetoothExplorerApp")
         } catch (error: UnsatisfiedLinkError) {
             Log.e("NativeLibrary", "Unable to load native libraries: $error")
             return

@@ -22,7 +22,7 @@ public class HelloSwift {
     public String name = "Java";
 
     static {
-        System.loadLibrary("SwiftAndroidApp");
+        System.loadLibrary("BluetoothExplorerApp");
     }
 
     public HelloSwift() {

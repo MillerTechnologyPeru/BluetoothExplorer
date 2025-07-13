@@ -7,16 +7,14 @@
 //
 
 import Foundation
-@preconcurrency import Combine
-import SwiftUI
+import Observation
 import Bluetooth
 import GATT
-import DarwinGATT
 
 /// Store
 @MainActor
 @Observable
-final class Store: @unchecked Sendable {
+public final class Store: @unchecked Sendable {
     
     typealias Central = NativeCentral
     
@@ -55,7 +53,7 @@ final class Store: @unchecked Sendable {
     private(set) var descriptors = [Characteristic: [Descriptor]]()
 
     private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
-
+    
     private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
 
     private(set) var isNotifying = [Characteristic: Bool]()
@@ -66,7 +64,12 @@ final class Store: @unchecked Sendable {
         
     // MARK: - Initialization
     
-    init(central: Central = Central()) {
+    public convenience init() {
+        let central = Central()
+        self.init(central: central)
+    }
+    
+    init(central: Central) {
         self.central = central
         setupLog()
         observeValues()
@@ -117,6 +120,14 @@ final class Store: @unchecked Sendable {
             return
         }
         self.connected = newValue
+    }
+    
+    public func log(_ message: String) {
+        print(message)
+    }
+    
+    func log(error: any Error) {
+        print("Error", error.localizedDescription)
     }
     
     func scan(

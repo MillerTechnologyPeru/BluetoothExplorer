@@ -7,25 +7,35 @@
 
 import Foundation
 
-enum AttributeValueType: Equatable, Hashable {
+public enum AttributeValueType: Equatable, Hashable {
     
     case read
     case write
     case notification
 }
 
-struct AttributeValue: Equatable, Hashable {
+public struct AttributeValue: Equatable, Hashable {
     
-    let date: Date
+    public let date: Date
     
-    let type: AttributeValueType
+    public let type: AttributeValueType
     
-    let data: Data
+    public let data: Data
+    
+    public init(
+        date: Date,
+        type: AttributeValueType,
+        data: Data
+    ) {
+        self.date = date
+        self.type = type
+        self.data = data
+    }
 }
 
 extension AttributeValue: Identifiable {
     
-    var id: Date {
+    public var id: Date {
         date
     }
 }

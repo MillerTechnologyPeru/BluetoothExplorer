@@ -6,10 +6,8 @@
 //  Copyright © 2019 Alsey Coleman Miller. All rights reserved.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
-#if canImport(BluetoothExplorerModel)
-import BluetoothExplorerModel
-#endif
 
 public struct CentralList: View {
     
@@ -95,3 +93,4 @@ public struct CentralList: View {
         }
     }
 }
+#endif

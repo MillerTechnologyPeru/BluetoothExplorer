@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/20/22.
 //
 
+#if canImport(AppIntents) && canImport(SwiftUI)
 import AppIntents
 import SwiftUI
 import Bluetooth
@@ -115,3 +116,4 @@ private extension ScanIntent {
         }.padding()
     }
 }
+#endif

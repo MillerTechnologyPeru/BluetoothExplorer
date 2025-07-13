@@ -9,23 +9,22 @@
 import Foundation
 import Bluetooth
 import GATT
-import DarwinGATT
 
 @MainActor
-internal final class MockCentral: CentralManager, @unchecked Sendable {
+public final class MockCentral: CentralManager, @unchecked Sendable {
     
     /// Central Peripheral Type
-    typealias Peripheral = GATT.Peripheral
+    public typealias Peripheral = GATT.Peripheral
     
     /// Central Advertisement Type
-    typealias Advertisement = MockAdvertisementData
+    public typealias Advertisement = MockAdvertisementData
     
     /// Central Attribute ID (Handle)
-    typealias AttributeID = UInt16
+    public typealias AttributeID = UInt16
         
-    nonisolated(unsafe) var log: (@Sendable (String) -> ())?
+    public nonisolated(unsafe) var log: (@Sendable (String) -> ())?
     
-    var peripherals: [GATT.Peripheral : Bool] {
+    public var peripherals: [GATT.Peripheral : Bool] {
         get async {
             var peripherals = [Peripheral: Bool]()
             for scanData in state.scanData {
@@ -35,7 +34,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
         }
     }
     
-    var isEnabled: Bool {
+    public var isEnabled: Bool {
         get async {
             state.isEnabled
         }
@@ -45,7 +44,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     
     private var continuation = Continuation()
     
-    init() {
+    public init() {
         Task {
             try await Task.sleep(for: .seconds(1))
             updateState {
@@ -55,7 +54,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Scans for peripherals that are advertising services.
-    func scan(
+    public func scan(
         with services: Set<BluetoothUUID>,
         filterDuplicates: Bool
     ) -> AsyncCentralScan<MockCentral> {
@@ -66,29 +65,29 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
         }
     }
     
-    func scan(
+    public func scan(
         filterDuplicates: Bool
     ) -> AsyncCentralScan<MockCentral> {
         scan(with: [], filterDuplicates: filterDuplicates)
     }
     
     /// Connect to the specified device
-    func connect(to peripheral: Peripheral) async throws {
+    public func connect(to peripheral: Peripheral) async throws {
         state.connected.insert(peripheral)
     }
     
     /// Disconnect the specified device.
-    func disconnect(_ peripheral: Peripheral) async {
+    public func disconnect(_ peripheral: Peripheral) async {
         state.connected.remove(peripheral)
     }
     
     /// Disconnect all connected devices.
-    func disconnectAll() {
+    public func disconnectAll() {
         state.connected.removeAll()
     }
     
     /// Discover Services
-    func discoverServices(
+    public func discoverServices(
         _ services: Set<BluetoothUUID> = [],
         for peripheral: Peripheral
     ) async throws -> [Service<Peripheral, AttributeID>] {
@@ -106,7 +105,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Discover Characteristics for service
-    nonisolated func discoverCharacteristics(
+    public nonisolated func discoverCharacteristics(
         _ characteristics: Set<BluetoothUUID> = [],
         for service: Service<Peripheral, AttributeID>
     ) async throws -> [Characteristic<Peripheral, AttributeID>] {
@@ -121,7 +120,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Read Characteristic Value
-    nonisolated func readValue(
+    public nonisolated func readValue(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> Data {
         guard await state.connected.contains(characteristic.peripheral) else {
@@ -131,7 +130,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Write Characteristic Value
-    nonisolated func writeValue(
+    public nonisolated func writeValue(
         _ data: Data,
         for characteristic: Characteristic<Peripheral, AttributeID>,
         withResponse: Bool = true
@@ -155,7 +154,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Discover descriptors
-    nonisolated func discoverDescriptors(
+    public nonisolated func discoverDescriptors(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> [Descriptor<Peripheral, AttributeID>] {
         guard await state.connected.contains(characteristic.peripheral) else {
@@ -165,7 +164,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Read descriptor
-    nonisolated func readValue(
+    public nonisolated func readValue(
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws -> Data {
         guard await state.connected.contains(descriptor.peripheral) else {
@@ -175,7 +174,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Write descriptor
-    nonisolated func writeValue(
+    public nonisolated func writeValue(
         _ data: Data,
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws {
@@ -187,7 +186,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
         }
     }
     
-    nonisolated func notify(
+    public nonisolated func notify(
         for characteristic: GATT.Characteristic<GATT.Peripheral, AttributeID>
     ) async throws -> AsyncCentralNotifications<MockCentral> {
         guard await state.connected.contains(characteristic.peripheral) else {
@@ -206,7 +205,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Read MTU
-    func maximumTransmissionUnit(for peripheral: Peripheral) async throws -> MaximumTransmissionUnit {
+    public func maximumTransmissionUnit(for peripheral: Peripheral) async throws -> MaximumTransmissionUnit {
         guard state.connected.contains(peripheral) else {
             throw CentralError.disconnected
         }
@@ -214,7 +213,7 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     // Read RSSI
-    func rssi(for peripheral: Peripheral) async throws -> RSSI {
+    public func rssi(for peripheral: Peripheral) async throws -> RSSI {
         return .init(rawValue: 127)!
     }
 }

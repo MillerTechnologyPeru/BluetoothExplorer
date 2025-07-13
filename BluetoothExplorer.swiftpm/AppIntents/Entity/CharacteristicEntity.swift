@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/22/22.
 //
 
+#if canImport(AppIntents)
 import AppIntents
 import Bluetooth
 import GATT
@@ -92,3 +93,4 @@ struct CharacteristicQuery: EntityQuery {
     
     func suggestedEntities() -> [CharacteristicEntity] { [] }
 }
+#endif

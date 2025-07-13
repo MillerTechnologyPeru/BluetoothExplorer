@@ -7,20 +7,20 @@
 //
 
 import Foundation
-import SwiftUI
 import Bluetooth
 import GATT
+#if canImport(DarwinGATT)
 import DarwinGATT
+#endif
 
 #if os(Android) || os(iOS) && targetEnvironment(simulator)
-typealias NativeCentral = MockCentral
+public typealias NativeCentral = MockCentral
 #elseif canImport(Darwin)
-typealias NativeCentral = DarwinCentral
+public typealias NativeCentral = DarwinCentral
 #else
 #error("Platform not supported")
 #endif
 
-#if canImport(Darwin)
 extension NativeCentral {
     
     /// Wait for CoreBluetooth to be ready.
@@ -46,4 +46,3 @@ extension NativeCentral {
         } while currentState != true
     }
 }
-#endif

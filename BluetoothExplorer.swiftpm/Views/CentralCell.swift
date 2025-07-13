@@ -5,10 +5,8 @@
 //  Created by Alsey Coleman Miller on 18/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
-#if canImport(BluetoothExplorerModel)
-import BluetoothExplorerModel
-#endif
 
 public struct CentralCell: View {
         
@@ -56,3 +54,4 @@ public struct CentralCell: View {
         .padding()
     }
 }
+#endif

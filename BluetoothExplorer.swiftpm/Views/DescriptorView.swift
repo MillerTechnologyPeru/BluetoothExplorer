@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Bluetooth
 import GATT
@@ -202,3 +203,4 @@ struct DescriptorView_Preview: PreviewProvider {
 }
 #endif
 
+#endif

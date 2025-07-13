@@ -11,9 +11,9 @@ import Foundation
 import Bluetooth
 import GATT
 
-typealias MockScanData = ScanData<GATT.Peripheral, MockAdvertisementData>
+public typealias MockScanData = ScanData<GATT.Peripheral, MockAdvertisementData>
 
-extension MockScanData {
+public extension MockScanData {
     
     static let beacon = MockScanData(
         peripheral: .beacon,
@@ -32,7 +32,7 @@ extension MockScanData {
     )
 }
 
-extension Peripheral {
+public extension Peripheral {
     
     static var beacon: Peripheral {
         Peripheral(id: BluetoothAddress(rawValue: "00:AA:AB:03:10:01")!)

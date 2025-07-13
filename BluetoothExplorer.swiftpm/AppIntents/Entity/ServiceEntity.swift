@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/22/22.
 //
 
+#if canImport(AppIntents)
 import AppIntents
 import Bluetooth
 import GATT
@@ -87,3 +88,4 @@ struct ServiceQuery: EntityQuery {
     
     func suggestedEntities() -> [ServiceEntity] { [] }
 }
+#endif

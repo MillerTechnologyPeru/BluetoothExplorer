@@ -6,15 +6,14 @@
 //
 
 #if DEBUG
-import SwiftUI
 import Bluetooth
 import GATT
 
-typealias MockService = GATT.Service<GATT.Peripheral, UInt16>
-typealias MockCharacteristic = GATT.Characteristic<GATT.Peripheral, UInt16>
-typealias MockDescriptor = GATT.Descriptor<GATT.Peripheral, UInt16>
+public typealias MockService = GATT.Service<GATT.Peripheral, UInt16>
+public typealias MockCharacteristic = GATT.Characteristic<GATT.Peripheral, UInt16>
+public typealias MockDescriptor = GATT.Descriptor<GATT.Peripheral, UInt16>
 
-extension MockService {
+public extension MockService {
     
     static var deviceInformation: MockService {
         Service(
@@ -41,7 +40,7 @@ extension MockService {
     }
 }
 
-extension MockCharacteristic {
+public extension MockCharacteristic {
     
     static var deviceName: MockCharacteristic {
         Characteristic(
@@ -96,7 +95,7 @@ extension MockCharacteristic {
     )
 }
 
-extension MockDescriptor {
+public extension MockDescriptor {
     
     static func clientCharacteristicConfiguration(_ peripheral: Peripheral) -> MockDescriptor {
         Descriptor(

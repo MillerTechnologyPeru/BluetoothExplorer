@@ -6,6 +6,7 @@
 //  Copyright © 2021 Alsey Coleman Miller. All rights reserved.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Bluetooth
 import GATT
@@ -160,4 +161,5 @@ struct PeripheralView_Preview: PreviewProvider {
         }
     }
 }
+#endif
 #endif

@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/20/22.
 //
 
+#if canImport(AppIntents)
 import AppIntents
 import Bluetooth
 import GATT
@@ -66,3 +67,4 @@ struct ManufacturerDataQuery: EntityQuery {
             .map { .init($0) }
     }
 }
+#endif

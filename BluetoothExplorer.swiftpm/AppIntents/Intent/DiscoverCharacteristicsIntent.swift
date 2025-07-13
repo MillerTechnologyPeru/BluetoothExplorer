@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/22/22.
 //
 
+#if canImport(AppIntents) && canImport(SwiftUI)
 import AppIntents
 import SwiftUI
 import Bluetooth
@@ -52,3 +53,4 @@ struct DiscoverCharacteristicsIntent: AppIntent {
         )
     }
 }
+#endif

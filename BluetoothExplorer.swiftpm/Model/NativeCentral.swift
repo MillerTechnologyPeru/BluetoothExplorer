@@ -19,6 +19,13 @@ typealias NativeCentral = MockCentral
 typealias NativeCentral = MockCentral
 #elseif canImport(Darwin)
 typealias NativeCentral = DarwinCentral
+extension NativeCentral {
+    var isEnabled: Bool {
+        get async {
+            await state == .poweredOn
+        }
+    }
+}
 #else
 #error("Platform not supported")
 #endif

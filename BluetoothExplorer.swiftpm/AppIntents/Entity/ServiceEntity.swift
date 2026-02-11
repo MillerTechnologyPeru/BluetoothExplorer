@@ -37,10 +37,10 @@ extension ServiceEntity {
         static func entityIdentifier(for string: String) -> ID? {
             let components = string.components(separatedBy: "/")
             guard components.count == 2,
-                let peripheral = PeripheralEntity.ID(components[0]),
                 let attributeID = Int(components[1]) else {
                 return nil
             }
+            let peripheral = String(components[0])
             return ServiceEntity.ID.init(peripheral: peripheral, attributeID: attributeID)
         }
     }
@@ -50,7 +50,7 @@ extension ServiceEntity {
 extension ServiceEntity {
     
     init(_ service: Store.Service) {
-        self.id = .init(peripheral: service.peripheral.id, attributeID: service.id.hashValue)
+        self.id = .init(peripheral: service.peripheral.id.description, attributeID: service.id.hashValue)
         self.uuid = service.uuid.rawValue
         self.isPrimary = service.isPrimary
     }
@@ -81,7 +81,7 @@ struct ServiceQuery: EntityQuery {
         let allServices = BluetoothExplorerApp.store.services.values.lazy.reduce([], { $0 + $1 })
         return identifiers.compactMap { id in
             allServices
-                .first(where: { $0.peripheral.id == id.peripheral && $0.id.hashValue == id.attributeID })
+                .first(where: { $0.peripheral.id.description == id.peripheral && $0.id.hashValue == id.attributeID })
                 .map { ServiceEntity($0) }
         }
     }

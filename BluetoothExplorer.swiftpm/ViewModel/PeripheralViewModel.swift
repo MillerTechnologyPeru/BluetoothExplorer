@@ -23,7 +23,7 @@ public final class PeripheralViewModel: ObservableObject {
     
     private var storeObserver: AnyCancellable?
         
-    init(store: Store, peripheral: Peripheral) {
+    init(store: Store, peripheral: Store.Peripheral) {
         self.store = store
         self.peripheral = peripheral
     }

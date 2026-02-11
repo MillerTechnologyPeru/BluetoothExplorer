@@ -33,7 +33,7 @@ struct DiscoverServicesIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult {
         let store = BluetoothExplorerApp.store
-        guard let peripheral = store.scanResults.keys.first(where: { $0.id == device.id }) else {
+        guard let peripheral = store.scanResults.keys.first(where: { $0.id.description == device.id }) else {
             throw CentralError.unknownPeripheral
         }
         try await store.central.wait(warning: 1, timeout: 2)

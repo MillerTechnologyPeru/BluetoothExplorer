@@ -13,7 +13,7 @@ import GATT
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct PeripheralEntity: AppEntity, Identifiable {
     
-    let id: NativeCentral.Peripheral.ID
+    let id: String
     
     /// Timestamp for when device was scanned.
     let date: Date
@@ -35,7 +35,7 @@ struct PeripheralEntity: AppEntity, Identifiable {
 extension PeripheralEntity {
     
     init(_ scanResult: Store.ScanData) {
-        self.id = scanResult.id
+        self.id = scanResult.id.description
         self.date = scanResult.date
         self.rssi = scanResult.rssi
         self.isConnectable = scanResult.isConnectable
@@ -77,7 +77,7 @@ struct PeripheralQuery: EntityQuery {
     func entities(for identifiers: [PeripheralEntity.ID]) -> [PeripheralEntity] {
         let scanResults = BluetoothExplorerApp.store.scanResults.values
         return identifiers.compactMap { id in
-            scanResults.first(where: { $0.id == id })
+            scanResults.first(where: { $0.id.description == id })
                 .map { PeripheralEntity($0.scanData) }
         }
     }

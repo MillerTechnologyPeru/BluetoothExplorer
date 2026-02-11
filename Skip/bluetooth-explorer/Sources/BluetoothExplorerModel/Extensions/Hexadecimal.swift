@@ -25,7 +25,7 @@ internal extension FixedWidthInteger {
     }
 }
 
-internal extension Collection where Element: FixedWidthInteger {
+public extension Collection where Element: FixedWidthInteger {
     
     func toHexadecimal() -> String {
         let length = count * MemoryLayout<Element>.size * 2
@@ -37,7 +37,7 @@ internal extension Collection where Element: FixedWidthInteger {
     }
 }
 
-internal extension Data {
+public extension Data {
     
     init?(hexadecimal string: String) {
         let elementStringSize = MemoryLayout<Element>.size * 2 // 2 for UInt8

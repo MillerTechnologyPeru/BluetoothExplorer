@@ -19,49 +19,49 @@ import SkipModel
 @Observable
 public final class Store: @unchecked Sendable {
     
-    typealias Central = NativeCentral
+    public typealias Central = NativeCentral
     
-    typealias Peripheral = Central.Peripheral
+    public typealias Peripheral = Central.Peripheral
     
-    typealias ScanData = GATT.ScanData<Central.Peripheral, Central.Advertisement>
+    public typealias ScanData = GATT.ScanData<Central.Peripheral, Central.Advertisement>
     
-    typealias Service = GATT.Service<Central.Peripheral, Central.AttributeID>
+    public typealias Service = GATT.Service<Central.Peripheral, Central.AttributeID>
     
-    typealias Characteristic = GATT.Characteristic<Central.Peripheral, Central.AttributeID>
+    public typealias Characteristic = GATT.Characteristic<Central.Peripheral, Central.AttributeID>
     
-    typealias Descriptor = GATT.Descriptor<Central.Peripheral, Central.AttributeID>
+    public typealias Descriptor = GATT.Descriptor<Central.Peripheral, Central.AttributeID>
     
-    typealias ScanResult = ScanDataCache<Central.Peripheral, Central.Advertisement>
+    public typealias ScanResult = ScanDataCache<Central.Peripheral, Central.Advertisement>
     
     // MARK: - Properties
     
-    private(set) var activity = [Peripheral: Bool]()
+    public private(set) var activity = [Peripheral: Bool]()
     
-    private(set) var isEnabled = false
+    public private(set) var isEnabled = false
     
-    private(set) var scanResults = [Peripheral: ScanResult]()
+    public private(set) var scanResults = [Peripheral: ScanResult]()
     
-    var isScanning: Bool {
+    public var isScanning: Bool {
         self.scanStream?.isScanning ?? false
     }
     
-    private(set) var connected: Set<Peripheral> = []
+    public private(set) var connected: Set<Peripheral> = []
     
-    private(set) var services = [Peripheral: [Service]]()
+    public private(set) var services = [Peripheral: [Service]]()
     
-    private(set) var characteristics = [Service: [Characteristic]]()
+    public private(set) var characteristics = [Service: [Characteristic]]()
     
-    private(set) var includedServices = [Service: [Service]]()
+    public private(set) var includedServices = [Service: [Service]]()
 
-    private(set) var descriptors = [Characteristic: [Descriptor]]()
+    public private(set) var descriptors = [Characteristic: [Descriptor]]()
 
-    private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
+    public private(set) var characteristicValues = [Characteristic: Cache<AttributeValue>]()
     
-    private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
+    public private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
 
-    private(set) var isNotifying = [Characteristic: Bool]()
+    public private(set) var isNotifying = [Characteristic: Bool]()
     
-    internal let central: Central
+    public let central: Central
     
     private var scanStream: AsyncCentralScan<NativeCentral>?
         
@@ -133,7 +133,7 @@ public final class Store: @unchecked Sendable {
         print("Error", error.localizedDescription)
     }
     
-    func scan(
+    public func scan(
         with services: Set<BluetoothUUID> = [],
         filterDuplicates: Bool = true
     ) async throws {
@@ -169,12 +169,12 @@ public final class Store: @unchecked Sendable {
         scanResults[scanData.peripheral] = cache
     }
     
-    func stopScan() async {
+    public func stopScan() async {
         scanStream?.stop()
         scanStream = nil
     }
     
-    func connect(to peripheral: Central.Peripheral) async throws {
+    public func connect(to peripheral: Central.Peripheral) async throws {
         activity[peripheral] = true
         defer { activity[peripheral] = false }
         if isScanning {
@@ -183,11 +183,11 @@ public final class Store: @unchecked Sendable {
         try await central.connect(to: peripheral)
     }
     
-    func disconnect(_ peripheral: Central.Peripheral) async {
+    public func disconnect(_ peripheral: Central.Peripheral) async {
         await central.disconnect(peripheral)
     }
     
-    func discoverServices(for peripheral: Central.Peripheral) async throws {
+    public func discoverServices(for peripheral: Central.Peripheral) async throws {
         activity[peripheral] = true
         defer { activity[peripheral] = false }
         let services = try await central.discoverServices(for: peripheral)
@@ -195,7 +195,7 @@ public final class Store: @unchecked Sendable {
         self.services[peripheral] = services
     }
     
-    func discoverCharacteristics(for service: Service) async throws {
+    public func discoverCharacteristics(for service: Service) async throws {
         activity[service.peripheral] = true
         defer { activity[service.peripheral] = false }
         let characteristics = try await central.discoverCharacteristics([], for: service)
@@ -203,7 +203,7 @@ public final class Store: @unchecked Sendable {
         self.characteristics[service] = characteristics
     }
     
-    func discoverIncludedServices(for service: Service) async throws {
+    public func discoverIncludedServices(for service: Service) async throws {
         activity[service.peripheral] = true
         defer { activity[service.peripheral] = false }
         let includedServices = try await central.discoverIncludedServices(for: service)
@@ -211,7 +211,7 @@ public final class Store: @unchecked Sendable {
         self.includedServices[service] = includedServices
     }
     
-    func discoverDescriptors(for characteristic: Characteristic) async throws {
+    public func discoverDescriptors(for characteristic: Characteristic) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
         let includedServices = try await central.discoverDescriptors(for: characteristic)
@@ -219,7 +219,7 @@ public final class Store: @unchecked Sendable {
         self.descriptors[characteristic] = includedServices
     }
     
-    func readValue(for characteristic: Characteristic) async throws {
+    public func readValue(for characteristic: Characteristic) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
         let data = try await central.readValue(for: characteristic)
@@ -232,7 +232,7 @@ public final class Store: @unchecked Sendable {
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
-    func writeValue(_ data: Data, for characteristic: Characteristic, withResponse: Bool = true) async throws {
+    public func writeValue(_ data: Data, for characteristic: Characteristic, withResponse: Bool = true) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
         try await central.writeValue(data, for: characteristic, withResponse: withResponse)
@@ -245,7 +245,7 @@ public final class Store: @unchecked Sendable {
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
-    func notify(_ isEnabled: Bool, for characteristic: Characteristic) async throws {
+    public func notify(_ isEnabled: Bool, for characteristic: Characteristic) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
         if isEnabled {
@@ -272,7 +272,7 @@ public final class Store: @unchecked Sendable {
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
     }
     
-    func readValue(for descriptor: Descriptor) async throws {
+    public func readValue(for descriptor: Descriptor) async throws {
         activity[descriptor.peripheral] = true
         defer { activity[descriptor.peripheral] = false }
         let data = try await central.readValue(for: descriptor)
@@ -285,7 +285,7 @@ public final class Store: @unchecked Sendable {
         self.descriptorValues[descriptor, default: .init(capacity: 10)].append(value)
     }
     
-    func writeValue(_ data: Data, for descriptor: Descriptor) async throws {
+    public func writeValue(_ data: Data, for descriptor: Descriptor) async throws {
         activity[descriptor.peripheral] = true
         defer { activity[descriptor.peripheral] = false }
         try await central.writeValue(data, for: descriptor)
@@ -301,43 +301,43 @@ public final class Store: @unchecked Sendable {
 
 // MARK: - Supporting Types
 
-struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>: Equatable, Hashable {
+public struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>: Equatable, Hashable, Sendable {
     
-    var scanData: GATT.ScanData<Peripheral, Advertisement>
+    public var scanData: GATT.ScanData<Peripheral, Advertisement>
     
     /// GAP or advertised name
-    var name: String?
+    public var name: String?
     
     /// Advertised name
-    var advertisedName: String?
+    public var advertisedName: String?
     
-    var manufacturerData: GATT.ManufacturerSpecificData<Advertisement.Data>?
+    public var manufacturerData: GATT.ManufacturerSpecificData<Advertisement.Data>?
     
     /// This value is available if the broadcaster (peripheral) provides its Tx power level in its advertising packet.
     /// Using the RSSI value and the Tx power level, it is possible to calculate path loss.
-    var txPowerLevel: Double?
+    public var txPowerLevel: Double?
     
     /// Service-specific advertisement data.
-    var serviceData = [BluetoothUUID: Advertisement.Data]()
+    public var serviceData = [BluetoothUUID: Advertisement.Data]()
     
     /// An array of service UUIDs
-    var serviceUUIDs = Set<BluetoothUUID>()
+    public var serviceUUIDs = Set<BluetoothUUID>()
     
     /// An array of one or more ``BluetoothUUID``, representing Service UUIDs.
-    var solicitedServiceUUIDs = Set<BluetoothUUID>()
+    public var solicitedServiceUUIDs = Set<BluetoothUUID>()
     
     /// An array of one or more ``BluetoothUUID``, representing Service UUIDs that were found in the “overflow” area of the advertisement data.
-    var overflowServiceUUIDs = Set<BluetoothUUID>()
+    public var overflowServiceUUIDs = Set<BluetoothUUID>()
     
     /// Advertised iBeacon
-    var beacon: AppleBeacon?
+    public var beacon: AppleBeacon?
     
-    init(scanData: GATT.ScanData<Peripheral, Advertisement>) {
+    public init(scanData: GATT.ScanData<Peripheral, Advertisement>) {
         self.scanData = scanData
         self += scanData
     }
     
-    static func += (cache: inout ScanDataCache, scanData: GATT.ScanData<Peripheral, Advertisement>) {
+    public static func += (cache: inout ScanDataCache, scanData: GATT.ScanData<Peripheral, Advertisement>) {
         cache.scanData = scanData
         cache.advertisedName = scanData.advertisementData.localName
         if cache.name == nil {
@@ -360,7 +360,7 @@ struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>: Equat
 
 extension ScanDataCache: Identifiable {
     
-    var id: Peripheral.ID {
+    public var id: Peripheral.ID {
         scanData.id
     }
 }

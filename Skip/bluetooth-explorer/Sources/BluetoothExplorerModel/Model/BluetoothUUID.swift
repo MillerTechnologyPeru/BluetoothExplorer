@@ -8,7 +8,7 @@
 import Foundation
 import Bluetooth
 
-internal extension BluetoothUUID {
+public extension BluetoothUUID {
     
     func description(for value: Data) -> String? {
         switch self {

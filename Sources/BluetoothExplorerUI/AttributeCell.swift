@@ -16,7 +16,7 @@ struct AttributeCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
             Text(uuid.rawValue)
-            if let name = uuid.metadata?.name {
+            if let name = uuid.appMetadata?.name {
                 Text(name)
                     .font(.subheadline)
                     .foregroundColor(.gray)

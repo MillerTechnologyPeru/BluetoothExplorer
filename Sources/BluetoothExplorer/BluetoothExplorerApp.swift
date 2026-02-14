@@ -1,6 +1,8 @@
 import Foundation
 import SkipFuse
 import SwiftUI
+import BluetoothExplorerModel
+import BluetoothExplorerUI
 
 /// A logger for the BluetoothExplorer module.
 let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", category: "BluetoothExplorer")
@@ -12,11 +14,15 @@ let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", catego
     /* SKIP @bridge */public init() {
     }
 
+    @State
+    var store = Store()
+    
     public var body: some View {
         ContentView()
             .task {
                 logger.info("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
             }
+            .environment(store)
     }
 }
 

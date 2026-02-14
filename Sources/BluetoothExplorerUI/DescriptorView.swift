@@ -119,7 +119,7 @@ extension DescriptorView {
 extension DescriptorView {
     
     var title: String {
-        descriptor.uuid.metadata?.name ?? "Descriptor"
+        descriptor.uuid.appMetadata?.name ?? "Descriptor"
     }
     
     var peripheral: Store.Peripheral {

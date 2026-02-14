@@ -83,13 +83,13 @@ public final class CentralListViewModel {
         }
         
         public var company: String? {
-            scanData.manufacturerData?.companyIdentifier.name
+            scanData.manufacturerData?.companyIdentifier.appName
         }
         
         public var services: String? {
             let services = scanData.serviceUUIDs
                 .sorted(by: { $0.description < $1.description })
-                .map { $0.metadata?.name ?? $0.rawValue }
+                .map { $0.appMetadata?.name ?? $0.rawValue }
             guard services.isEmpty == false
                 else { return nil }
             return "Services: " + services.reduce("", { ($0.isEmpty ? "" : ", ") + $1 })

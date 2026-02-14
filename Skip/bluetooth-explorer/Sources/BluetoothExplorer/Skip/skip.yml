@@ -1,7 +1,0 @@
-# Configuration file for https://skip.tools project
-# this is a transpiled SkipLite module
-skip:
-  mode: 'native'
-
-build:
-  contents:

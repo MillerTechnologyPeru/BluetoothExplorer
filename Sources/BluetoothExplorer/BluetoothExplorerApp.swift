@@ -4,6 +4,7 @@ import SwiftUI
 import BluetoothExplorerModel
 import BluetoothExplorerUI
 
+
 /// A logger for the BluetoothExplorer module.
 let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", category: "BluetoothExplorer")
 
@@ -15,7 +16,7 @@ let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", catego
     }
 
     @State
-    var store = Store()
+    var store = Store(central: 
     
     public var body: some View {
         ContentView()

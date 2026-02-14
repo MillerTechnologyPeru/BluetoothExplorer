@@ -8,11 +8,18 @@
 
 import Foundation
 import Observation
+import SkipFuse
+import SkipModel
 import Bluetooth
 import GATT
-import SkipFuse
-import SkipUI
-import SkipModel
+#if canImport(DarwinGATT)
+import DarwinGATT
+#elseif os(Android)
+import JavaKit
+import AndroidOS
+import AndroidContent
+@preconcurrency import AndroidBluetooth
+#endif
 
 /// Store
 @MainActor
@@ -68,7 +75,16 @@ public final class Store: @unchecked Sendable {
     // MARK: - Initialization
     
     public convenience init() {
+        #if canImport(Darwin)
         let central = Central()
+        #elseif os(Android)
+        let context = AndroidContent.Context().getApplicationContext()!
+        let hostController = try! JavaClass<BluetoothAdapter>().getDefaultAdapter()!
+        let central = AndroidCentral(
+            hostController: hostController,
+            context: context
+        )
+        #endif
         self.init(central: central)
     }
     
@@ -134,13 +150,11 @@ public final class Store: @unchecked Sendable {
     }
     
     public func scan(
-        with services: Set<BluetoothUUID> = [],
         filterDuplicates: Bool = true
     ) async throws {
         scanResults.removeAll(keepingCapacity: true)
         self.scanStream = nil // end previous scan
-        let stream = central.scan(
-            with: services,
+        let stream: AsyncCentralScan<NativeCentral> = try await central.scan(
             filterDuplicates: filterDuplicates
         )
         self.scanStream = stream
@@ -190,7 +204,7 @@ public final class Store: @unchecked Sendable {
     public func discoverServices(for peripheral: Central.Peripheral) async throws {
         activity[peripheral] = true
         defer { activity[peripheral] = false }
-        let services = try await central.discoverServices(for: peripheral)
+        let services = try await central.discoverServices([], for: peripheral)
         assert(Thread.isMainThread)
         self.services[peripheral] = services
     }
@@ -203,13 +217,15 @@ public final class Store: @unchecked Sendable {
         self.characteristics[service] = characteristics
     }
     
+    #if canImport(Darwin)
     public func discoverIncludedServices(for service: Service) async throws {
         activity[service.peripheral] = true
         defer { activity[service.peripheral] = false }
-        let includedServices = try await central.discoverIncludedServices(for: service)
+        let includedServices = try await central.discoverIncludedServices([], for: service)
         assert(Thread.isMainThread)
         self.includedServices[service] = includedServices
     }
+    #endif
     
     public func discoverDescriptors(for characteristic: Characteristic) async throws {
         activity[characteristic.peripheral] = true

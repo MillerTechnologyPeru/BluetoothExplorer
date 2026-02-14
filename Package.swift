@@ -16,6 +16,15 @@ let package = Package(
         .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse.git", branch: "feature/pureswift"),
         .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
         .package(url: "https://github.com/PureSwift/AndroidBluetooth.git", branch: "master"),
+        
+            .package(
+                url: "https://github.com/apple/swift-log",
+                from: "1.6.3"
+            ),
+            .package(
+                url: "https://github.com/apple/swift-system",
+                from: "1.5.0"
+            )
     ],
     targets: [
         .target(
@@ -55,6 +64,10 @@ let package = Package(
                 .product(
                     name: "SkipModel",
                     package: "skip-model"
+                ),
+                .product(
+                    name: "SystemPackage",
+                    package: "swift-system"
                 ),
                 .product(
                     name: "AndroidBluetooth",

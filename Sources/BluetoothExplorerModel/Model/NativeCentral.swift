@@ -11,12 +11,16 @@ import Bluetooth
 import GATT
 #if canImport(DarwinGATT)
 import DarwinGATT
+#elseif os(Android)
+import AndroidBluetooth
 #endif
 
-#if os(Android) || os(iOS) && targetEnvironment(simulator)
+#if os(iOS) && targetEnvironment(simulator)
 public typealias NativeCentral = MockCentral
 #elseif canImport(Darwin)
 public typealias NativeCentral = DarwinCentral
+#elseif os(Android)
+public typealias NativeCentral = AndroidCentral
 #else
 #error("Platform not supported")
 #endif

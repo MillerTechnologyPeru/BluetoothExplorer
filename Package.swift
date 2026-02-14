@@ -11,10 +11,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://source.skip.tools/skip.git", from: "1.7.1"),
-        .package(url: "https://source.skip.tools/skip-fuse-ui.git", from: "1.0.0"),
-        .package(url: "https://source.skip.tools/skip-fuse.git", from: "1.0.0"),
         .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0"),
-        .package(url: "https://github.com/PureSwift/GATT.git", branch: "master")
+        .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse-ui.git", branch: "feature/pureswift"),
+        .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse.git", branch: "feature/pureswift"),
+        .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
+        .package(url: "https://github.com/PureSwift/AndroidBluetooth.git", branch: "master"),
     ],
     targets: [
         .target(
@@ -43,9 +44,23 @@ let package = Package(
         .target(
             name: "BluetoothExplorerModel",
             dependencies: [
-                .product(name: "GATT", package: "GATT"),
-                .product(name: "SkipFuse", package: "skip-fuse"),
-                .product(name: "SkipModel", package: "skip-model")
+                .product(
+                    name: "GATT",
+                    package: "GATT"
+                ),
+                .product(
+                    name: "SkipFuse",
+                    package: "skip-fuse"
+                ),
+                .product(
+                    name: "SkipModel",
+                    package: "skip-model"
+                ),
+                .product(
+                    name: "AndroidBluetooth",
+                    package: "AndroidBluetooth",
+                    condition: .when(platforms: [.android])
+                )
             ],
             resources: [.process("Resources")]
         )

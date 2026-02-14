@@ -16,7 +16,7 @@ let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", catego
     }
 
     @State
-    var store = Store(central: 
+    var store = Store()
     
     public var body: some View {
         ContentView()

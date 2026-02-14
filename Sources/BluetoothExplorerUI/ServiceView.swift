@@ -123,7 +123,9 @@ extension ServiceView {
             if isConnected == false {
                 try await store.connect(to: peripheral)
             }
+            #if canImport(Darwin)
             try await store.discoverIncludedServices(for: service)
+            #endif
             try await store.discoverCharacteristics(for: service)
         }
         catch { print("Unable to load characteristics", error) }

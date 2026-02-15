@@ -78,8 +78,8 @@ public final class Store: @unchecked Sendable {
         #if canImport(Darwin)
         let central = Central()
         #elseif os(Android)
-        let context = AndroidContent.Context().getApplicationContext()!
         let hostController = try! JavaClass<BluetoothAdapter>().getDefaultAdapter()!
+        let context = AndroidContent.Context.androidContext()
         let central = AndroidCentral(
             hostController: hostController,
             context: context

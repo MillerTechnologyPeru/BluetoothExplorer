@@ -50,6 +50,9 @@ SWIFT_EMIT_LOC_STRINGS = YES
 
 SWIFT_VERSION = 6
 
+// Android SDK version
+ANDROID_SDK_VERSION = 28
+
 // Development team ID for on-device testing
 CODE_SIGNING_REQUIRED = NO
 CODE_SIGN_STYLE = Automatic

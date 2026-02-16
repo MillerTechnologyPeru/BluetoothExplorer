@@ -15,7 +15,7 @@ import GATT
 #if canImport(DarwinGATT)
 import DarwinGATT
 #elseif os(Android)
-import JavaKit
+import SwiftJava
 import AndroidOS
 import AndroidContent
 @preconcurrency import AndroidBluetooth
@@ -24,7 +24,7 @@ import AndroidContent
 /// Store
 @MainActor
 @Observable
-public final class Store: @unchecked Sendable {
+public final class Store {
     
     public typealias Central = NativeCentral
     
@@ -79,7 +79,7 @@ public final class Store: @unchecked Sendable {
         let central = Central()
         #elseif os(Android)
         let hostController = try! JavaClass<BluetoothAdapter>().getDefaultAdapter()!
-        let context = AndroidContent.Context.androidContext()
+        let context = try! AndroidContent.Context.androidContext()!
         let central = AndroidCentral(
             hostController: hostController,
             context: context

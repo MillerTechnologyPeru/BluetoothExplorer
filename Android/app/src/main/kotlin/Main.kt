@@ -40,6 +40,15 @@ open class AndroidAppMain: Application {
     override fun onCreate() {
         super.onCreate()
         logger.info("starting app")
+        try {
+            // Ensure SwiftJNI JNI_OnLoad runs before Skip bridge bootstrap converts Java strings.
+            java.lang.System.loadLibrary("SwiftJava")
+            java.lang.System.loadLibrary("SkipBridge")
+            java.lang.System.loadLibrary("SwiftJNI")
+            java.lang.System.loadLibrary("BluetoothExplorer")
+        } catch (error: Throwable) {
+            logger.warning("SwiftJNI load skipped or failed: ${error.message ?: error::class.java.name}")
+        }
         ProcessInfo.launch(applicationContext)
         AppDelegate.shared.onInit()
     }

@@ -77,17 +77,16 @@ open class MainActivity: AppCompatActivity {
         }
 
         AppDelegate.shared.onLaunch()
-
-        // Example of requesting permissions on startup.
-        // These must match the permissions in the AndroidManifest.xml file.
-        //let permissions = listOf(
-        //    Manifest.permission.ACCESS_COARSE_LOCATION,
-        //    Manifest.permission.ACCESS_FINE_LOCATION
-        //    Manifest.permission.CAMERA,
-        //    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        //)
-        //let requestTag = 1
-        //ActivityCompat.requestPermissions(self, permissions.toTypedArray(), requestTag)
+        
+        // Request permissions on startup.
+        val permissions = listOf(
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_ADVERTISE,
+            Manifest.permission.INTERNET
+        )
+        val requestTag = 1
+        ActivityCompat.requestPermissions(this, permissions.toTypedArray(), requestTag)
     }
 
     override fun onStart() {

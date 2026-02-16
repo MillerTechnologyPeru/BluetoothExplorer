@@ -16,14 +16,24 @@ let logger: Logger = Logger(subsystem: "org.pureswift.bluetoothexplorer", catego
     }
 
     @State
-    var store = Store()
+    var store: Store?
     
     public var body: some View {
-        ContentView()
-            .task {
-                logger.info("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
+        Group {
+            if let store {
+                ContentView()
+                    .environment(store)
+            } else {
+                ProgressView().task {
+                    if store == nil {
+                        store = Store()
+                    }
+                }
             }
-            .environment(store)
+        }
+        .task {
+            logger.info("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
+        }
     }
 }
 

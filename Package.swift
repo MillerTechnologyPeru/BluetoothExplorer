@@ -62,7 +62,8 @@ let package = Package(
                     condition: .when(platforms: [.android])
                 )
             ],
-            resources: [.process("Resources")]
+            resources: [.process("Resources")],
+            plugins: [.plugin(name: "skipstone", package: "skip")]
         )
     ]
 )

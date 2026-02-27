@@ -22,7 +22,8 @@ public typealias NativeCentral = DarwinCentral
 #elseif os(Android)
 public typealias NativeCentral = AndroidCentral
 #else
-#error("Platform not supported")
+#warning("Platform not supported")
+public typealias NativeCentral = MockCentral
 #endif
 
 extension NativeCentral {
@@ -50,3 +51,14 @@ extension NativeCentral {
         } while currentState != true
     }
 }
+
+#if canImport(Darwin)
+extension DarwinCentral {
+    
+    var isEnabled: Bool {
+        get async {
+            await self.state == .poweredOn
+        }
+    }
+}
+#endif

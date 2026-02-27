@@ -20,7 +20,7 @@ public final class PeripheralViewModel {
     
     let peripheral: Store.Peripheral
         
-    init(store: Store, peripheral: Peripheral) {
+    init(store: Store, peripheral: Store.Peripheral) {
         self.store = store
         self.peripheral = peripheral
     }

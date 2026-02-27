@@ -25,11 +25,11 @@ open class ScanCallback(
     }
 
     fun finalize() {
-        swiftRelease(swiftPeer)
+        swiftScanRelease(swiftPeer)
         swiftPeer = 0L
     }
 
-    private external fun swiftRelease(swiftPeer: Long)
+    private external fun swiftScanRelease(swiftPeer: Long)
 
     companion object {
         private const val TAG = "PureSwift.ScanCallback"

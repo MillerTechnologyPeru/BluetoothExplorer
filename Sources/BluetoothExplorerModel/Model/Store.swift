@@ -104,7 +104,7 @@ public final class Store {
         Task { [weak self] in
             do {
                 while let self {
-                    try await Task.sleep(for: .seconds(1))
+                    try await Task.sleep(for: .milliseconds(100))
                     await self.updateState()
                 }
             }

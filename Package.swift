@@ -49,17 +49,22 @@ let package = Package(
                     package: "GATT"
                 ),
                 .product(
+                    name: "DarwinGATT",
+                    package: "GATT",
+                    condition: .when(platforms: [.macOS, .iOS, .macCatalyst, .watchOS, .tvOS, .visionOS])
+                ),
+                .product(
+                    name: "AndroidBluetooth",
+                    package: "AndroidBluetooth",
+                    condition: .when(platforms: [.android])
+                ),
+                .product(
                     name: "SkipFuse",
                     package: "skip-fuse"
                 ),
                 .product(
                     name: "SkipModel",
                     package: "skip-model"
-                ),
-                .product(
-                    name: "AndroidBluetooth",
-                    package: "AndroidBluetooth",
-                    condition: .when(platforms: [.android])
                 )
             ],
             resources: [.process("Resources")],

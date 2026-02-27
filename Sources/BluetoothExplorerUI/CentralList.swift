@@ -58,7 +58,7 @@ public struct CentralList: View {
                 LazyVStack(alignment: .leading) {
                     ForEach(scanResults) { item in
                         NavigationLink(destination: {
-                            EmptyView()
+                            PeripheralView(peripheral: item.peripheral)
                         }, label: {
                             CentralCell(item)
                         })

@@ -78,6 +78,10 @@ public final class CentralListViewModel {
             scanData.id.description
         }
         
+        public var peripheral: Store.Peripheral {
+            scanData.scanData.peripheral
+        }
+        
         public var name: String {
             scanData.name ?? (beacon != nil ? "iBeacon" : "Unknown")
         }

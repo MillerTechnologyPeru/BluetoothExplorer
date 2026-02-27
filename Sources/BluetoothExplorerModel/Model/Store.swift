@@ -106,6 +106,7 @@ public final class Store {
                 while let self {
                     try await Task.sleep(for: .milliseconds(100))
                     await self.updateState()
+                    await self.updateConnected()
                 }
             }
             catch {

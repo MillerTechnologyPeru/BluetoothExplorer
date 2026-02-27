@@ -9,7 +9,6 @@
 import SwiftUI
 import BluetoothExplorerModel
 
-/*
 struct PeripheralView: View {
     
     @Environment(Store.self)
@@ -61,9 +60,9 @@ struct PeripheralView: View {
             }
         }
         .navigationTitle(title)
-        #if os(iOS)
-        .navigationBarItems(trailing: leftBarButtonItem)
-        #endif
+        .toolbar {
+            leftBarButtonItem
+        }
         .task {
             if services.isEmpty {
                 await reload()
@@ -84,8 +83,7 @@ extension PeripheralView {
     }
     
     var isConnected: Bool {
-        //store.connected.contains(peripheral)
-        true
+        store.connected.contains(peripheral)
     }
     
     var services: [Store.Service] {
@@ -146,4 +144,3 @@ extension PeripheralView {
         catch { print("Unable to load services", error) }
     }
 }
-*/

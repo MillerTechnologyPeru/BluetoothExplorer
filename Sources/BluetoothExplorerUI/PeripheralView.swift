@@ -24,7 +24,7 @@ struct PeripheralView: View {
             if let scanData = store.scanResults[peripheral]?.scanData {
                 if let manufacturerData = scanData.advertisementData.manufacturerData {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(verbatim: manufacturerData.companyIdentifier.name ?? manufacturerData.companyIdentifier.description)
+                        Text(verbatim: manufacturerData.companyIdentifier.rawValue.description)
                         if manufacturerData.additionalData.isEmpty == false {
                             Text(verbatim: "0x" + manufacturerData.additionalData.toHexadecimal())
                         }
@@ -36,7 +36,7 @@ struct PeripheralView: View {
                 if let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
                     serviceUUIDs.isEmpty == false {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(verbatim: ListFormatter().string(from: serviceUUIDs.map({ $0.rawValue })) ?? "")
+                        Text(verbatim: serviceUUIDs.reduce("", { $0 + ($0.isEmpty ? "" : ", ") + $1.rawValue }))
                         Text("Service UUIDs")
                             .font(.subheadline)
                             .foregroundColor(.gray)

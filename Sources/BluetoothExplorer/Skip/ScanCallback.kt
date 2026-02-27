@@ -12,7 +12,24 @@ import android.util.Log
  * It extends Android's ScanCallback and provides the bridge between
  * Android's Bluetooth LE scanning and the Swift AndroidBluetooth package.
  */
-open class ScanCallback : AndroidScanCallback() {
+open class ScanCallback(
+    private var swiftPeer: Long = 0L
+) : AndroidScanCallback() {
+
+    fun setSwiftPeer(swiftPeer: Long) {
+        this.swiftPeer = swiftPeer
+    }
+    
+    fun getSwiftPeer(): Long {
+        return swiftPeer
+    }
+
+    fun finalize() {
+        swiftRelease(swiftPeer)
+        swiftPeer = 0L
+    }
+
+    private external fun swiftRelease(swiftPeer: Long)
 
     companion object {
         private const val TAG = "PureSwift.ScanCallback"
@@ -26,10 +43,14 @@ open class ScanCallback : AndroidScanCallback() {
      */
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
-        // The Swift AndroidBluetooth.LowEnergyScanCallback overrides this method
-        // via @JavaImplementation, so this is just the base implementation
-        Log.d(TAG, "onScanResult: callbackType=$callbackType, result=$result")
+        swiftOnScanResult(swiftPeer, callbackType, result)
     }
+
+    external fun swiftOnScanResult(
+        swiftPeer: Long,
+        callbackType: Int,
+        result: ScanResult?
+    )
 
     /**
      * Callback when batch results are delivered.
@@ -38,10 +59,16 @@ open class ScanCallback : AndroidScanCallback() {
      */
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
-        // The Swift AndroidBluetooth.LowEnergyScanCallback overrides this method
-        // via @JavaImplementation, so this is just the base implementation
-        Log.d(TAG, "onBatchScanResults: ${results?.size ?: 0} results")
+        if (swiftPeer != 0L) {
+            swiftOnBatchScanResults(swiftPeer, results)
+        } else {
+            Log.d(TAG, "onBatchScanResults: ${results?.size ?: 0} results")
+        }
     }
+    private external fun swiftOnBatchScanResults(
+        swiftPeer: Long,
+        results: MutableList<ScanResult>?
+    )
 
     /**
      * Callback when scan could not be started.
@@ -50,8 +77,11 @@ open class ScanCallback : AndroidScanCallback() {
      */
     override fun onScanFailed(errorCode: Int) {
         super.onScanFailed(errorCode)
-        // The Swift AndroidBluetooth.LowEnergyScanCallback overrides this method
-        // via @JavaImplementation, so this is just the base implementation
-        Log.e(TAG, "onScanFailed: errorCode=$errorCode")
+        if (swiftPeer != 0L) {
+            swiftOnScanFailed(swiftPeer, errorCode)
+        } else {
+            Log.e(TAG, "onScanFailed: errorCode=$errorCode")
+        }
     }
+    private external fun swiftOnScanFailed(swiftPeer: Long, errorCode: Int)
 }

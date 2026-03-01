@@ -5,7 +5,6 @@
 //  Created by Alsey Coleman Miller on 19/12/21.
 //
 
-#if canImport(SwiftUI)
 import SwiftUI
 import Bluetooth
 import GATT
@@ -47,5 +46,4 @@ struct AttributeCell_Preview: PreviewProvider {
         }
     }
 }
-#endif
 #endif

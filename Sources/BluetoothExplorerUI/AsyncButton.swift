@@ -5,7 +5,6 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
-#if canImport(SwiftUI)
 import SwiftUI
 
 enum ActionOption: CaseIterable {
@@ -61,4 +60,3 @@ struct AsyncButton<Label: View>: View {
         .disabled(isDisabled)
     }
 }
-#endif

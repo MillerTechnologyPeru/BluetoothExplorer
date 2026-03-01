@@ -5,13 +5,14 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Bluetooth
 import GATT
 
 struct DescriptorView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let descriptor: Store.Descriptor
@@ -128,7 +129,9 @@ extension DescriptorView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        // FIXME
+        //store.connected.contains(peripheral)
+        false
     }
     
     var showActivity: Bool {
@@ -191,12 +194,13 @@ struct DescriptorView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 DescriptorView(
-                    store: .shared,
                     descriptor: .clientCharacteristicConfiguration(.beacon)
                 )
+                .environment(Store())
             }
         }
     }
 }
 #endif
 
+#endif

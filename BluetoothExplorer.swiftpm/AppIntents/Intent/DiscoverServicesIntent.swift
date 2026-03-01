@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/22/22.
 //
 
+#if canImport(AppIntents) && canImport(SwiftUI)
 import AppIntents
 import SwiftUI
 import Bluetooth
@@ -31,12 +32,12 @@ struct DiscoverServicesIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let store = Store.shared
+        let store = BluetoothExplorerApp.store
         guard let peripheral = store.scanResults.keys.first(where: { $0.id == device.id }) else {
             throw CentralError.unknownPeripheral
         }
-        try await store.central.wait(for: .poweredOn, warning: 1, timeout: 2)
-        if store.connected.contains(peripheral) == false {
+        try await store.central.wait(warning: 1, timeout: 2)
+        if await store.connected.contains(peripheral) == false {
             try await store.connect(to: peripheral)
         }
         try await store.discoverServices(for: peripheral)
@@ -49,3 +50,4 @@ struct DiscoverServicesIntent: AppIntent {
         )
     }
 }
+#endif

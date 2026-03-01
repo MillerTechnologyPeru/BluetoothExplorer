@@ -5,15 +5,16 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+
+enum ActionOption: CaseIterable {
+    case disableButton
+    case showProgressView
+}
 
 // https://www.swiftbysundell.com/articles/building-an-async-swiftui-button/
 struct AsyncButton<Label: View>: View {
-    
-    enum ActionOption: CaseIterable {
-        case disableButton
-        case showProgressView
-    }
     
     var action: () async -> Void
     var actionOptions = Set(ActionOption.allCases)
@@ -60,3 +61,4 @@ struct AsyncButton<Label: View>: View {
         .disabled(isDisabled)
     }
 }
+#endif

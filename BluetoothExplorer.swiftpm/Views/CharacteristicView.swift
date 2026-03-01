@@ -5,13 +5,14 @@
 //  Created by Alsey Coleman Miller on 22/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Bluetooth
 import GATT
 
 struct CharacteristicView: View {
     
-    @EnvironmentObject
+    @Environment(Store.self)
     var store: Store
     
     let characteristic: Store.Characteristic
@@ -153,7 +154,8 @@ extension CharacteristicView {
     }
     
     var isConnected: Bool {
-        store.connected.contains(peripheral)
+        //store.connected.contains(peripheral)
+        true
     }
     
     var descriptors: [Store.Descriptor] {
@@ -251,17 +253,19 @@ struct CharacteristicView_Preview: PreviewProvider {
         Group {
             NavigationView {
                 CharacteristicView(
-                    store: .shared,
                     characteristic: .deviceName
                 )
             }
+            .environment(Store())
+            
             NavigationView {
                 CharacteristicView(
-                    store: .shared,
                     characteristic: .batteryLevel
                 )
             }
+            .environment(Store())
         }
     }
 }
+#endif
 #endif

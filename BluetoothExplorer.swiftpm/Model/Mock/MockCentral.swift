@@ -9,77 +9,96 @@
 import Foundation
 import Bluetooth
 import GATT
-import DarwinGATT
 
-internal final class MockCentral: CentralManager, @unchecked Sendable {
+@MainActor
+final class MockCentral: CentralManager, @unchecked Sendable {
     
     /// Central Peripheral Type
     typealias Peripheral = GATT.Peripheral
     
     /// Central Advertisement Type
-    typealias Advertisement = MockAdvertisementData
+    internal typealias Advertisement = MockAdvertisementData
     
     /// Central Attribute ID (Handle)
-    typealias AttributeID = UInt16
+    internal typealias AttributeID = UInt16
+        
+    internal nonisolated(unsafe) var log: (@Sendable (String) -> ())?
     
-    lazy var state = AsyncStream<DarwinBluetoothState> { [unowned self]  in
-        $0.yield(.poweredOn)
-    }
-    
-    var log: (@Sendable (String) -> ())?
-    
-    var peripherals: [GATT.Peripheral : Bool] {
+    internal var peripherals: [GATT.Peripheral : Bool] {
         get async {
             var peripherals = [Peripheral: Bool]()
-            for scanData in _state.scanData {
-                peripherals[scanData.peripheral] = _state.connected.contains(scanData.peripheral)
+            for scanData in state.scanData {
+                peripherals[scanData.peripheral] = state.connected.contains(scanData.peripheral)
             }
             return peripherals
         }
     }
     
-    var _state = State()
+    internal var isEnabled: Bool {
+        get async {
+            state.isEnabled
+        }
+    }
+    
+    private var state = State()
     
     private var continuation = Continuation()
     
-    init() { }
-    
-    /// Scans for peripherals that are advertising services.
-    func scan(filterDuplicates: Bool) -> AsyncCentralScan<MockCentral> {
-        return AsyncCentralScan { continuation in
-            self._state.scanData.forEach {
-                continuation($0)
+    internal init() {
+        Task {
+            try await Task.sleep(for: .seconds(1))
+            updateState {
+                $0.isEnabled = true
             }
         }
     }
     
+    /// Scans for peripherals that are advertising services.
+    internal func scan(
+        with services: Set<BluetoothUUID>,
+        filterDuplicates: Bool
+    ) -> AsyncCentralScan<MockCentral> {
+        return AsyncCentralScan { continuation in
+            for scanData in await self.state.scanData {
+                try await Task.sleep(for: .seconds(1))
+                continuation(scanData)
+            }
+        }
+    }
+    
+    internal func scan(
+        filterDuplicates: Bool
+    ) -> AsyncCentralScan<MockCentral> {
+        scan(with: [], filterDuplicates: filterDuplicates)
+    }
+    
     /// Connect to the specified device
-    func connect(to peripheral: Peripheral) async throws {
-        _state.connected.insert(peripheral)
+    internal func connect(to peripheral: Peripheral) async throws {
+        state.connected.insert(peripheral)
     }
     
     /// Disconnect the specified device.
-    func disconnect(_ peripheral: Peripheral) {
-        _state.connected.remove(peripheral)
+    internal func disconnect(_ peripheral: Peripheral) async {
+        state.connected.remove(peripheral)
     }
     
     /// Disconnect all connected devices.
-    func disconnectAll() {
-        _state.connected.removeAll()
+    internal func disconnectAll() {
+        state.connected.removeAll()
     }
     
     /// Discover Services
-    func discoverServices(
+    internal func discoverServices(
         _ services: Set<BluetoothUUID> = [],
         for peripheral: Peripheral
     ) async throws -> [Service<Peripheral, AttributeID>] {
-        return _state.characteristics
+        return state.characteristics
             .keys
             .filter { $0.peripheral == peripheral }
             .sorted(by: { $0.id < $1.id })
     }
     
-    public func discoverIncludedServices(
+    internal func discoverIncludedServices(
         _ services: Set<BluetoothUUID> = [],
         for service: Service<Peripheral, AttributeID>
     ) async throws -> [Service<Peripheral, AttributeID>] {
@@ -87,14 +106,14 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Discover Characteristics for service
-    func discoverCharacteristics(
+    internal nonisolated func discoverCharacteristics(
         _ characteristics: Set<BluetoothUUID> = [],
         for service: Service<Peripheral, AttributeID>
     ) async throws -> [Characteristic<Peripheral, AttributeID>] {
-        guard _state.connected.contains(service.peripheral) else {
+        guard await state.connected.contains(service.peripheral) else {
             throw CentralError.disconnected
         }
-        guard let characteristics = _state.characteristics[service] else {
+        guard let characteristics = await state.characteristics[service] else {
             throw CentralError.invalidAttribute(service.uuid)
         }
         return characteristics
@@ -102,22 +121,22 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Read Characteristic Value
-    func readValue(
+    internal nonisolated func readValue(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> Data {
-        guard _state.connected.contains(characteristic.peripheral) else {
+        guard await state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
-        return _state.characteristicValues[characteristic] ?? Data()
+        return await state.characteristicValues[characteristic] ?? Data()
     }
     
     /// Write Characteristic Value
-    func writeValue(
+    internal nonisolated func writeValue(
         _ data: Data,
         for characteristic: Characteristic<Peripheral, AttributeID>,
         withResponse: Bool = true
     ) async throws {
-        guard _state.connected.contains(characteristic.peripheral) else {
+        guard await state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
         if withResponse {
@@ -130,50 +149,56 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
             }
         }
         // write
-        _state.characteristicValues[characteristic] = data
+        await updateState { state in
+            state.characteristicValues[characteristic] = data
+        }
     }
     
     /// Discover descriptors
-    func discoverDescriptors(
+    internal nonisolated func discoverDescriptors(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> [Descriptor<Peripheral, AttributeID>] {
-        guard _state.connected.contains(characteristic.peripheral) else {
+        guard await state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
-        return _state.descriptors[characteristic] ?? []
+        return await state.descriptors[characteristic] ?? []
     }
     
     /// Read descriptor
-    func readValue(
+    internal nonisolated func readValue(
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws -> Data {
-        guard _state.connected.contains(descriptor.peripheral) else {
+        guard await state.connected.contains(descriptor.peripheral) else {
             throw CentralError.disconnected
         }
-        return _state.descriptorValues[descriptor] ?? Data()
+        return await state.descriptorValues[descriptor] ?? Data()
     }
     
     /// Write descriptor
-    func writeValue(
+    internal nonisolated func writeValue(
         _ data: Data,
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws {
-        guard _state.connected.contains(descriptor.peripheral) else {
+        guard await state.connected.contains(descriptor.peripheral) else {
             throw CentralError.disconnected
         }
-        _state.descriptorValues[descriptor] = data
+        await updateState { state in
+            state.descriptorValues[descriptor] = data
+        }
     }
     
-    func notify(
+    internal nonisolated func notify(
         for characteristic: GATT.Characteristic<GATT.Peripheral, AttributeID>
     ) async throws -> AsyncCentralNotifications<MockCentral> {
-        guard _state.connected.contains(characteristic.peripheral) else {
+        guard await state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
         return AsyncCentralNotifications { [unowned self] continuation in
-            if let notifications = self._state.notifications[characteristic] {
+            if let notifications = await self.state.notifications[characteristic] {
                 for notification in notifications {
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    if #available(iOS 16.0, *) {
+                        try await Task.sleep(for: .seconds(1))
+                    }
                     continuation(notification)
                 }
             }
@@ -181,22 +206,30 @@ internal final class MockCentral: CentralManager, @unchecked Sendable {
     }
     
     /// Read MTU
-    func maximumTransmissionUnit(for peripheral: Peripheral) async throws -> MaximumTransmissionUnit {
-        guard _state.connected.contains(peripheral) else {
+    internal func maximumTransmissionUnit(for peripheral: Peripheral) async throws -> MaximumTransmissionUnit {
+        guard state.connected.contains(peripheral) else {
             throw CentralError.disconnected
         }
         return .default
     }
     
     // Read RSSI
-    func rssi(for peripheral: Peripheral) async throws -> RSSI {
+    internal func rssi(for peripheral: Peripheral) async throws -> RSSI {
         return .init(rawValue: 127)!
+    }
+}
+
+private extension MockCentral {
+    
+    func updateState(_ body: (inout State) -> ()) {
+        body(&state)
     }
 }
 
 internal extension MockCentral {
     
     struct State {
+        var isEnabled = false
         var isScanning = false
         var scanData: [MockScanData] = [.beacon, .smartThermostat]
         var connected = Set<Peripheral>()
@@ -253,7 +286,6 @@ internal extension MockCentral {
     
     struct Continuation {
         var scan: AsyncThrowingStream<ScanData<Peripheral, Advertisement>, Error>.Continuation?
-        var isScanning: AsyncStream<Bool>.Continuation?
     }
 }
 #endif

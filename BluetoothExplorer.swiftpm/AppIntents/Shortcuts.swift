@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/20/22.
 //
 
+#if canImport(AppIntents)
 import AppIntents
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
@@ -26,3 +27,4 @@ struct AppShortcuts: AppShortcutsProvider {
         )
     }
 }
+#endif

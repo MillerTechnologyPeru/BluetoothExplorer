@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 11/20/22.
 //
 
+#if canImport(AppIntents)
 import AppIntents
 import Bluetooth
 import GATT
@@ -59,10 +60,11 @@ struct ManufacturerDataQuery: EntityQuery {
     
     @MainActor
     func suggestedEntities() throws -> [ManufacturerDataEntity] {
-        return Store.shared.scanResults
+        return BluetoothExplorerApp.store.scanResults
             .values
             .lazy
             .compactMap { $0.manufacturerData }
             .map { .init($0) }
     }
 }
+#endif

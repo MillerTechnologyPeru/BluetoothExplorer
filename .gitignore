@@ -22,7 +22,7 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
-*.DS_Store
+.DS_Store
 
 ## Obj-C/Swift specific
 *.hmap
@@ -76,6 +76,7 @@ Android/app/src/main/swift/.swiftpm
 
 # Android Studio
 .idea/*
+.gradle
 
 # VS Code
 .vscode

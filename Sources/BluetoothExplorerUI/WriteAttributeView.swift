@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
+#if canImport(SwiftUI)
 import Foundation
 import SwiftUI
 import Bluetooth
@@ -67,3 +68,4 @@ internal extension WriteAttributeView {
         return Data(hexadecimal: text)
     }
 }
+#endif

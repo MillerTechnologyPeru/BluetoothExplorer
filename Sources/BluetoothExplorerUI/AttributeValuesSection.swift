@@ -5,6 +5,7 @@
 //  Created by Alsey Coleman Miller on 22/12/21.
 //
 
+#if canImport(SwiftUI)
 import Foundation
 import Bluetooth
 import SwiftUI
@@ -101,3 +102,4 @@ struct AttributeValuesSection_Preview: PreviewProvider {
 }
 #endif
 */
+#endif

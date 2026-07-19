@@ -9,19 +9,24 @@ import Foundation
 import Bluetooth
 import SwiftUI
 import BluetoothExplorerModel
+import BluetoothExplorerPluginEngine
 
 struct AttributeValuesSection: View {
-    
+
     let uuid: BluetoothUUID
-    
+
     let values: [AttributeValue]
-    
+
+    /// Plugin-decoded results keyed by `AttributeValue.id`.
+    var decodedValues: [UUID: DecodedResult] = [:]
+
     var body: some View {
         Section(content: {
             ForEach(values) {
                 AttributeValueCell(
                     uuid: uuid,
-                    attributeValue: $0
+                    attributeValue: $0,
+                    decoded: decodedValues[$0.id]
                 )
             }
         }, header: {

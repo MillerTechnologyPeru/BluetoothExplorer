@@ -126,7 +126,12 @@ struct WasmRunnerTests {
             (i64.const 0)))
         """
         let wasm = try [UInt8](wat2wasm(wat))
-        let plugin = try WasmParserPlugin(manifest: batteryManifest(), moduleBytes: wasm, deadline: .milliseconds(50))
+        let plugin = try WasmParserPlugin(
+            manifest: batteryManifest(),
+            moduleBytes: wasm,
+            deadline: .milliseconds(50),
+            warmupDeadline: .seconds(2)
+        )
         let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([1]))
         #expect(await plugin.parse(request) == nil)
         // Give the timeout task a moment to flip the quarantine flag.
@@ -164,6 +169,42 @@ struct PluginLoaderTests {
         let decoded = try #require(await battery.plugin.parse(request))
         #expect(decoded.title == "Battery")
         #expect(decoded.fields.first?.value == .uint(88))
+    }
+
+    @Test("Bundled Embedded Swift plugin matches the native parser across values")
+    func bundledSwiftPluginParity() async throws {
+        let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
+        let battery = try #require(result.loaded.first {
+            $0.manifest.identifier == "org.pureswift.plugin.battery-level"
+        })
+        let native = NativeWellKnownCharacteristicParser()
+        var failures = [UInt8]()
+        for level: UInt8 in [0, 1, 42, 99, 100, 255] {
+            let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([level]))
+            guard let wasmResult = await battery.plugin.parse(request) else {
+                failures.append(level)
+                continue
+            }
+            let nativeResult = try #require(await native.parse(request))
+            #expect(wasmResult.fields.first?.value == .uint(UInt64(level)), "level \(level)")
+            #expect(wasmResult.fields.first?.value == nativeResult.fields.first?.value, "level \(level)")
+            #expect(wasmResult.fields.first?.unit == "%", "level \(level)")
+        }
+        #expect(failures.isEmpty, "levels returning nil: \(failures)")
+    }
+
+    @Test("Bundled plugin declines a payload it does not recognize")
+    func bundledSwiftPluginDeclines() async throws {
+        let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
+        let battery = try #require(result.loaded.first {
+            $0.manifest.identifier == "org.pureswift.plugin.battery-level"
+        })
+        // Empty payload: the guest returns 0 ("not mine"), which must surface as nil, not an error.
+        let empty = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data())
+        #expect(await battery.plugin.parse(empty) == nil)
+        // Wrong UUID: the plugin checks its own assigned number.
+        let wrong = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A37), payload: Data([1]))
+        #expect(await battery.plugin.parse(wrong) == nil)
     }
 
     @Test("A tampered sha256 is rejected")

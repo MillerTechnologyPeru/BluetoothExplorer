@@ -20,7 +20,12 @@ public struct WasmParserPlugin: ParserPlugin {
 
     /// Load and validate a WASM plugin from its manifest and module bytes.
     /// - Throws: `PluginError` if the manifest or module is invalid.
-    public init(manifest: PluginManifest, moduleBytes: [UInt8], deadline: Duration = .milliseconds(50)) throws {
+    public init(
+        manifest: PluginManifest,
+        moduleBytes: [UInt8],
+        deadline: Duration = .milliseconds(50),
+        warmupDeadline: Duration = .seconds(5)
+    ) throws {
         try manifest.validate()
 
         self.id = manifest.id
@@ -32,7 +37,12 @@ public struct WasmParserPlugin: ParserPlugin {
             descriptorUUIDs: manifest.descriptorBluetoothUUIDs
         )
 
-        let runner = WasmPluginRunner(manifest: manifest, moduleBytes: moduleBytes, deadline: deadline)
+        let runner = WasmPluginRunner(
+            manifest: manifest,
+            moduleBytes: moduleBytes,
+            deadline: deadline,
+            warmupDeadline: warmupDeadline
+        )
         try runner.validate()
         self.runner = runner
     }

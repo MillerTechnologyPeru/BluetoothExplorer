@@ -81,3 +81,6 @@ Android/app/src/main/swift/.swiftpm
 # VS Code
 .vscode
 
+
+# Plugin SDK build artifacts (the installed module lives under Sources/.../Plugins)
+PluginSDK/Examples/*/*.wasm

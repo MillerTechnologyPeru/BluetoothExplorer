@@ -5,9 +5,9 @@
   "version": "1.0.0",
   "abi": 1,
   "module": "battery-level.wasm",
-  "sha256": "f5ad62816cf9b64a1326abc70ecb66662bafbf6cd6b3fa35f07908b2566993e9",
+  "sha256": "97b7a4a83a0550f2720b39f414019f37d2c63476737c717112df6fd0b55fe5f3",
   "matches": {
     "characteristicUUIDs": ["2A19"]
   },
-  "limits": { "maxMemoryPages": 2, "maxOutputBytes": 256 }
+  "limits": { "maxMemoryPages": 16, "maxOutputBytes": 256 }
 }

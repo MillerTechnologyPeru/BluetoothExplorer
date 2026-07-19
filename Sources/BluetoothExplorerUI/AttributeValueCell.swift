@@ -9,16 +9,26 @@ import Foundation
 import Bluetooth
 import SwiftUI
 import BluetoothExplorerModel
+import BluetoothExplorerPluginEngine
 
 struct AttributeValueCell: View {
-    
+
     let uuid: BluetoothUUID
-    
+
     let attributeValue: AttributeValue
-    
+
+    var decoded: DecodedResult? = nil
+
     var body: some View {
         VStack(alignment: .leading, spacing: nil) {
-            data
+            if let decoded {
+                DecodedFieldsView(result: decoded)
+                Text(verbatim: "via " + decoded.pluginID.rawValue)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            } else {
+                data
+            }
             Text(type)
                 .font(.subheadline)
                 .foregroundColor(.gray)

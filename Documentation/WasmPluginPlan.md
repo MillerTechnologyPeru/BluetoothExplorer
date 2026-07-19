@@ -420,11 +420,47 @@ battery/perf profiling on low-end Android.
 
 Total ≈ 8–11 weeks. M1 and M2 are each independently shippable.
 
+## 9.1 Android build status (verified 2026-07-19)
+
+**What works.** The plugin engine cross-compiles for Android:
+
+```sh
+swift build --swift-sdk swift-6.3.3-RELEASE_android --target BluetoothExplorerPluginEngine
+```
+
+This clears the largest unknown in the original plan: WasmKit and its `_CWasmKit` C target build
+under the Swift Android SDK. One genuine portability bug surfaced and was fixed —
+`Bundle.urls(forResourcesWithExtension:subdirectory:)` returns `[NSURL]` (with an optional
+`lastPathComponent`) on Android's Foundation but `[URL]` on Darwin, so `PluginLoader` now normalizes
+the element type.
+
+**What is blocked, for reasons unrelated to this feature.** The app-level Android build cannot
+currently be completed in this repo:
+
+1. **A clean checkout does not resolve.** `swift-android-native` is required at two different
+   branches (`feature/pureswift` and `main`) by different packages in the graph. Reproduced on
+   unmodified `master` in a scratch worktree. `Package.resolved` is gitignored, so every fresh
+   resolve hits this.
+2. **`skip-android-bridge` does not compile.** Its `AndroidBundle.swift` references a `BundleAccess`
+   type that is defined nowhere in the resolved dependency set — the `feature/pureswift` fork
+   expects a different `skip-foundation` revision than the one resolved. This stops
+   `BluetoothExplorerModel` from cross-compiling for Android.
+3. **The gradle/skipstone path fails in its iOS prebuild** with 15 platform-requirement errors
+   between dependencies (`AndroidBluetooth` and `AndroidLooper` leave iOS unspecified, so it defaults
+   to iOS 12, while `Bluetooth`/`BluetoothGAP`/`GATT`/`Socket` require iOS 13; `SwiftJavaToolLib`
+   hits the same against swift-syntax). Verified pre-existing: swapping in `master`'s `Package.swift`
+   with the same pins produces the identical 15 errors.
+
+Consequently **`.copy` delivery of `.wasm` resources into the APK remains unverified** — it needs a
+working app-level Android build. The base64-embed fallback is still the documented escape hatch.
+Fixing (1)–(3) is fork-alignment work on the Skip dependencies, not on the plugin system.
+
 ## 9. Top risks
 
 | Risk | Mitigation |
 |---|---|
-| WasmKit unverified under this exact Skip Fuse fork stack (feature/pureswift branches, NDK 27, minSdk 28 vs API-30 floor) | M0 hard gate; WAMR fallback documented |
+| ~~WasmKit unverified on Android~~ — **resolved**: `swift build --swift-sdk swift-6.3.3-RELEASE_android --target BluetoothExplorerPluginEngine` succeeds, so WasmKit and `_CWasmKit` do cross-compile. One real portability bug was found and fixed (Android Foundation returns `[NSURL]` from `Bundle.urls(forResourcesWithExtension:)`). | — |
+| App-level Android build blocked by pre-existing Skip fork breakage (see §9.1), so `.copy` of `.wasm` into the APK is still unverified | Fix fork alignment first; base64-embed fallback remains available |
 | swift-system version conflict in the dependency graph | M0 `swift package resolve` dry run; pin branch deps to revisions first |
 | No fuel/interruption in WasmKit — runaway plugin = abandoned spinning thread | dedicated thread per plugin, quarantine on first timeout, memory caps, CPU budget + kill switch; WAMR if containment becomes hard requirement |
 | App Store review of user-imported plugins (2.5.2 / 3.3.1(B)) | bundled-first rollout; import framed as same-purpose interpreted content; no marketplace ever |

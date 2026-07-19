@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "bluetooth-explorer",
     defaultLocalization: "en",
-    platforms: [.iOS(.v17), .macOS(.v14)],
+    platforms: [.iOS(.v18), .macOS(.v15)],
     products: [
         .library(name: "BluetoothExplorer", type: .dynamic, targets: ["BluetoothExplorer"])
     ],
@@ -15,7 +15,9 @@ let package = Package(
         .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse-ui.git", branch: "feature/pureswift"),
         .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse.git", branch: "feature/pureswift"),
         .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
-        .package(url: "https://github.com/PureSwift/AndroidBluetooth.git", branch: "master")
+        .package(url: "https://github.com/PureSwift/AndroidBluetooth.git", branch: "master"),
+        .package(url: "https://github.com/PureSwift/Bluetooth.git", from: "7.2.0"),
+        .package(url: "https://github.com/swiftwasm/WasmKit.git", .upToNextMinor(from: "0.3.1"))
     ],
     targets: [
         .target(
@@ -34,6 +36,7 @@ let package = Package(
             name: "BluetoothExplorerUI",
             dependencies: [
                 "BluetoothExplorerModel",
+                "BluetoothExplorerPluginEngine",
                 .product(name: "SkipModel", package: "skip-model"),
                 .product(name: "SkipFuse", package: "skip-fuse"),
                 .product(name: "SkipFuseUI", package: "skip-fuse-ui")
@@ -42,8 +45,17 @@ let package = Package(
             plugins: [.plugin(name: "skipstone", package: "skip")]
         ),
         .target(
+            name: "BluetoothExplorerPluginEngine",
+            dependencies: [
+                .product(name: "WasmKit", package: "WasmKit"),
+                .product(name: "Bluetooth", package: "Bluetooth")
+            ],
+            resources: [.copy("Plugins")]
+        ),
+        .target(
             name: "BluetoothExplorerModel",
             dependencies: [
+                "BluetoothExplorerPluginEngine",
                 .product(
                     name: "GATT",
                     package: "GATT"
@@ -69,6 +81,13 @@ let package = Package(
             ],
             resources: [.process("Resources")],
             plugins: [.plugin(name: "skipstone", package: "skip")]
+        ),
+        .testTarget(
+            name: "BluetoothExplorerPluginEngineTests",
+            dependencies: [
+                "BluetoothExplorerPluginEngine",
+                .product(name: "WAT", package: "WasmKit")
+            ]
         )
     ]
 )

@@ -1,17 +1,23 @@
 # BLE Parser Plugin ABI v1 (normative)
 
-A plugin is a core WebAssembly module (`wasm32-unknown-unknown`, import-free) that decodes a BLE
-advertisement field or GATT attribute value into structured fields. The host is
-`BluetoothExplorerPluginEngine`, running the module under the WasmKit interpreter.
+A plugin is a WebAssembly module that decodes a BLE advertisement field or GATT attribute value into
+structured fields. The host is `BluetoothExplorerPluginEngine`, running the module under the WasmKit
+interpreter.
 
 This document is normative. The host implementation lives in
-`Sources/BluetoothExplorerPluginEngine/PluginABI.swift`; the reference plugin is
-`Sources/BluetoothExplorerPluginEngine/Plugins/battery-level.wat`.
+`Sources/BluetoothExplorerPluginEngine/PluginABI.swift`; plugins are authored in Embedded Swift
+against `PluginSDK/BLEPluginSDK`, with a complete example in `PluginSDK/Examples/BatteryLevel`.
 
 ## Module requirements
 
-- **Import-free.** The module must not import any host function. A module with any import is
-  rejected at load.
+- **Target.** `wasm32-unknown-wasip1` built as a **reactor** (`-mexec-model=reactor`) — what the
+  Embedded Swift SDK emits. Import-free core modules are also accepted.
+- **Imports.** Only `wasi_snapshot_preview1` may be imported; any other import module is rejected at
+  load. The host satisfies those imports with a minimal shim rather than a real WASI
+  implementation: `random_get` fills guest memory with real random bytes (the Embedded Swift runtime
+  requires it), and every other WASI function is stubbed to return success with zeroed results. A
+  plugin therefore has no filesystem, network, environment or clock access, and cannot call back
+  into the host.
 - **No JIT / no threads required.** Pure computation only.
 
 ## Required exports
@@ -121,8 +127,11 @@ declare. `sha256` is mandatory for user-imported plugins and verified before loa
 ## Resource limits & failure isolation
 
 - Guest linear memory is capped at `maxMemoryPages` (default 16, ceiling 64) × 64 KiB.
-- Each call has a wall-clock deadline (default 50 ms). On timeout the plugin is **quarantined**
-  (WasmKit has no execution interruption; the wedged call is abandoned).
+- Each parse call has a wall-clock deadline (default 50 ms). The one-time cost of parsing,
+  instantiating and `_initialize`-ing a module is bounded separately by a generous warmup deadline
+  (default 5 s), and WasmKit compiles eagerly, so translation never lands on the per-call deadline.
+  On timeout the plugin is **quarantined** (WasmKit has no execution interruption; the wedged call
+  is abandoned).
 - A trap, allocation failure, out-of-bounds result, oversized output, or malformed CBOR is a
   failure; three consecutive failures quarantine the plugin. Failures never propagate — the UI
   falls back to the raw hex view.

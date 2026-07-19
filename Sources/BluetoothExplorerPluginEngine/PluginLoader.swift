@@ -76,7 +76,10 @@ public enum PluginLoader {
 
     /// Scan a bundle's `Plugins/` directory for `*.bleplugin.json` manifests and load each.
     public static func loadBundled(from bundle: Bundle) -> (loaded: [LoadedPlugin], failures: [PluginLoadFailure]) {
-        let manifestURLs = bundle.urls(forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
+        // `urls(forResourcesWithExtension:subdirectory:)` yields `[URL]` on Darwin but `[NSURL]` on
+        // Android's Foundation, so normalize before touching path components.
+        let discovered = bundle.urls(forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
+        let manifestURLs: [URL] = discovered.map { $0 as URL }
         var loaded = [LoadedPlugin]()
         var failures = [PluginLoadFailure]()
         for url in manifestURLs where url.lastPathComponent.hasSuffix(".bleplugin.json") {

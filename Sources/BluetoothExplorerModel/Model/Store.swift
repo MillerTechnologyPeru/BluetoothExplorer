@@ -12,6 +12,7 @@ import SkipFuse
 import SkipModel
 import Bluetooth
 import GATT
+import BluetoothExplorerPluginEngine
 #if canImport(DarwinGATT)
 import DarwinGATT
 #elseif os(Android)
@@ -67,13 +68,28 @@ public final class Store {
     public private(set) var descriptorValues = [Descriptor: Cache<AttributeValue>]()
 
     public private(set) var isNotifying = [Characteristic: Bool]()
-    
+
+    /// Plugin-decoded advertisement results, keyed by peripheral.
+    public internal(set) var decodedAdvertisements = [Peripheral: [DecodedResult]]()
+
+    /// Plugin-decoded characteristic values, keyed by characteristic then `AttributeValue.id`.
+    public internal(set) var decodedCharacteristicValues = [Characteristic: [UUID: DecodedResult]]()
+
+    /// Plugin-decoded descriptor values, keyed by descriptor then `AttributeValue.id`.
+    public internal(set) var decodedDescriptorValues = [Descriptor: [UUID: DecodedResult]]()
+
+    /// Owns the plugin registry and lifecycle. Injected so the app and tests can supply their own.
+    public let pluginManager: PluginManager
+
+    /// Last-decoded advertisement fingerprint per peripheral, to skip re-decoding identical packets.
+    var advertisementFingerprints = [Peripheral: Int]()
+
     public let central: Central
-    
+
     private var scanStream: AsyncCentralScan<NativeCentral>?
-        
+
     // MARK: - Initialization
-    
+
     public convenience init() {
         #if canImport(Darwin)
         let central = Central()
@@ -88,11 +104,16 @@ public final class Store {
         self.init(central: central)
     }
     
-    init(central: Central) {
+    init(central: Central, pluginManager: PluginManager = PluginManager()) {
         self.central = central
+        self.pluginManager = pluginManager
         setupLog()
         observeValues()
+        pluginManager.loadBundledPlugins()
     }
+
+    /// The current parser registry snapshot.
+    var registry: ParserRegistry { pluginManager.registry }
         
     // MARK: - Methods
     
@@ -182,6 +203,7 @@ public final class Store {
         }
         #endif
         scanResults[scanData.peripheral] = cache
+        decodeAdvertisement(cache, for: scanData.peripheral)
     }
     
     public func stopScan() async {
@@ -247,8 +269,9 @@ public final class Store {
             data: data
         )
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
+        decodeCharacteristicValue(value, for: characteristic)
     }
-    
+
     public func writeValue(_ data: Data, for characteristic: Characteristic, withResponse: Bool = true) async throws {
         activity[characteristic.peripheral] = true
         defer { activity[characteristic.peripheral] = false }
@@ -287,8 +310,9 @@ public final class Store {
             data: data
         )
         self.characteristicValues[characteristic, default: .init(capacity: 10)].append(value)
+        decodeCharacteristicValue(value, for: characteristic)
     }
-    
+
     public func readValue(for descriptor: Descriptor) async throws {
         activity[descriptor.peripheral] = true
         defer { activity[descriptor.peripheral] = false }
@@ -300,8 +324,9 @@ public final class Store {
             data: data
         )
         self.descriptorValues[descriptor, default: .init(capacity: 10)].append(value)
+        decodeDescriptorValue(value, for: descriptor)
     }
-    
+
     public func writeValue(_ data: Data, for descriptor: Descriptor) async throws {
         activity[descriptor.peripheral] = true
         defer { activity[descriptor.peripheral] = false }
@@ -363,9 +388,9 @@ public struct ScanDataCache <Peripheral: Peer, Advertisement: AdvertisementData>
         cache.txPowerLevel = scanData.advertisementData.txPowerLevel
         if let beacon = scanData.advertisementData.beacon {
             cache.beacon = beacon
-        } else {
-            cache.manufacturerData = scanData.advertisementData.manufacturerData
         }
+        // Always retain the raw manufacturer data (even for beacons) so parser plugins can decode it.
+        cache.manufacturerData = scanData.advertisementData.manufacturerData
         for serviceUUID in scanData.advertisementData.serviceUUIDs ?? [] {
             cache.serviceUUIDs.insert(serviceUUID)
         }

@@ -62,7 +62,8 @@ struct CharacteristicView: View {
             if values.isEmpty == false {
                 AttributeValuesSection(
                     uuid: characteristic.uuid,
-                    values: values
+                    values: values,
+                    decodedValues: store.decodedCharacteristicValues[characteristic] ?? [:]
                 )
             }
             if descriptors.isEmpty == false {

@@ -1,0 +1,13 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.battery-level",
+  "name": "Battery Level",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "battery-level.wasm",
+  "sha256": "97b7a4a83a0550f2720b39f414019f37d2c63476737c717112df6fd0b55fe5f3",
+  "matches": {
+    "characteristicUUIDs": ["2A19"]
+  },
+  "limits": { "maxMemoryPages": 16, "maxOutputBytes": 256 }
+}

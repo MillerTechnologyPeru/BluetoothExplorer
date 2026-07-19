@@ -47,7 +47,8 @@ struct DescriptorView: View {
             if values.isEmpty == false {
                 AttributeValuesSection(
                     uuid: descriptor.uuid,
-                    values: values
+                    values: values,
+                    decodedValues: store.decodedDescriptorValues[descriptor] ?? [:]
                 )
             }
         }

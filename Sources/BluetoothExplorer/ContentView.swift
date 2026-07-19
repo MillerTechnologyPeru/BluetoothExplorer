@@ -59,6 +59,9 @@ struct SettingsView : View {
                 Text("Light").tag("light")
                 Text("Dark").tag("dark")
             }
+            NavigationLink("Plugins") {
+                PluginsView()
+            }
             if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
                let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
                 Text("Version \(version) (\(buildNumber))")

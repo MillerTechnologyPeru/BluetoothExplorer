@@ -8,6 +8,7 @@
 
 import SwiftUI
 import BluetoothExplorerModel
+import BluetoothExplorerPluginEngine
 
 struct PeripheralView: View {
     
@@ -42,6 +43,16 @@ struct PeripheralView: View {
                             .foregroundColor(.gray)
                     }
                 }
+            }
+            let decoded = store.decodedAdvertisement(for: peripheral)
+            if decoded.isEmpty == false {
+                Section(content: {
+                    ForEach(Array(decoded.enumerated()), id: \.offset) { _, result in
+                        DecodedFieldsView(result: result)
+                    }
+                }, header: {
+                    Text("Decoded")
+                })
             }
             if services.isEmpty == false {
                 Section(content: {

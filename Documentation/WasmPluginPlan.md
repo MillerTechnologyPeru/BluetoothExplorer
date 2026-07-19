@@ -7,11 +7,11 @@ native Swift).
 
 ---
 
-> **Implementation status (M0–M2 + app integration done).** The runtime, host engine, native
-> parsers, ABI, a bundled reference plugin, tests, and full Store/UI integration are implemented and
-> building. See `Sources/BluetoothExplorerPluginEngine/`, `Documentation/PluginABI.md`, and the
-> M0-driven pin change below. Remaining: guest SDK repo (Rust PDK + `bleplug` CLI), user-import UX
-> (M4), and the Android build verification (still a gate — see §9).
+> **Implementation status.** The runtime, host engine, native parsers, ABI, the Embedded Swift guest
+> SDK, a bundled Embedded-Swift reference plugin, tests, and full Store/UI integration are
+> implemented and building. See `Sources/BluetoothExplorerPluginEngine/`, `PluginSDK/`, and
+> `Documentation/PluginABI.md`. Remaining: user-import UX (M4) and Android build verification
+> (still a gate — see §9).
 
 ## 1. Runtime decision: WasmKit 0.3.x (app floor raised to iOS 18 / macOS 15)
 
@@ -78,12 +78,9 @@ Extism (no Swift host SDK; wasmtime-based — copy its manifest/ABI ideas only).
 │   PluginEngine actor → WasmKit (per-plugin Store/Instance,      │
 │   ResourceLimiter, deadline watchdog, quarantine)               │
 └─────────────────────────────────────────────────────────────────┘
-   ble-plugin-sdk (separate repo)
-     spec/ABI.md + conformance vectors (normative, frozen first)
-     rust/ble-plugin-pdk   (reference PDK, wasm32-unknown-unknown)
-     swift/BLEPluginSDK    (Embedded Swift, wasip1 reactor, template)
-     bleplug CLI           (new / run / pack / conformance)
-     examples/             (ibeacon, heart-rate, battery-level)
+   PluginSDK/ (in-repo, never part of the app build)
+     BLEPluginSDK/         Embedded Swift guest SDK (envelope, PayloadReader, Fields/CBOR)
+     Examples/             plugin projects; `make install` builds + installs the .wasm
 ```
 
 Key layering choice: the `ParserPlugin` protocol + registry ship **before** any wasm code,
@@ -92,16 +89,19 @@ with the existing native decoders (`AppleBeacon` iBeacon parser, the
 gets the decoded-fields UI and routing in a fully shippable milestone with zero wasm risk;
 WasmKit plugins then join the same registry.
 
-## 4. Normative ABI v1 — freeze first, in `spec/ABI.md`
+## 4. Normative ABI v1 — see `Documentation/PluginABI.md`
 
-The three drafts produced during design diverged on envelope encoding, UUID byte order, and
-export names. **One byte-level spec with test vectors must be written and frozen before any
-host or SDK code.** The decisions:
+The design drafts diverged on envelope encoding, UUID byte order, and export names, so one
+byte-level spec was frozen before the host and SDK were written. It lives in
+`Documentation/PluginABI.md`; the summary below is informative.
 
-**Module forms accepted:** import-free core module (`wasm32-unknown-unknown`) — canonical;
-or `wasm32-unknown-wasip1` **reactor** (for Embedded Swift; host links WASI with *no*
-preopens/env/args — allocator plumbing only; host calls `_initialize` once). Any other
-import ⇒ load rejection. No host-callback imports in v1 (one-directional trust boundary).
+**Module forms accepted:** `wasm32-unknown-wasip1` **reactor** (what the Embedded Swift SDK emits;
+the host calls `_initialize` once), and import-free core modules. Imports are permitted **only** from
+`wasi_snapshot_preview1`; any other import module is rejected at load. Those WASI imports are
+satisfied by a minimal in-house shim (§5.4) rather than a full WASI implementation: `random_get`
+returns real randomness because the Embedded Swift runtime requires it, and everything else is
+stubbed to success. Plugins get no filesystem, network, environment or clock access, and there are
+no host-callback imports (the trust boundary stays one-directional).
 
 **Exports:**
 
@@ -122,7 +122,7 @@ Return `u64 = (result_ptr << 32) | result_len`; `0` = "not mine / no parse" (not
 trap = plugin failure. Only i32/i64 cross the boundary.
 
 **Input envelope** — fixed little-endian binary header + payload (trivially readable from
-`no_std` Rust and Embedded Swift, no decoder dependency):
+Embedded Swift without a decoder dependency):
 
 ```
 offset size  field
@@ -333,37 +333,35 @@ Precondition: give `AttributeValue` a proper unique `id` (UUID) — it is curren
   imports + memory caps + deadline + quarantine. No signing in v1; decide the authenticity
   story before any non-local distribution (and see §2 — no marketplace, ever).
 
-## 6. Guest SDKs (`ble-plugin-sdk`, separate repo)
+## 6. Guest SDK — Embedded Swift (`PluginSDK/`, implemented)
 
-- **`spec/ABI.md` + `spec/vectors/*.json`** — the normative spec (§4) and conformance
-  vectors (hex input → expected fields). Everything else conforms to this.
-- **Rust reference PDK** (`ble-plugin-pdk`, `no_std` + alloc, `wasm32-unknown-unknown`):
-  author writes one pure function over `AdvertisementInput`/`Fields`; a `ble_plugin!` macro
-  emits the exports, allocator, and CBOR (minicbor). `opt-level="z"` + lto + `panic="abort"`
-  + `wasm-opt -Oz` → 1–30 KB. This is the always-working path.
-- **Embedded Swift SDK** (`BLEPluginSDK`, wasip1 reactor, `swift-6.3_wasm-embedded` SDK,
-  pinned): same author experience (`PayloadReader`, `Fields` builder, hand-rolled ~100-line
-  CBOR emitter — Embedded-safe: no existentials, no Codable, no Foundation). Because
-  `@_expose(wasm)` symbols are dropped from dependency modules (swiftlang/swift #77812), the
-  export shims live in the **author's module via template**, not in the SDK library.
-  Flagship but experimental — docs must not promise parity with Rust. Sizes: tens–hundreds
-  of KB. AssemblyScript documented; TinyGo tolerated; full non-embedded Swift explicitly
-  unsupported (9–50 MB binaries).
-- **`bleplug` CLI**: `new` (scaffold), `run <plugin.wasm> --adv --company 004C --hex …`
-  (instant feedback under real WasmKit, no app/device), `pack` (validate exports vs
-  manifest, sha256, emit pair), `conformance` (run vectors).
-- **Two-tier author testing**: the parse function is a plain function — unit-test it
-  natively with LLDB; only the thin shim needs wasm-level conformance runs.
-- **Reference plugins** (examples + bundled in the app):
-  1. `battery-level.wasm` (Rust, ~1 KB) — 0x2A19; the "hello world"; also exercises
-     coexistence with the native decoder for the same UUID.
-  2. `ibeacon.wasm` (Rust) — conformance twin of the native `AppleBeacon` parser; tests
-     diff their outputs byte-for-byte on the `MockAdvertisement` fixtures.
-  3. `heart-rate.wasm` (Embedded Swift) — 0x2A37 flags/8-16-bit BPM/RR intervals; fills a
-     real gap (`GATTHeartRateMeasurement` doesn't exist in BluetoothGATT) and exercises
-     notifications live with any HR strap.
-  4. (Post-v1) Eddystone 0xFEAA — exercises the service-data route.
-  Built artifacts checked into the app repo; SDK-repo CI rebuilds and diffs hashes.
+Plugins are authored in **Embedded Swift** and compiled to wasm32 with the
+`swift-<version>_wasm-embedded` Swift SDK. This is the only supported guest toolchain: it keeps
+plugin authoring in the same language as the app, and the SDK is a normal SwiftPM package.
+
+- **`PluginSDK/BLEPluginSDK`** — the guest SDK, Embedded-safe (no Foundation, no existentials, no
+  `Codable`): `ParseInput`/`UUIDBytes` envelope decoding, an allocation-free `PayloadReader`
+  cursor, a `Fields` builder that emits the CBOR result incrementally, and `PluginRuntime` for
+  guest allocation and the packed-`u64` return convention. Keys/labels/units are `StaticString`,
+  so they cost no allocation.
+- **Author experience** — one pure function, `(ParseInput) -> Fields?`. Returning `nil` means "not
+  mine" and is not an error. `Exports.swift` is copied boilerplate declaring the ABI exports; it
+  lives in the author's module because `@_expose(wasm)` symbols are dropped when they come from a
+  dependency module (swiftlang/swift#77812).
+- **Build** — `make install` in an example: `swift build --swift-sdk …_wasm-embedded`, then
+  `wasm-opt -Oz`, then copy into `Sources/BluetoothExplorerPluginEngine/Plugins/` and refresh the
+  manifest `sha256`. Expect ~90–110 KB per plugin.
+- **Verified end to end**: multi-module Embedded Swift (SDK as a separate package) links cleanly for
+  wasm32; the resulting module exports exactly the ABI and imports only
+  `wasi_snapshot_preview1.random_get`, which the host satisfies (§5.4).
+- **Bundled reference plugin**: `battery-level.wasm` (GATT Battery Level `0x2A19`), authored in
+  Embedded Swift, tested for byte-parity against the native parser across values.
+- **Testing** — because the parse function is a plain Swift function over plain structs, authors can
+  unit-test it natively before it ever becomes wasm; the app's test suite additionally runs the
+  built module under the real interpreter.
+
+Full non-embedded Swift is not supported for plugins (9–50 MB binaries). Other guest languages are
+out of scope: the ABI is language-agnostic, but only the Embedded Swift path is maintained here.
 
 ## 7. Testing
 
@@ -405,12 +403,12 @@ MockCentral tests. App behaves identically-or-better with zero wasm.
 
 **M2 — Wasm execution (2–3 weeks, shippable).**
 `PluginEngine` actor, ABI v1 host side, MicroCBOR, resource limiter, deadline/quarantine,
-memoization + CPU budget + kill switch. Bundled battery + iBeacon (Rust) plugins.
+memoization + CPU budget + kill switch. Bundled Embedded Swift battery-level plugin.
 `PluginManager` bundled discovery + enable/disable. Basic `PluginsView` (toggles).
 Golden-file tests both platforms.
 
 **M3 — SDK + author tooling (2 weeks, parallelizable with M2 tail).**
-`ble-plugin-sdk` repo: Rust PDK + macro, `bleplug` CLI, conformance harness, Embedded Swift
+`PluginSDK/`: Embedded Swift guest SDK, example plugins, build/install tooling, Embedded Swift
 template + pinned toolchain docs, heart-rate reference plugin, docs site page.
 
 **M4 — User-imported plugins + hardening (1.5–2 weeks).**
@@ -431,7 +429,7 @@ Total ≈ 8–11 weeks. M1 and M2 are each independently shippable.
 | No fuel/interruption in WasmKit — runaway plugin = abandoned spinning thread | dedicated thread per plugin, quarantine on first timeout, memory caps, CPU budget + kill switch; WAMR if containment becomes hard requirement |
 | App Store review of user-imported plugins (2.5.2 / 3.3.1(B)) | bundled-first rollout; import framed as same-purpose interpreted content; no marketplace ever |
 | `.copy` binary resources through skipstone into the APK unproven | M0 item 5; base64-embed escape hatch |
-| Embedded Swift toolchain churn (#77812 export-dropping, duplicate-symbol issues) | shims-in-template design, pinned SDK versions, Rust as reference PDK |
+| Embedded Swift toolchain churn (#77812 export-dropping, duplicate-symbol issues) | export shims live in the author's module by design; pin the wasm-embedded SDK version |
 | Dense-environment scan load (dozens of devices × ~10 adv/s) at interpreter speed | synchronous fingerprint dedupe before Task spawn, manifest-only routing, memoization, CPU budget; profile on low-end Android |
 | Hand-rolled CBOR in three places (host Swift, Embedded Swift, minicbor) | shared conformance vectors exercised on all three |
 

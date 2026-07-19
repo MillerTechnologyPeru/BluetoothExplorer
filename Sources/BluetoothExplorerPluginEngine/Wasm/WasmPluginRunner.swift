@@ -36,6 +36,7 @@ final class WasmPluginRunner: @unchecked Sendable {
 
     private let moduleBytes: [UInt8]
     private let deadline: Duration
+    private let warmupDeadline: Duration
     private let queue: DispatchQueue
     private let limiter: PluginResourceLimiter
 
@@ -47,6 +48,7 @@ final class WasmPluginRunner: @unchecked Sendable {
     private let stateLock = NSLock()
     private var _quarantined = false
     private var _consecutiveFailures = 0
+    private var _hasLoaded = false
     private static let failureThreshold = 3
     /// Re-instantiate for hygiene after this many successful calls.
     private static let recycleAfter = 1024
@@ -61,10 +63,16 @@ final class WasmPluginRunner: @unchecked Sendable {
         var callsSinceRecycle = 0
     }
 
-    init(manifest: PluginManifest, moduleBytes: [UInt8], deadline: Duration = .milliseconds(50)) {
+    init(
+        manifest: PluginManifest,
+        moduleBytes: [UInt8],
+        deadline: Duration = .milliseconds(50),
+        warmupDeadline: Duration = .seconds(5)
+    ) {
         self.manifest = manifest
         self.moduleBytes = moduleBytes
         self.deadline = deadline
+        self.warmupDeadline = warmupDeadline
         self.queue = DispatchQueue(label: "bleplug.runner.\(manifest.identifier)")
         self.limiter = PluginResourceLimiter(maxMemoryBytes: manifest.maxMemoryBytes)
     }
@@ -82,8 +90,8 @@ final class WasmPluginRunner: @unchecked Sendable {
         } catch {
             throw PluginError.invalidModule("\(error)")
         }
-        // Reject any host import — ABI v1 is import-free.
-        for imported in module.imports {
+        // Only WASI preview 1 imports are permitted (Embedded Swift reactor modules need a few).
+        for imported in module.imports where imported.module != WASIShim.moduleName {
             throw PluginError.disallowedImport(module: imported.module, name: imported.name)
         }
         // Marker + alloc + memory + at least the declared capability exports must be present.
@@ -109,32 +117,61 @@ final class WasmPluginRunner: @unchecked Sendable {
     func invoke(_ request: ParseRequest) async -> Result<[UInt8]?, PluginError> {
         if isQuarantined { return .failure(.quarantined) }
 
-        let result: Result<[UInt8]?, PluginError> = await withCheckedContinuation { continuation in
-            let gate = ResumeOnce(continuation)
+        // Parsing, instantiating and `_initialize` are one-time costs that scale with module size
+        // (an Embedded Swift module is ~100 KB). Bounding them with the per-call deadline would
+        // quarantine healthy plugins on first use, so warm up under a separate, generous deadline
+        // and reserve the tight deadline for the parse call itself.
+        if hasLoaded == false {
+            let warmup: Result<Void, PluginError> = await run(deadline: warmupDeadline) {
+                do {
+                    _ = try self.ensureLoaded()
+                    return .success(())
+                } catch let error as PluginError {
+                    return .failure(error)
+                } catch {
+                    return .failure(.invalidModule("\(error)"))
+                }
+            }
+            if case let .failure(error) = warmup {
+                record(.failure(error))
+                return .failure(error)
+            }
+            markLoaded()
+        }
 
-            let timeout = Task { [deadline] in
+        let outcome: Result<[UInt8]?, PluginError> = await run(deadline: deadline) {
+            do {
+                return .success(try self.performCall(request))
+            } catch let error as PluginError {
+                return .failure(error)
+            } catch {
+                return .failure(.trap("\(error)"))
+            }
+        }
+        record(outcome)
+        return outcome
+    }
+
+    /// Run `body` on the plugin's serial queue, bounded by `deadline`. On timeout the plugin is
+    /// quarantined and the wedged work is abandoned on the queue.
+    private func run<T>(
+        deadline: Duration,
+        _ body: @escaping @Sendable () -> Result<T, PluginError>
+    ) async -> Result<T, PluginError> {
+        await withCheckedContinuation { continuation in
+            let gate = ResumeOnce(continuation)
+            let timeout = Task {
                 try? await Task.sleep(for: deadline)
                 if gate.resume(.failure(.deadlineExceeded)) {
                     self.quarantine()
                 }
             }
-
             queue.async {
-                let outcome: Result<[UInt8]?, PluginError>
-                do {
-                    outcome = .success(try self.performCall(request))
-                } catch let error as PluginError {
-                    outcome = .failure(error)
-                } catch {
-                    outcome = .failure(.trap("\(error)"))
-                }
-                if gate.resume(outcome) {
+                if gate.resume(body()) {
                     timeout.cancel()
-                    self.record(outcome)
                 }
             }
         }
-        return result
     }
 
     // MARK: - Queue-confined execution
@@ -157,11 +194,15 @@ final class WasmPluginRunner: @unchecked Sendable {
     }
 
     private func instantiate() throws -> LoadedInstance {
-        let engine = Engine(configuration: EngineConfiguration(compilationMode: .lazy))
+        // Eager translation: do all of WasmKit's compilation work here, inside the generous warmup
+        // deadline. With lazy mode the first call to an export pays for translating it, which on the
+        // scan hot path would blow the per-call deadline and quarantine a healthy plugin.
+        let engine = Engine(configuration: EngineConfiguration(compilationMode: .eager))
         let store = WasmKit.Store(engine: engine)
         store.resourceLimiter = limiter
         let module = try parseWasm(bytes: moduleBytes)
-        let instance = try module.instantiate(store: store)
+        let imports = try WASIShim.makeImports(for: module, store: store)
+        let instance = try module.instantiate(store: store, imports: imports)
 
         // wasip1 reactor init, if present.
         if let initialize = instance.exports[function: PluginABI.initializeExport] {
@@ -234,7 +275,9 @@ final class WasmPluginRunner: @unchecked Sendable {
         // Periodic recycle for hygiene.
         loaded.callsSinceRecycle += 1
         if loaded.callsSinceRecycle >= Self.recycleAfter {
+            // Drop the instance for hygiene; the next call re-warms under the warmup deadline.
             self.loaded = nil
+            clearLoaded()
         } else {
             self.loaded = loaded
         }
@@ -265,6 +308,23 @@ final class WasmPluginRunner: @unchecked Sendable {
     }
 
     // MARK: - State
+
+    private var hasLoaded: Bool {
+        stateLock.lock(); defer { stateLock.unlock() }
+        return _hasLoaded
+    }
+
+    private func markLoaded() {
+        stateLock.lock()
+        _hasLoaded = true
+        stateLock.unlock()
+    }
+
+    private func clearLoaded() {
+        stateLock.lock()
+        _hasLoaded = false
+        stateLock.unlock()
+    }
 
     private func quarantine() {
         stateLock.lock()

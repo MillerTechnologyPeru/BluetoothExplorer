@@ -109,7 +109,7 @@ public final class Store {
         self.pluginManager = pluginManager
         setupLog()
         observeValues()
-        pluginManager.loadBundledPlugins()
+        pluginManager.loadInstalledPlugins()
     }
 
     /// The current parser registry snapshot.

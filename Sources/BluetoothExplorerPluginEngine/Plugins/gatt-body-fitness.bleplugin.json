@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-body-fitness",
+  "name": "GATT Body & Fitness",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-body-fitness.wasm",
+  "sha256": "4189d4080d74913edbe9b2c36a411ba53c95494906ac7227ee9ccb9468130b55",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A38",
+      "2A9C",
+      "2ACE"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

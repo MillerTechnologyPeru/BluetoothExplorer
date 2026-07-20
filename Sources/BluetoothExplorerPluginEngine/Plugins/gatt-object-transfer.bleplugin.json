@@ -1,0 +1,21 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-object-transfer",
+  "name": "GATT Object Transfer",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-object-transfer.wasm",
+  "sha256": "65af94272b2805adad36fb724e5d29282b51cf0b8cd1f979d71f02baff78364c",
+  "matches": {
+    "characteristicUUIDs": [
+      "2ABE",
+      "2ABF",
+      "2AC0",
+      "2AC3"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

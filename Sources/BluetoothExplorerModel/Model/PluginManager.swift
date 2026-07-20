@@ -62,9 +62,59 @@ public final class PluginManager {
 
     // MARK: Loading
 
-    /// Scan the engine bundle's `Plugins/` directory for `*.bleplugin.json` manifests.
-    public func loadBundledPlugins() {
-        loadBundledPlugins(from: PluginEngineResources.bundle)
+    /// Where installed plugins live on disk, once `loadInstalledPlugins()` has run.
+    public private(set) var directory: PluginDirectory?
+
+    /// Install bundled plugins into Documents on first launch, then load everything from there.
+    ///
+    /// This is the normal startup path: bundled and imported plugins end up in the same directory,
+    /// so there is a single load path and the user can see and manage every plugin in one place.
+    public func loadInstalledPlugins() {
+        do {
+            let directory = try PluginDirectory.default()
+            self.directory = directory
+            let freshlyInstalled = Set(try directory.installBundledPlugins(from: PluginEngineResources.bundle))
+            load(from: directory, bundledIdentifiers: freshlyInstalled)
+        } catch {
+            // Falling back to the read-only bundle keeps parsing working even if Documents is
+            // unavailable; the user just cannot manage plugins this session.
+            loadBundledPlugins(from: PluginEngineResources.bundle)
+        }
+    }
+
+    private func load(from directory: PluginDirectory, bundledIdentifiers: Set<String>) {
+        for manifestURL in directory.installedManifestURLs() {
+            do {
+                let loaded = try PluginLoader.load(manifestURL: manifestURL, verifyHash: true)
+                // Anything installed from the app bundle is "bundled", whether it landed this
+                // launch or a previous one; the install record is the source of truth.
+                let source: Source = bundledIdentifiers.contains(loaded.manifest.identifier)
+                    || bundledManifestIdentifiers.contains(loaded.manifest.identifier)
+                    ? .bundled : .imported
+                register(loaded.plugin, manifest: loaded.manifest, source: source)
+            } catch let failure as PluginLoadFailure {
+                recordFailure(failure, source: .imported)
+            } catch {
+                recordFailure(PluginLoadFailure(manifestName: manifestURL.lastPathComponent,
+                                                underlying: nil, message: "\(error)"), source: .imported)
+            }
+        }
+        rebuild()
+    }
+
+    /// Identifiers shipped inside the app bundle, used to label a plugin's origin in the UI.
+    private var bundledManifestIdentifiers: Set<String> {
+        let urls = PluginEngineResources.bundle.urls(
+            forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
+        var identifiers = Set<String>()
+        for url in urls.map({ $0 as URL })
+        where url.lastPathComponent.hasSuffix(PluginDirectory.manifestSuffix) {
+            guard let data = try? Data(contentsOf: url),
+                  let manifest = try? JSONDecoder().decode(PluginManifest.self, from: data)
+            else { continue }
+            identifiers.insert(manifest.identifier)
+        }
+        return identifiers
     }
 
     /// Scan a bundle's `Plugins/` directory for `*.bleplugin.json` manifests and load each.
@@ -77,6 +127,42 @@ public final class PluginManager {
             recordFailure(failure)
         }
         rebuild()
+    }
+
+    // MARK: Importing
+
+    /// Why an import failed, in a form the UI can show directly.
+    public struct ImportError: Error, Sendable, CustomStringConvertible {
+        public let message: String
+        public var description: String { message }
+    }
+
+    /// Import a plugin the user picked. The manifest and its module are validated, then copied
+    /// into the plugin directory and loaded.
+    @discardableResult
+    public func importPlugin(manifestURL: URL) -> Result<PluginID, ImportError> {
+        guard let directory else {
+            return .failure(ImportError(message: "Plugin storage is unavailable."))
+        }
+        #if canImport(Darwin)
+        // Files handed over by the document picker live outside the sandbox until claimed.
+        let scoped = manifestURL.startAccessingSecurityScopedResource()
+        defer { if scoped { manifestURL.stopAccessingSecurityScopedResource() } }
+        #endif
+        do {
+            let manifest = try directory.importPlugin(manifestURL: manifestURL)
+            let installed = directory.url
+                .appendingPathComponent(PluginDirectory.folderName(for: manifest.identifier), isDirectory: true)
+                .appendingPathComponent(manifestURL.lastPathComponent)
+            let loaded = try PluginLoader.load(manifestURL: installed, verifyHash: true)
+            register(loaded.plugin, manifest: loaded.manifest, source: .imported)
+            rebuild()
+            return .success(loaded.plugin.id)
+        } catch let failure as PluginLoadFailure {
+            return .failure(ImportError(message: failure.message))
+        } catch {
+            return .failure(ImportError(message: "\(error)"))
+        }
     }
 
     /// Load a single plugin from a manifest URL. `verifyHash` enforces the manifest `sha256`.
@@ -112,7 +198,7 @@ public final class PluginManager {
         let id = plugin.id
         wasmPlugins[id] = plugin
         if order.contains(id) == false { order.append(id) }
-        if enabled[id] == nil { enabled[id] = true }
+        if enabled[id] == nil { enabled[id] = Self.storedEnabled(id) }
         sources[id] = source
         displayNames[id] = manifest.name
         versions[id] = manifest.version
@@ -123,18 +209,36 @@ public final class PluginManager {
 
     public func setEnabled(_ isEnabled: Bool, id: PluginID) {
         enabled[id] = isEnabled
+        UserDefaults.standard.set(isEnabled, forKey: Self.enabledKey(id))
         rebuild()
     }
 
+    /// Remove a plugin from the registry and delete it from the plugin directory.
+    ///
+    /// A deleted bundled plugin is not reinstalled on the next launch: the install record still
+    /// lists it, so `installBundledPlugins` considers it already handled.
     public func removePlugin(id: PluginID) {
+        if let directory {
+            try? directory.remove(identifier: id.rawValue)
+        }
         wasmPlugins[id] = nil
         order.removeAll { $0 == id }
         enabled[id] = nil
+        UserDefaults.standard.removeObject(forKey: Self.enabledKey(id))
         sources[id] = nil
         displayNames[id] = nil
         versions[id] = nil
         loadErrors[id] = nil
         rebuild()
+    }
+
+    private static func enabledKey(_ id: PluginID) -> String {
+        "plugin.enabled." + id.rawValue
+    }
+
+    /// Persisted enable state, defaulting to on for a plugin seen for the first time.
+    private static func storedEnabled(_ id: PluginID) -> Bool {
+        UserDefaults.standard.object(forKey: enabledKey(id)) as? Bool ?? true
     }
 
     // MARK: Registry construction

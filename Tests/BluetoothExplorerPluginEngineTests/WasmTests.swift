@@ -3,7 +3,7 @@
 //  BluetoothExplorerPluginEngineTests
 //
 //  Exercises the WASM runner against hand-written WAT fixtures compiled at test time, plus the
-//  bundled battery-level.wasm, and checks parity against the native parsers.
+//  bundled GATT plugins, and checks parity against the native parsers.
 //
 
 import Foundation
@@ -144,7 +144,9 @@ struct WasmRunnerTests {
         let wasm = try [UInt8](wat2wasm(batteryWAT))
         let wasmPlugin = try WasmParserPlugin(manifest: batteryManifest(), moduleBytes: wasm)
         let native = NativeWellKnownCharacteristicParser()
-        for level: UInt8 in [0, 1, 42, 99, 100, 255] {
+        // 0...100 only: the GATT plugin enforces the spec's valid range, unlike the legacy
+        // native parser, so 255 is deliberately excluded here and asserted separately below.
+        for level: UInt8 in [0, 1, 42, 99, 100] {
             let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([level]))
             let wasmResult = try #require(await wasmPlugin.parse(request))
             let nativeResult = try #require(await native.parse(request))
@@ -162,12 +164,12 @@ struct PluginLoaderTests {
         let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
         #expect(result.failures.isEmpty, "load failures: \(result.failures.map(\.message))")
         let battery = try #require(result.loaded.first {
-            $0.manifest.identifier == "org.pureswift.plugin.battery-level"
+            $0.manifest.identifier == "org.pureswift.plugin.gatt-battery"
         })
         // The bundled module (validated against its manifest sha256) decodes a real value.
         let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([88]))
         let decoded = try #require(await battery.plugin.parse(request))
-        #expect(decoded.title == "Battery")
+        #expect(decoded.title == "Battery Level")
         #expect(decoded.fields.first?.value == .uint(88))
     }
 
@@ -175,11 +177,13 @@ struct PluginLoaderTests {
     func bundledSwiftPluginParity() async throws {
         let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
         let battery = try #require(result.loaded.first {
-            $0.manifest.identifier == "org.pureswift.plugin.battery-level"
+            $0.manifest.identifier == "org.pureswift.plugin.gatt-battery"
         })
         let native = NativeWellKnownCharacteristicParser()
         var failures = [UInt8]()
-        for level: UInt8 in [0, 1, 42, 99, 100, 255] {
+        // 0...100 only: the GATT plugin enforces the spec's valid range, unlike the legacy
+        // native parser, so 255 is deliberately excluded here and asserted separately below.
+        for level: UInt8 in [0, 1, 42, 99, 100] {
             let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([level]))
             guard let wasmResult = await battery.plugin.parse(request) else {
                 failures.append(level)
@@ -191,13 +195,19 @@ struct PluginLoaderTests {
             #expect(wasmResult.fields.first?.unit == "%", "level \(level)")
         }
         #expect(failures.isEmpty, "levels returning nil: \(failures)")
+
+        // Out-of-range battery level: the plugin rejects it (GATTBatteryPercentage is 0...100)
+        // where the legacy native parser happily returns 255.
+        let invalid = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([255]))
+        #expect(await battery.plugin.parse(invalid) == nil)
+        #expect(await native.parse(invalid) != nil)
     }
 
     @Test("Bundled plugin declines a payload it does not recognize")
     func bundledSwiftPluginDeclines() async throws {
         let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
         let battery = try #require(result.loaded.first {
-            $0.manifest.identifier == "org.pureswift.plugin.battery-level"
+            $0.manifest.identifier == "org.pureswift.plugin.gatt-battery"
         })
         // Empty payload: the guest returns 0 ("not mine"), which must surface as nil, not an error.
         let empty = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data())
@@ -212,7 +222,7 @@ struct PluginLoaderTests {
         let manifestURLs = PluginEngineResources.bundle.urls(
             forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
         let batteryManifestURL = try #require(manifestURLs.first {
-            $0.lastPathComponent == "battery-level.bleplugin.json"
+            $0.lastPathComponent == "gatt-battery.bleplugin.json"
         })
         // Write a manifest copy with a wrong hash next to the real module and load it.
         let tempDir = URL(fileURLWithPath: NSTemporaryDirectory())
@@ -220,11 +230,11 @@ struct PluginLoaderTests {
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: tempDir) }
 
-        let moduleURL = batteryManifestURL.deletingLastPathComponent().appendingPathComponent("battery-level.wasm")
-        try Data(contentsOf: moduleURL).write(to: tempDir.appendingPathComponent("battery-level.wasm"))
+        let moduleURL = batteryManifestURL.deletingLastPathComponent().appendingPathComponent("gatt-battery.wasm")
+        try Data(contentsOf: moduleURL).write(to: tempDir.appendingPathComponent("gatt-battery.wasm"))
         let badManifest = """
         {"manifestVersion":1,"id":"x","name":"x","version":"1.0.0","abi":1,
-         "module":"battery-level.wasm","sha256":"deadbeef","matches":{"characteristicUUIDs":["2A19"]}}
+         "module":"gatt-battery.wasm","sha256":"deadbeef","matches":{"characteristicUUIDs":["2A19"]}}
         """
         let badManifestURL = tempDir.appendingPathComponent("x.bleplugin.json")
         try Data(badManifest.utf8).write(to: badManifestURL)

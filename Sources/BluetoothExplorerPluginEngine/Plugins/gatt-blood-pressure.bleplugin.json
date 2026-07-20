@@ -1,0 +1,19 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-blood-pressure",
+  "name": "GATT Blood Pressure",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-blood-pressure.wasm",
+  "sha256": "019d86188802b75276de01fa5a052bdcaed44249e602b08e5dbeb87e454526f0",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A35",
+      "2A49"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

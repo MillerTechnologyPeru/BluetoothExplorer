@@ -34,7 +34,7 @@ public struct DecodedField: Equatable, Hashable, Sendable, Identifiable {
 }
 
 /// A typed decoded value. Mirrors the value types carried across the WASM ABI (CBOR).
-public enum DecodedValue: Equatable, Hashable, Sendable {
+public enum DecodedValue: Sendable {
     case string(String)
     case int(Int64)
     case uint(UInt64)
@@ -43,6 +43,53 @@ public enum DecodedValue: Equatable, Hashable, Sendable {
     /// Raw bytes; rendered as hexadecimal by the UI.
     case bytes(Data)
     case uuid(UUID)
+}
+
+extension DecodedValue: Equatable, Hashable {
+
+    /// Integers compare numerically across `int` and `uint`.
+    ///
+    /// CBOR has no notion of signedness: major type 0 encodes *any* non-negative integer, so a
+    /// plugin field that is semantically signed arrives as `uint` whenever its value happens to be
+    /// non-negative. The cases therefore mean "negative" and "non-negative", not "signed" and
+    /// "unsigned", and two producers of the same number — a native parser and a WASM plugin — must
+    /// compare equal. The UI renders both identically.
+    public static func == (lhs: DecodedValue, rhs: DecodedValue) -> Bool {
+        switch (lhs, rhs) {
+        case let (.string(a), .string(b)): return a == b
+        case let (.int(a), .int(b)): return a == b
+        case let (.uint(a), .uint(b)): return a == b
+        case let (.int(a), .uint(b)): return a >= 0 && UInt64(a) == b
+        case let (.uint(a), .int(b)): return b >= 0 && a == UInt64(b)
+        case let (.double(a), .double(b)): return a == b
+        case let (.bool(a), .bool(b)): return a == b
+        case let (.bytes(a), .bytes(b)): return a == b
+        case let (.uuid(a), .uuid(b)): return a == b
+        default: return false
+        }
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case let .string(value):
+            hasher.combine(0); hasher.combine(value)
+        // Both integer cases share a discriminator, and non-negative values hash through the same
+        // UInt64 path, so numerically equal values hash equally as Hashable requires.
+        case let .int(value):
+            hasher.combine(1)
+            if value >= 0 { hasher.combine(UInt64(value)) } else { hasher.combine(value) }
+        case let .uint(value):
+            hasher.combine(1); hasher.combine(value)
+        case let .double(value):
+            hasher.combine(2); hasher.combine(value)
+        case let .bool(value):
+            hasher.combine(3); hasher.combine(value)
+        case let .bytes(value):
+            hasher.combine(4); hasher.combine(value)
+        case let .uuid(value):
+            hasher.combine(5); hasher.combine(value)
+        }
+    }
 }
 
 /// The result of a plugin decoding one advertisement field or attribute value.

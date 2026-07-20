@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-hid",
+  "name": "GATT HID",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-hid.wasm",
+  "sha256": "3092c5aeb616a9ea358b2e3875e4ae936db77c183366cfdfabb95e13192667f4",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A22",
+      "2A32",
+      "2A33"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

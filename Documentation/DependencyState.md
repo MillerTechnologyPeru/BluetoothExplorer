@@ -70,7 +70,7 @@ With macros disabled the graph resolves (verified, exit 0). The durable fix is t
 
 ## Outstanding — needs a decision
 
-**`swift-java` and `swift-java-jni-core` both declare a C target named `CSwiftJavaJNI`:**
+### 1. `swift-java` and `swift-java-jni-core` both declare `CSwiftJavaJNI`
 
 ```
 multiple packages ('swift-java', 'swift-java-jni-core') declare targets with a conflicting
@@ -91,6 +91,30 @@ Attempting to pin backwards instead (older `GATT`, older `swift-java`) does not 
 has adopted SwiftPM traits and requires `Bluetooth` 7.5.0+, and an older `swift-java` reintroduces
 the `CSwiftJavaJNI` clash from the other direction. The ecosystem is mid-migration on several fronts
 at once, so the graph has to move forward, not back.
+
+### 2. The `skip-fuse-ui` fork does not build against current `skip-ui`
+
+`MillerTechnologyPeru/skip-fuse-ui` @ `feature/pureswift` declares `skip-ui` `from: "1.46.0"`, so a
+fresh resolve selects the newest release (1.59.0 at time of writing). The fork has not kept up with
+`skip-ui`'s API changes and fails to compile:
+
+```
+SkipSwiftUI/Components/AsyncImage.swift:77: error: cannot convert value of type
+'((Image?, (any Error)?) -> any View)?' to expected argument type
+'((AsyncImageBridgedContentArguments) -> any View)?'
+```
+
+The last version the fork builds against is **1.49.1** — the one the old pin file happened to
+select, which is why this only surfaces on a fresh resolve. Pinning it in the app is a workaround:
+
+```swift
+.package(url: "https://source.skip.tools/skip-ui.git", exact: "1.49.1"),
+```
+
+The real fix is either to update the fork for the current `skip-ui` API, or to give it an upper
+bound (`"1.46.0"..<"1.50.0"`) so resolution cannot silently select a version it cannot compile
+against. An unbounded `from:` on a fork that tracks a fast-moving upstream will keep breaking this
+way.
 
 ## Structural recommendation
 
@@ -113,3 +137,25 @@ swift package config set-mirror --package-url https://github.com/PureSwift/Andro
   --mirror-url file:///Users/coleman/Developer/Android
 # ...same for AndroidBluetooth and MillerTechnologyPeru/swift-android-native
 ```
+
+### Getting a buildable graph on this machine
+
+Until the outstanding items are resolved, the app can still be built and tested locally by
+reconstructing the state the old pin file happened to describe. This is a workaround, not a fix, and
+none of it is committed:
+
+1. Pin `PureSwift/Android` to `5642769` — the commit *before* `e9f59f8 Add swift-android-native
+   dependency`, which is where the duplicate-identity conflict enters the graph. A throwaway clone
+   works, so the real checkout is left alone:
+
+   ```sh
+   git clone ~/Developer/Android /tmp/Android-pinned
+   git -C /tmp/Android-pinned checkout -B master 5642769
+   swift package config set-mirror --package-url https://github.com/PureSwift/Android.git \
+     --mirror-url file:///tmp/Android-pinned
+   ```
+
+2. Pin `skip-ui` to `1.49.1` (see Outstanding #2).
+3. Build with `SWIFTPM_ENABLE_MACROS=0` (see Fixed #4).
+
+With those three in place the package resolves, and the plugin engine test suite passes.

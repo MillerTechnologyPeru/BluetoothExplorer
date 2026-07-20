@@ -1,0 +1,23 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-user-data",
+  "name": "GATT User Data",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-user-data.wasm",
+  "sha256": "f98e464304ea45e09f0e6dd3a3cb9fe23a8cc6a8291d69c03455188a3f03ca56",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A7E",
+      "2A7F",
+      "2A80",
+      "2A81",
+      "2A82",
+      "2A84"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

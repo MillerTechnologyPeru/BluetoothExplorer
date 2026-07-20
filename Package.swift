@@ -86,7 +86,10 @@ let package = Package(
             name: "BluetoothExplorerPluginEngineTests",
             dependencies: [
                 "BluetoothExplorerPluginEngine",
-                .product(name: "WAT", package: "WasmKit")
+                .product(name: "WAT", package: "WasmKit"),
+                // Oracle for the GATT characteristic plugins: the same bytes are run through
+                // BluetoothGATT's own parsers and the plugins must agree on accept/reject.
+                .product(name: "BluetoothGATT", package: "Bluetooth")
             ]
         )
     ]

@@ -1,0 +1,25 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-device-information",
+  "name": "GATT Device Information",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-device-information.wasm",
+  "sha256": "3bbf24ba67e87a8d482d24984b6ff4136fa7f8d4e8e792c4773cce9e8b720525",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A23",
+      "2A24",
+      "2A25",
+      "2A26",
+      "2A27",
+      "2A28",
+      "2A29",
+      "2A50"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

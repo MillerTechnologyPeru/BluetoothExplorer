@@ -1,0 +1,24 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-generic-service",
+  "name": "GATT Generic Service",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-generic-service.wasm",
+  "sha256": "6975e518a867d7ec84ca461377834228c5edddce7d479d1dd69a9c264dd98864",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A05",
+      "2AA6",
+      "2A31",
+      "2A4F",
+      "2B29",
+      "2B2A",
+      "2BF5"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

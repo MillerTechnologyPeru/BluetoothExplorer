@@ -1,0 +1,26 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-indoor-positioning",
+  "name": "GATT Indoor Positioning",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-indoor-positioning.wasm",
+  "sha256": "05047ad88626b597b09cd7e9a9af775437eb160b73ac2f2290b10ed3aece791b",
+  "matches": {
+    "characteristicUUIDs": [
+      "2AAD",
+      "2AAE",
+      "2AAF",
+      "2AB0",
+      "2AB1",
+      "2AB2",
+      "2AB3",
+      "2AB4",
+      "2AB5"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

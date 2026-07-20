@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-misc",
+  "name": "GATT Miscellaneous",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-misc.wasm",
+  "sha256": "e4ef01ed33ff359306e27005029cd2f2afcb52732515b6faa2fc0383b058b585",
+  "matches": {
+    "characteristicUUIDs": [
+      "2AA3",
+      "2AAB",
+      "2B88"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

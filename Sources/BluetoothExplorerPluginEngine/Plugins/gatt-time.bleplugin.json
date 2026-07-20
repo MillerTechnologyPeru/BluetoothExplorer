@@ -1,0 +1,32 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-time",
+  "name": "GATT Time",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-time.wasm",
+  "sha256": "ec2031c3e7ef0c2af5e078c256dad927490105852b938108f285c0398659b9b4",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A08",
+      "2A09",
+      "2A0A",
+      "2A0C",
+      "2A0D",
+      "2A0E",
+      "2A0F",
+      "2A11",
+      "2A12",
+      "2A13",
+      "2A14",
+      "2A16",
+      "2A17",
+      "2A2B",
+      "2AED"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

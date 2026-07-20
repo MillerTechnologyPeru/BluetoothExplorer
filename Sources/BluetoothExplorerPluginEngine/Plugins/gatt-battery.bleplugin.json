@@ -1,0 +1,19 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-battery",
+  "name": "GATT Battery",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-battery.wasm",
+  "sha256": "d15e4be14a3aa00d13036d5ff90a45886457bc99bafb15d0f69e516f703d0f52",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A19",
+      "2BF0"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

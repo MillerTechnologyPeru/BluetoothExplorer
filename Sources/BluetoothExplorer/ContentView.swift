@@ -2,7 +2,7 @@ import SwiftUI
 import BluetoothExplorerUI
 
 enum ContentTab: String, Hashable {
-    case welcome, home, settings
+    case welcome, home, plugins, settings
 }
 
 struct ContentView: View {
@@ -17,6 +17,12 @@ struct ContentView: View {
             }
             .tabItem { Label("Welcome", systemImage: "heart.fill") }
             .tag(ContentTab.welcome)
+
+            NavigationStack {
+                PluginsView()
+            }
+            .tabItem { Label("Plugins", systemImage: "puzzlepiece.extension.fill") }
+            .tag(ContentTab.plugins)
 
             NavigationStack {
                 SettingsView(appearance: $appearance, welcomeName: $welcomeName)
@@ -58,9 +64,6 @@ struct SettingsView : View {
                 Text("System").tag("")
                 Text("Light").tag("light")
                 Text("Dark").tag("dark")
-            }
-            NavigationLink("Plugins") {
-                PluginsView()
             }
             if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
                let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {

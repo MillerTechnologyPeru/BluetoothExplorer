@@ -1,0 +1,26 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.gatt-alert-notification",
+  "name": "GATT Alert Notification",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "gatt-alert-notification.wasm",
+  "sha256": "9411a3ca375305708d71007bc75c6b5c14fb373e29ca6aa6ae591deabbaf49f2",
+  "matches": {
+    "characteristicUUIDs": [
+      "2A06",
+      "2A3F",
+      "2A42",
+      "2A43",
+      "2A44",
+      "2A45",
+      "2A46",
+      "2A47",
+      "2A48"
+    ]
+  },
+  "limits": {
+    "maxMemoryPages": 16,
+    "maxOutputBytes": 4096
+  }
+}

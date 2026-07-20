@@ -55,6 +55,11 @@ and `remainingBytes(_:)`.
 (compile-time literal), `text` (UTF-8 from the payload), `bytes` (rendered as hex by the app), and
 `uuid`. Keys, labels and units are `StaticString` so they cost no allocation.
 
+Note that CBOR does not carry signedness: a value written with `int` arrives on the host as an
+unsigned value whenever it is non-negative. The host compares integers numerically, so this does
+not affect correctness or display — but do not expect the signed/unsigned distinction to survive
+the boundary.
+
 ## Building
 
 ```sh

@@ -97,6 +97,12 @@ Definite-length, integer-keyed CBOR:
 ```
 
 - Byte fields use a CBOR byte string; UUID fields use tag 37 over a 16-byte string.
+- **Integers carry no signedness.** CBOR major type 0 encodes any non-negative integer and major
+  type 1 any negative one, so a semantically signed field (say a dBm power level) arrives as
+  `uint` whenever its value is non-negative. The host's `DecodedValue.int` / `.uint` cases
+  therefore mean "negative" / "non-negative", and they compare and hash numerically — a native
+  parser emitting `.int(0)` equals a plugin emitting `.uint(0)`. Do not rely on the case to
+  recover the guest's original type.
 - The host decoder is strict: max depth 8, max 64 items per collection, max 1 KiB per string, and
   the total output must not exceed the manifest's `maxOutputBytes`.
 

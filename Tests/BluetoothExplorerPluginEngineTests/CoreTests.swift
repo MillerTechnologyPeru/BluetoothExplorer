@@ -146,3 +146,42 @@ struct RegistryTests {
         #expect(battery?.fields.first?.value == .uint(50))
     }
 }
+
+@Suite("DecodedValue integer semantics")
+struct DecodedValueTests {
+
+    // CBOR cannot distinguish a non-negative signed integer from an unsigned one, so a plugin's
+    // signed field arrives as `uint` whenever its value is non-negative. Native and WASM producers
+    // of the same number must still compare equal.
+
+    @Test("Non-negative int and uint compare equal")
+    func numericEquality() {
+        #expect(DecodedValue.int(0) == DecodedValue.uint(0))
+        #expect(DecodedValue.int(127) == DecodedValue.uint(127))
+        #expect(DecodedValue.uint(42) == DecodedValue.int(42))
+        #expect(DecodedValue.int(Int64.max) == DecodedValue.uint(UInt64(Int64.max)))
+    }
+
+    @Test("Negative values never equal an unsigned value")
+    func negativeInequality() {
+        #expect(DecodedValue.int(-1) != DecodedValue.uint(1))
+        #expect(DecodedValue.int(-59) != DecodedValue.uint(UInt64(bitPattern: -59)))
+        // A uint beyond Int64.max has no signed counterpart.
+        #expect(DecodedValue.uint(UInt64(Int64.max) + 1) != DecodedValue.int(Int64.min))
+    }
+
+    @Test("Equal values hash equally")
+    func hashing() {
+        #expect(DecodedValue.int(7).hashValue == DecodedValue.uint(7).hashValue)
+        // Hashable's contract: equal values must collapse in a Set.
+        #expect(Set([DecodedValue.int(7), DecodedValue.uint(7)]).count == 1)
+        #expect(Set([DecodedValue.int(-7), DecodedValue.uint(7)]).count == 2)
+    }
+
+    @Test("Other cases stay distinct")
+    func otherCases() {
+        #expect(DecodedValue.int(1) != DecodedValue.double(1))
+        #expect(DecodedValue.uint(1) != DecodedValue.bool(true))
+        #expect(DecodedValue.string("1") != DecodedValue.uint(1))
+    }
+}

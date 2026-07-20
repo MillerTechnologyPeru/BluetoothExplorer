@@ -1,0 +1,13 @@
+{
+  "manifestVersion": 1,
+  "id": "org.pureswift.plugin.ibeacon",
+  "name": "iBeacon",
+  "version": "1.0.0",
+  "abi": 1,
+  "module": "ibeacon.wasm",
+  "sha256": "fb1d79bee5f78713ce8d0c9df4528508f7dcbc4bf73fc1cec0b2825b87c8aa4a",
+  "matches": {
+    "companyIdentifiers": [76]
+  },
+  "limits": { "maxMemoryPages": 16, "maxOutputBytes": 512 }
+}

@@ -23,7 +23,7 @@ public struct WasmParserPlugin: ParserPlugin {
     public init(
         manifest: PluginManifest,
         moduleBytes: [UInt8],
-        deadline: Duration = .milliseconds(50),
+        deadline: Duration = .milliseconds(250),
         warmupDeadline: Duration = .seconds(5)
     ) throws {
         try manifest.validate()

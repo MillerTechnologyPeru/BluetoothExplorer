@@ -1,5 +1,4 @@
 // swift-tools-version: 6.2
-// This is a Skip (https://skip.tools) package.
 import PackageDescription
 
 let package = Package(
@@ -10,13 +9,12 @@ let package = Package(
         .library(name: "BluetoothExplorer", type: .dynamic, targets: ["BluetoothExplorer"])
     ],
     dependencies: [
-        .package(url: "https://source.skip.tools/skip.git", from: "1.7.1"),
-        .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0"),
-        .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse-ui.git", branch: "feature/pureswift"),
-        .package(url: "https://github.com/MillerTechnologyPeru/skip-fuse.git", branch: "feature/pureswift"),
         .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
         .package(url: "https://github.com/PureSwift/AndroidBluetooth.git", branch: "master"),
         .package(url: "https://github.com/PureSwift/Bluetooth.git", from: "7.2.0"),
+        // SwiftUI for Android. Apple platforms use the system SwiftUI instead, so this is only
+        // linked for .android — see the conditional target dependencies below.
+        .package(url: "https://github.com/PureSwift/AndroidSwiftUI.git", branch: "master"),
         .package(url: "https://github.com/swiftwasm/WasmKit.git", .upToNextMinor(from: "0.3.1"))
     ],
     targets: [
@@ -25,24 +23,25 @@ let package = Package(
             dependencies: [
                 "BluetoothExplorerUI",
                 .product(
-                    name: "SkipFuseUI",
-                    package: "skip-fuse-ui"
+                    name: "AndroidSwiftUI",
+                    package: "AndroidSwiftUI",
+                    condition: .when(platforms: [.android])
                 )
             ],
-            resources: [.process("Resources")],
-            plugins: [.plugin(name: "skipstone", package: "skip")]
+            resources: [.process("Resources")]
         ),
         .target(
             name: "BluetoothExplorerUI",
             dependencies: [
                 "BluetoothExplorerModel",
                 "BluetoothExplorerPluginEngine",
-                .product(name: "SkipModel", package: "skip-model"),
-                .product(name: "SkipFuse", package: "skip-fuse"),
-                .product(name: "SkipFuseUI", package: "skip-fuse-ui")
+                .product(
+                    name: "AndroidSwiftUI",
+                    package: "AndroidSwiftUI",
+                    condition: .when(platforms: [.android])
+                )
             ],
-            resources: [.process("Resources")],
-            plugins: [.plugin(name: "skipstone", package: "skip")]
+            resources: [.process("Resources")]
         ),
         .target(
             name: "BluetoothExplorerPluginEngine",
@@ -71,16 +70,12 @@ let package = Package(
                     condition: .when(platforms: [.android])
                 ),
                 .product(
-                    name: "SkipFuse",
-                    package: "skip-fuse"
-                ),
-                .product(
-                    name: "SkipModel",
-                    package: "skip-model"
+                    name: "AndroidSwiftUI",
+                    package: "AndroidSwiftUI",
+                    condition: .when(platforms: [.android])
                 )
             ],
-            resources: [.process("Resources")],
-            plugins: [.plugin(name: "skipstone", package: "skip")]
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "BluetoothExplorerPluginEngineTests",

@@ -8,8 +8,6 @@
 
 import Foundation
 import Observation
-import SkipFuse
-import SkipModel
 import Bluetooth
 import GATT
 import BluetoothExplorerPluginEngine

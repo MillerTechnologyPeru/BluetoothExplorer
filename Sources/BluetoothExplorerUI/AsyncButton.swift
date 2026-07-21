@@ -5,7 +5,11 @@
 //  Created by Alsey Coleman Miller on 23/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 
 enum ActionOption: CaseIterable {
     case disableButton

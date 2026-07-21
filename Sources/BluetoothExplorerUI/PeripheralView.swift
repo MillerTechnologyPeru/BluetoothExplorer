@@ -6,7 +6,11 @@
 //  Copyright © 2021 Alsey Coleman Miller. All rights reserved.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import BluetoothExplorerModel
 import BluetoothExplorerPluginEngine
 

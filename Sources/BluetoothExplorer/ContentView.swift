@@ -1,13 +1,16 @@
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import BluetoothExplorerUI
 
 enum ContentTab: String, Hashable {
-    case welcome, home, plugins, settings
+    case devices, plugins, settings
 }
 
 struct ContentView: View {
-    @AppStorage("tab") var tab = ContentTab.welcome
-    @AppStorage("name") var welcomeName = "Skipper"
+    @AppStorage("tab") var tab = ContentTab.devices
     @AppStorage("appearance") var appearance = ""
 
     var body: some View {
@@ -15,8 +18,8 @@ struct ContentView: View {
             NavigationStack {
                 CentralList()
             }
-            .tabItem { Label("Welcome", systemImage: "heart.fill") }
-            .tag(ContentTab.welcome)
+            .tabItem { Label("Devices", systemImage: "dot.radiowaves.left.and.right") }
+            .tag(ContentTab.devices)
 
             NavigationStack {
                 PluginsView()
@@ -25,7 +28,7 @@ struct ContentView: View {
             .tag(ContentTab.plugins)
 
             NavigationStack {
-                SettingsView(appearance: $appearance, welcomeName: $welcomeName)
+                SettingsView(appearance: $appearance)
                     .navigationTitle("Settings")
             }
             .tabItem { Label("Settings", systemImage: "gearshape.fill") }
@@ -35,31 +38,11 @@ struct ContentView: View {
     }
 }
 
-struct WelcomeView : View {
-    @State var heartBeating = false
-    @Binding var welcomeName: String
-
-    var body: some View {
-        VStack(spacing: 0) {
-            Text("Hello [\(welcomeName)](https://skip.dev)!")
-                .padding()
-            Image(systemName: "heart.fill")
-                .foregroundStyle(.red)
-                .scaleEffect(heartBeating ? 1.5 : 1.0)
-                .animation(.easeInOut(duration: 1).repeatForever(), value: heartBeating)
-                .task { heartBeating = true }
-        }
-        .font(.largeTitle)
-    }
-}
-
-struct SettingsView : View {
+struct SettingsView: View {
     @Binding var appearance: String
-    @Binding var welcomeName: String
 
     var body: some View {
         Form {
-            TextField("Name", text: $welcomeName)
             Picker("Appearance", selection: $appearance) {
                 Text("System").tag("")
                 Text("Light").tag("light")
@@ -69,32 +52,6 @@ struct SettingsView : View {
                let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
                 Text("Version \(version) (\(buildNumber))")
             }
-            HStack {
-                PlatformHeartView()
-                Text("Powered by [Skip](https://skip.tools)")
-            }
         }
     }
 }
-
-/// A view that shows a blue heart on iOS and a green heart on Android.
-struct PlatformHeartView : View {
-    var body: some View {
-        #if os(Android)
-        ComposeView {
-            HeartComposer()
-        }
-        #else
-        Text(verbatim: "💙")
-        #endif
-    }
-}
-
-#if SKIP
-/// Use a ContentComposer to integrate Compose content. This code will be transpiled to Kotlin.
-struct HeartComposer : ContentComposer {
-    @Composable func Compose(context: ComposeContext) {
-        androidx.compose.material3.Text("💚", modifier: context.modifier)
-    }
-}
-#endif

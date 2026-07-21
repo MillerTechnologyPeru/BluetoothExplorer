@@ -7,7 +7,11 @@
 //  listed here lives in one place the user can inspect.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 #if canImport(UniformTypeIdentifiers)
 import UniformTypeIdentifiers
 #endif

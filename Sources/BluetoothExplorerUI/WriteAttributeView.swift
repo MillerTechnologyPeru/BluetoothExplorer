@@ -6,7 +6,11 @@
 //
 
 import Foundation
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import Bluetooth
 import BluetoothExplorerModel
 

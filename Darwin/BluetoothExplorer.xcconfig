@@ -1,12 +1,17 @@
-#include "../Skip.env"
+// App identity. These previously lived in Skip.env, which was shared with the Android build; with
+// Skip removed they are declared here and the Android project carries its own copy.
 
-// Set the action that will be executed as part of the Xcode Run Script phase
-// Setting to "launch" will build and run the app in the first open Android emulator or device
-// Setting to "build" will just run gradle build, but will not launch the app
-// Setting to "none" will completely disable the build and launch of the Android app
-//SKIP_ACTION = launch
-//SKIP_ACTION = build
-SKIP_ACTION = none
+// PRODUCT_NAME must match the app's Swift module name
+PRODUCT_NAME = BluetoothExplorer
+
+// The unique id for the app
+PRODUCT_BUNDLE_IDENTIFIER = org.pureswift.bluetoothexplorer
+
+// The semantic version of the app
+MARKETING_VERSION = 1.0.0
+
+// The build number specifying the internal app version
+CURRENT_PROJECT_VERSION = 1
 
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
 ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor

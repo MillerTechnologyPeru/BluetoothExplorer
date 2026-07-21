@@ -94,3 +94,33 @@ device or emulator. Notable limitations, each documented in the source:
   `Sources/BluetoothExplorer/Skip/` (`ScanCallback.kt`, `BluetoothGattCallback.kt`) rehomed into the
   Android app project — they are peers for `AndroidBluetooth`, unrelated to Skip, and were only
   living in that directory because skipstone collected them.
+
+## Building an Android app archive
+
+CI (`.github/workflows/ci.yml`) archives the iOS app but does **not** produce an Android `.aab`.
+Three things block it, each verified by trying:
+
+1. **The app does not cross-compile for Android.** `swift build --swift-sdk … --target BluetoothExplorer`
+   fails inside `AndroidBluetooth`: its `@JavaImplementation` macro generates invalid Swift for
+   `LowEnergyScanCallback.swiftOnScanFailed(error:)` — the parameter named `error` is emitted into a
+   context where it parses as a keyword, producing
+   `declaration name '…' is not covered by macro 'JavaImplementation'`. This is an upstream
+   swift-java/AndroidBluetooth bug.
+2. **A whole-package Android build additionally fails in WasmKit's `SystemExtras`**: it does
+   `st_mode & S_IFMT`, but `st_mode` is `UInt32` in the Android sysroot while swift-system's
+   `CInterop.Mode` is `UInt16`. This target is not reachable from the app, so building specific
+   targets avoids it; a plain `swift build` does not.
+3. **The Android project is still Skip's.** `Android/settings.gradle.kts` shells out to
+   `skip plugin --prebuild`, and `Android/app/build.gradle.kts` applies `skip-build-plugin` with a
+   `skip { }` block that reads the now-deleted `Skip.env`. With Skip removed none of that resolves.
+
+Replacing (3) means writing a conventional Android app project, using
+[AndroidSwiftUI's `Demo/`](https://github.com/PureSwift/AndroidSwiftUI/tree/master/Demo) as the
+template: its `app/src/main/java/com/pureswift/swiftandroid/` Kotlin classes (`MainActivity`,
+`Application`, `NativeLibrary`, `ListViewAdapter`, `Fragment`, …) are the peers AndroidSwiftUI's
+`@JavaClass` bindings bind to, and `build-swift.sh` shows the packaging step — build the Swift
+package for the target architecture, then copy the resulting `.so` into
+`app/src/main/jniLibs/<abi>/`. The Kotlin JNI peers currently under `Sources/BluetoothExplorer/Skip/`
+(`ScanCallback.kt`, `BluetoothGattCallback.kt`) belong in that project too.
+
+None of this is worth doing until (1) is fixed upstream, since the `.so` cannot be produced.

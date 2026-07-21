@@ -1,0 +1,97 @@
+# NOTE: every job here fails on a clean checkout until PureSwift/AndroidBluetooth#4 is merged.
+# AndroidBluetooth requests the `AndroidManifest` product from `Android`, but it moved to
+# `swift-android-native` (PureSwift/Android#40), and SwiftPM validates the whole package graph even
+# for dependencies that are conditional on `.android`:
+#   error: product 'AndroidManifest' required by package 'androidbluetooth' ... not found
+# That is a one-line manifest fix upstream, not a problem with this repo.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Build
+        run: swift build --build-tests
+      - name: Test
+        run: swift test
+
+  ios-archive:
+    name: iOS Archive
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      # WasmKit declares `.treatAllWarnings(as: .error)` for Apple platforms, which conflicts with
+      # the `-suppress-warnings` Xcode passes to package dependencies:
+      #   error: Conflicting options '-warnings-as-errors' and '-suppress-warnings'
+      # The setting only reaches package targets from the command line, so it cannot live in the
+      # xcconfig or the project.
+      - name: Archive
+        working-directory: Darwin
+        run: |
+          xcodebuild archive \
+            -project BluetoothExplorer.xcodeproj \
+            -scheme "BluetoothExplorer App" \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/BluetoothExplorer.xcarchive" \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            SWIFT_SUPPRESS_WARNINGS=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Verify archive contents
+        run: |
+          APP="$RUNNER_TEMP/BluetoothExplorer.xcarchive/Products/Applications/BluetoothExplorer.app"
+          test -d "$APP" || { echo "::error::archive did not produce BluetoothExplorer.app"; exit 1; }
+          # The bundled WASM parser plugins must ship inside the app.
+          find "$APP" -name '*.wasm' -print | tee /tmp/wasm-list
+          test -s /tmp/wasm-list || { echo "::error::no bundled .wasm plugins in the archive"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-archive
+          path: ${{ runner.temp }}/BluetoothExplorer.xcarchive
+          retention-days: 14
+
+  android-package:
+    name: Android Swift Package
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install Swift Android SDK
+        run: |
+          brew install skiptools/skip/skip || (brew update && brew install skiptools/skip/skip)
+          skip android sdk install --version 6.3.3
+
+      # Only the plugin engine is built here. The full app does not yet cross-compile for Android:
+      # AndroidBluetooth's `@JavaImplementation` macro generates invalid code for its scan callback,
+      # and WasmKit's SystemExtras target does not compile against the Android sysroot
+      # (`st_mode` is UInt32 there while swift-system's CInterop.Mode is UInt16). Neither is
+      # reachable from this target. See Documentation/AndroidSwiftUIMigration.md.
+      - name: Build plugin engine for Android
+        run: swift build --swift-sdk swift-6.3.3-RELEASE_android --target BluetoothExplorerPluginEngine

@@ -59,14 +59,32 @@ AndroidSwiftUI first (branch `feature/swiftui-containers`):
 - `NavigationStack` — reusing the existing `NavigationContext`, so `NavigationLink` push and
   hardware-back pop are shared with `NavigationView` rather than duplicated
 - `LazyVStack` / `LazyHStack` — eager, mapping onto the same LinearLayout path as `VStack`/`HStack`
-- `TabView` with `.tabItem` and selection
-- `.sheet(isPresented:content:)`
-- `.refreshable`
+- `TabView` with `.tabItem` and selection — tab items are read back by walking the modifier chain
+  for trait-writing modifiers; only the selected tab is mounted
+- `.sheet(isPresented:content:)` — a full-screen overlay in the same view hierarchy rather than an
+  Android `Dialog`, because the fiber renderer mounts children into the parent's `ViewGroup` and has
+  no path to a `Dialog`'s separate decor view
+- `.refreshable` — stores a `RefreshAction` in the environment as SwiftUI does, but no gesture
+  triggers it: binding `SwipeRefreshLayout` would need an androidx dependency the package lacks
 - Swift **Observation** support — `.environment(object)` and `@Environment(Type.self)`, with
   invalidation driven by `withObservationTracking`
 
 `.fileImporter` is not needed on Android: the plugin import button is already gated behind
 `#if !os(Android)`.
+
+### Known gaps in those additions
+
+All four compile and were verified to build together for Android, but none has been exercised on a
+device or emulator. Notable limitations, each documented in the source:
+
+- **Observation**: `@Bindable` is not implemented, and `@Environment(Store.self) var store: Store?`
+  (the optional form) is unsupported — a missing injection traps rather than yielding `nil`.
+- **TabView**: unselected tabs are unmounted, so their `@State` resets; no `TabViewStyle`, paging or
+  badges.
+- **Sheet**: no animation, detents or drag-to-dismiss, and no `@Environment(\.dismiss)` — content
+  must dismiss itself through the binding.
+- **NavigationStack**: `NavigationStack(path:)` and value-based `navigationDestination(for:)` are
+  not implemented; `NavigationContext.path` holds type-erased views, not a `Hashable` data path.
 
 ## Platform status
 

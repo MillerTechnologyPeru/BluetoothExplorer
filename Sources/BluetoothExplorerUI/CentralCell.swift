@@ -5,7 +5,11 @@
 //  Created by Alsey Coleman Miller on 18/12/21.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import BluetoothExplorerModel
 
 public struct CentralCell: View {

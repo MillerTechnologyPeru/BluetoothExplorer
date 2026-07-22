@@ -39,7 +39,10 @@ playground.xcworkspace
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
 # Packages/
 # Package.pins
-*Package.resolved
+# NOTE: Package.resolved is deliberately committed. This is an app, not a library, and several
+# dependencies track moving branches (GATT master, AndroidSwiftUI master), so without it every
+# clean checkout — including CI — resolves a different graph than the one that was tested.
+Darwin/**/Package.resolved
 .build/
 .swiftpm
 

@@ -1,9 +1,3 @@
-# NOTE: every job here fails on a clean checkout until PureSwift/AndroidBluetooth#4 is merged.
-# AndroidBluetooth requests the `AndroidManifest` product from `Android`, but it moved to
-# `swift-android-native` (PureSwift/Android#40), and SwiftPM validates the whole package graph even
-# for dependencies that are conditional on `.android`:
-#   error: product 'AndroidManifest' required by package 'androidbluetooth' ... not found
-# That is a one-line manifest fix upstream, not a problem with this repo.
 name: CI
 
 on:
@@ -19,13 +13,16 @@ concurrency:
 jobs:
   test:
     name: Test
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      # Pinned, not latest-stable: WasmKit 0.3.x declares swift-tools-version 6.3, so it needs
+      # Swift 6.3+. Xcode 26.5 (the macos-26 default) ships Swift 6.2.x and fails with
+      # "package 'wasmkit' is using Swift tools version 6.3.0 but the installed version is 6.2.4".
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: '26.6'
       - name: Build
         run: swift build --build-tests
       - name: Test
@@ -33,19 +30,17 @@ jobs:
 
   ios-archive:
     name: iOS Archive
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      # Pinned, not latest-stable: WasmKit 0.3.x declares swift-tools-version 6.3, so it needs
+      # Swift 6.3+. Xcode 26.5 (the macos-26 default) ships Swift 6.2.x and fails with
+      # "package 'wasmkit' is using Swift tools version 6.3.0 but the installed version is 6.2.4".
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: '26.6'
 
-      # WasmKit declares `.treatAllWarnings(as: .error)` for Apple platforms, which conflicts with
-      # the `-suppress-warnings` Xcode passes to package dependencies:
-      #   error: Conflicting options '-warnings-as-errors' and '-suppress-warnings'
-      # The setting only reaches package targets from the command line, so it cannot live in the
-      # xcconfig or the project.
       - name: Archive
         working-directory: Darwin
         run: |
@@ -56,7 +51,6 @@ jobs:
             -archivePath "$RUNNER_TEMP/BluetoothExplorer.xcarchive" \
             -skipPackagePluginValidation \
             -skipMacroValidation \
-            SWIFT_SUPPRESS_WARNINGS=NO \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Verify archive contents
@@ -72,26 +66,3 @@ jobs:
           name: ios-archive
           path: ${{ runner.temp }}/BluetoothExplorer.xcarchive
           retention-days: 14
-
-  android-package:
-    name: Android Swift Package
-    runs-on: macos-15
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v4
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: Install Swift Android SDK
-        run: |
-          brew install skiptools/skip/skip || (brew update && brew install skiptools/skip/skip)
-          skip android sdk install --version 6.3.3
-
-      # Only the plugin engine is built here. The full app does not yet cross-compile for Android:
-      # AndroidBluetooth's `@JavaImplementation` macro generates invalid code for its scan callback,
-      # and WasmKit's SystemExtras target does not compile against the Android sysroot
-      # (`st_mode` is UInt32 there while swift-system's CInterop.Mode is UInt16). Neither is
-      # reachable from this target. See Documentation/AndroidSwiftUIMigration.md.
-      - name: Build plugin engine for Android
-        run: swift build --swift-sdk swift-6.3.3-RELEASE_android --target BluetoothExplorerPluginEngine

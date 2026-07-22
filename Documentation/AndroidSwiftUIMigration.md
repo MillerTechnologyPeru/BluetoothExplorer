@@ -88,7 +88,19 @@ device or emulator. Notable limitations, each documented in the source:
 
 ## Platform status
 
-- **Apple platforms** — the package resolves and every target builds with no Skip involvement.
+- **Apple platforms** — working end to end. A clean checkout resolves, builds, tests and archives
+  with **no mirrors, no environment variables and no extra xcodebuild flags**, and the app runs in
+  the simulator: the device list populates from `MockCentral`, and all 13 bundled plugins install
+  into `Documents/Plugins/` on first launch and appear in the Plugins tab.
+
+  Two things were needed to get there beyond removing Skip:
+  - The `AndroidBluetooth` package dependency is temporarily not declared. SwiftPM validates the
+    whole graph even for `.android`-conditional dependencies, so its `AndroidManifest` bug broke
+    Apple builds. Restore it with PureSwift/AndroidBluetooth#4.
+  - WasmKit is taken from a fork that drops `.treatAllWarnings(as: .error)`. Upstream's setting
+    collides with the `-suppress-warnings` Xcode passes to package dependencies, which made the app
+    unbuildable in Xcode; the override only works from the command line, so it could not be fixed
+    from the xcconfig or project.
 - **Android** — the dependency wiring is in place, but the Android app build has not been verified
   end to end. It additionally needs the two PureSwift PRs above, and the Kotlin JNI peers under
   `Sources/BluetoothExplorer/Skip/` (`ScanCallback.kt`, `BluetoothGattCallback.kt`) rehomed into the

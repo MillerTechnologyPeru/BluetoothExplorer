@@ -21,7 +21,16 @@ let package = Package(
         // SwiftUI for Android. Apple platforms use the system SwiftUI instead, so this is only
         // linked for .android — see the conditional target dependencies below.
         .package(url: "https://github.com/PureSwift/AndroidSwiftUI.git", branch: "master"),
-        .package(url: "https://github.com/swiftwasm/WasmKit.git", .upToNextMinor(from: "0.3.1"))
+        // Fork of WasmKit 0.3.1 with one change: upstream declares
+        // `.treatAllWarnings(as: .error)` for Apple platforms, which collides with the
+        // `-suppress-warnings` Xcode passes to package dependencies and makes the app fail to build
+        // in Xcode ("Conflicting options '-warnings-as-errors' and '-suppress-warnings'"). That
+        // setting only reaches package targets from the command line, so it cannot be overridden
+        // from the xcconfig or the project. Track upstream and drop the fork once it is fixed there.
+        .package(
+            url: "https://github.com/MillerTechnologyPeru/WasmKit.git",
+            revision: "ba06b7c64b5bc692c19c301ba2ef843c8d0f37c2"
+        )
     ],
     targets: [
         .target(

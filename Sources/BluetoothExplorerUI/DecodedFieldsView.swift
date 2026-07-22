@@ -6,7 +6,11 @@
 //  subset (no ByteCountFormatter; Text(verbatim:) throughout).
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import BluetoothExplorerModel
 import BluetoothExplorerPluginEngine
 

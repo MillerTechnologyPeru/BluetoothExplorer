@@ -8,7 +8,6 @@
 
 import Foundation
 import Observation
-import SkipFuse
 import BluetoothExplorerPluginEngine
 
 @MainActor

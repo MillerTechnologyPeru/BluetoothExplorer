@@ -9,8 +9,6 @@ import Foundation
 import Observation
 import Bluetooth
 import GATT
-import SkipFuse
-import SkipModel
 
 @MainActor
 @Observable

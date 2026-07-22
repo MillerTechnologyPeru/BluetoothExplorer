@@ -96,7 +96,11 @@ private let knownDivergences: [UInt16: String] = [:]
 
 // MARK: - Tests
 
-@Suite("GATT characteristic plugins")
+// Serialized: each test loads all 13 bundled plugins, and every plugin holds its own warm
+// interpreter instance on its own thread. Running these tests concurrently multiplies that into
+// dozens of contending interpreters, which is a property of the test harness rather than of the
+// engine, and makes per-call latency wildly variable.
+@Suite("GATT characteristic plugins", .serialized)
 struct GATTPluginTests {
 
     private func loadAll() throws -> [LoadedPlugin] {

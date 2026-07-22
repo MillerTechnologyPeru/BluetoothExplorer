@@ -6,7 +6,11 @@
 //  Copyright © 2019 Alsey Coleman Miller. All rights reserved.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
+#else
+import AndroidSwiftUI
+#endif
 import BluetoothExplorerModel
 
 public struct CentralList: View {

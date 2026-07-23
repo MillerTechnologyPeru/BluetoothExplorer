@@ -139,18 +139,13 @@ struct WasmRunnerTests {
         #expect(plugin.isQuarantined)
     }
 
-    @Test("WASM battery output matches the native parser")
-    func wasmNativeParity() async throws {
+    @Test("WASM battery output decodes each level")
+    func wasmBatteryDecode() async throws {
         let wasm = try [UInt8](wat2wasm(batteryWAT))
         let wasmPlugin = try WasmParserPlugin(manifest: batteryManifest(), moduleBytes: wasm)
-        let native = NativeWellKnownCharacteristicParser()
-        // 0...100 only: the GATT plugin enforces the spec's valid range, unlike the legacy
-        // native parser, so 255 is deliberately excluded here and asserted separately below.
-        for level: UInt8 in [0, 1, 42, 99, 100] {
+        for level: UInt8 in [0, 1, 42, 99, 100, 255] {
             let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([level]))
             let wasmResult = try #require(await wasmPlugin.parse(request))
-            let nativeResult = try #require(await native.parse(request))
-            #expect(wasmResult.fields.first?.value == nativeResult.fields.first?.value)
             #expect(wasmResult.fields.first?.value == .uint(UInt64(level)))
         }
     }
@@ -173,34 +168,27 @@ struct PluginLoaderTests {
         #expect(decoded.fields.first?.value == .uint(88))
     }
 
-    @Test("Bundled Embedded Swift plugin matches the native parser across values")
-    func bundledSwiftPluginParity() async throws {
+    @Test("Bundled battery plugin decodes valid levels and rejects out-of-range")
+    func bundledBatteryDecode() async throws {
         let result = PluginLoader.loadBundled(from: PluginEngineResources.bundle)
         let battery = try #require(result.loaded.first {
             $0.manifest.identifier == "org.pureswift.plugin.gatt-battery"
         })
-        let native = NativeWellKnownCharacteristicParser()
         var failures = [UInt8]()
-        // 0...100 only: the GATT plugin enforces the spec's valid range, unlike the legacy
-        // native parser, so 255 is deliberately excluded here and asserted separately below.
         for level: UInt8 in [0, 1, 42, 99, 100] {
             let request = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([level]))
             guard let wasmResult = await battery.plugin.parse(request) else {
                 failures.append(level)
                 continue
             }
-            let nativeResult = try #require(await native.parse(request))
             #expect(wasmResult.fields.first?.value == .uint(UInt64(level)), "level \(level)")
-            #expect(wasmResult.fields.first?.value == nativeResult.fields.first?.value, "level \(level)")
             #expect(wasmResult.fields.first?.unit == "%", "level \(level)")
         }
         #expect(failures.isEmpty, "levels returning nil: \(failures)")
 
-        // Out-of-range battery level: the plugin rejects it (GATTBatteryPercentage is 0...100)
-        // where the legacy native parser happily returns 255.
+        // Out of range: the GATT plugin enforces GATTBatteryPercentage's 0...100 and rejects 255.
         let invalid = ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([255]))
         #expect(await battery.plugin.parse(invalid) == nil)
-        #expect(await native.parse(invalid) != nil)
     }
 
     @Test("Bundled plugin declines a payload it does not recognize")

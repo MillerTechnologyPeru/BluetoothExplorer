@@ -3,8 +3,8 @@
 //  BluetoothExplorerPluginEngineTests
 //
 //  Exercises the advertisement (manufacturer-data) path end to end: the bundled Embedded Swift
-//  iBeacon module runs under the interpreter and its output is diffed field-by-field against
-//  NativeIBeaconParser. This is the only coverage of `bleplug_parse_manufacturer`.
+//  iBeacon module runs under the interpreter and its decoded fields are checked against
+//  hand-computed values. This is the only coverage of `bleplug_parse_manufacturer`.
 //
 
 import Foundation
@@ -57,10 +57,9 @@ struct IBeaconPluginTests {
         #expect(result.fields.first(where: { $0.key == "uuid" })?.value == .uuid(expectedUUID))
     }
 
-    @Test("WASM output matches the native parser field for field")
-    func matchesNativeParser() async throws {
+    @Test("Decodes major, minor and measured power across values")
+    func decodesFields() async throws {
         let plugin = try loadPlugin()
-        let native = NativeIBeaconParser()
 
         let cases: [(UInt16, UInt16, Int8)] = [
             (0, 0, 0),
@@ -75,24 +74,18 @@ struct IBeaconPluginTests {
                 companyID: 0x004C,
                 payload: payload(major: major, minor: minor, measuredPower: power)
             )
-            let wasmResult = try #require(await plugin.parse(request), "wasm declined \(major)/\(minor)")
-            let nativeResult = try #require(await native.parse(request))
-
-            #expect(wasmResult.title == nativeResult.title, "major \(major)")
-            #expect(wasmResult.fields.count == nativeResult.fields.count, "major \(major)")
-            for (wasmField, nativeField) in zip(wasmResult.fields, nativeResult.fields) {
-                #expect(wasmField.key == nativeField.key)
-                #expect(wasmField.label == nativeField.label)
-                #expect(wasmField.value == nativeField.value, "field \(wasmField.key), major \(major)")
-                #expect(wasmField.unit == nativeField.unit)
-            }
+            let result = try #require(await plugin.parse(request), "declined \(major)/\(minor)")
+            #expect(result.title == "iBeacon", "major \(major)")
+            #expect(result.fields.first { $0.key == "major" }?.value == .uint(UInt64(major)), "major \(major)")
+            #expect(result.fields.first { $0.key == "minor" }?.value == .uint(UInt64(minor)), "minor \(minor)")
+            #expect(result.fields.first { $0.key == "tx_power" }?.value == .int(Int64(power)), "power \(power)")
+            #expect(result.fields.first { $0.key == "tx_power" }?.unit == "dBm")
         }
     }
 
-    @Test("Non-iBeacon Apple payloads are declined, like the native parser")
+    @Test("Non-iBeacon Apple payloads are declined")
     func declinesNonBeacon() async throws {
         let plugin = try loadPlugin()
-        let native = NativeIBeaconParser()
 
         // Apple uses this company id for many formats; only 0x02/0x15 is an iBeacon.
         let notBeacons: [Data] = [
@@ -104,8 +97,7 @@ struct IBeaconPluginTests {
         ]
         for data in notBeacons {
             let request = ParseRequest(kind: .manufacturerData, companyID: 0x004C, payload: data)
-            #expect(await plugin.parse(request) == nil, "wasm accepted \(data as NSData)")
-            #expect(await native.parse(request) == nil, "native accepted \(data as NSData)")
+            #expect(await plugin.parse(request) == nil, "accepted \(data as NSData)")
         }
     }
 

@@ -8,6 +8,22 @@ data, a characteristic or a descriptor value — into labelled fields the app di
 - `Examples/BatteryLevel/` — a complete plugin (GATT Battery Level, `0x2A19`) you can copy.
 - `../Documentation/PluginABI.md` — the normative wire contract.
 
+## Depending on the SDK
+
+`BLEPluginSDK` is a product of the root `bluetooth-explorer` package, so an external plugin author
+can consume it by adding this repository as a dependency and importing `BLEPluginSDK`:
+
+```swift
+.package(url: "https://github.com/MillerTechnologyPeru/BluetoothExplorer.git", branch: "master"),
+// ... .product(name: "BLEPluginSDK", package: "bluetooth-explorer")
+```
+
+> **Note:** consuming the root package this way currently fails to resolve, because the app's
+> `AndroidSwiftUI` dependency uses a local sub-package that SwiftPM forbids in a branch-pinned
+> dependency graph. Until that is fixed upstream, build against the standalone
+> `PluginSDK/BLEPluginSDK` package instead — which is exactly what the in-repo examples do
+> (`.package(path: "../../BLEPluginSDK")`). Both manifests build the same sources.
+
 ## Prerequisites
 
 ```sh

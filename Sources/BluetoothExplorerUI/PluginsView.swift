@@ -2,9 +2,9 @@
 //  PluginsView.swift
 //  BluetoothExplorerUI
 //
-//  Manages parser plugins: enable/disable, import from a file, delete, and surface load errors.
-//  Bundled plugins are copied into the app's Documents directory on first launch, so everything
-//  listed here lives in one place the user can inspect.
+//  Manages parser plugins: enable/disable, import from a file, delete imported ones, and surface
+//  load errors. Bundled plugins are shipped in the app bundle (read-only, disable to turn off);
+//  imported plugins live in the app's Documents directory and can be deleted.
 //
 
 #if canImport(SwiftUI)
@@ -40,7 +40,7 @@ public struct PluginsView: View {
             } header: {
                 Text("Parsers")
             } footer: {
-                Text("Plugins decode advertisement and characteristic values. Built-in parsers are native; others are WebAssembly modules stored in the app's Documents folder.")
+                Text("Plugins are WebAssembly modules that decode advertisement and characteristic values. Bundled plugins ship with the app and can be disabled; imported plugins are stored in the app's Documents folder and can be deleted.")
             }
 
             if let error = importError {
@@ -94,8 +94,8 @@ public struct PluginsView: View {
         let plugins = store.pluginManager.plugins
         for index in offsets where index < plugins.count {
             let state = plugins[index]
-            // Native parsers are compiled in; there is nothing on disk to remove.
-            guard state.source != .native else { continue }
+            // Only imported plugins are on disk; bundled ones are read-only in the app bundle.
+            guard state.isRemovable else { continue }
             store.pluginManager.removePlugin(id: state.id)
         }
     }
@@ -133,7 +133,6 @@ public struct PluginsView: View {
 
     private func sourceLabel(_ source: PluginManager.Source) -> String {
         switch source {
-        case .native: return "Built-in"
         case .bundled: return "Bundled"
         case .imported: return "Imported"
         }

@@ -6,7 +6,12 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [.iOS(.v18), .macOS(.v15)],
     products: [
-        .library(name: "BluetoothExplorer", type: .dynamic, targets: ["BluetoothExplorer"])
+        .library(name: "BluetoothExplorer", type: .dynamic, targets: ["BluetoothExplorer"]),
+        // Guest-side SDK for authoring parser plugins, so consumers can depend on this package and
+        // `import BLEPluginSDK` from their wasm plugin. It is not a dependency of the app, so the app
+        // and the iOS archive never build it. Sources are shared with the standalone
+        // `PluginSDK/BLEPluginSDK` package that the in-repo example plugins use.
+        .library(name: "BLEPluginSDK", targets: ["BLEPluginSDK"])
     ],
     dependencies: [
         .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
@@ -86,6 +91,18 @@ let package = Package(
                 )
             ],
             resources: [.process("Resources")]
+        ),
+        // Embedded-Swift-safe helpers for plugin authors: envelope decoding, a payload cursor, a
+        // CBOR field builder, and the allocation/return glue. Built in Embedded mode (it compiles
+        // for the host too, though nothing runs it there).
+        .target(
+            name: "BLEPluginSDK",
+            path: "PluginSDK/BLEPluginSDK/Sources/BLEPluginSDK",
+            swiftSettings: [
+                .enableExperimentalFeature("Embedded"),
+                .enableExperimentalFeature("Extern"),
+                .unsafeFlags(["-wmo"])
+            ]
         ),
         .testTarget(
             name: "BluetoothExplorerPluginEngineTests",

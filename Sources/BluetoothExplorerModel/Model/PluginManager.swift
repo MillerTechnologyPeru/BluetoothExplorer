@@ -5,6 +5,10 @@
 //  Owns plugin discovery, enable/disable state, and the current routing registry. UI observes
 //  `plugins`; the Store reads `registry`.
 //
+//  All parsing is done by WASM plugins — there are no built-in native decoders. Bundled plugins are
+//  loaded read-only from the app bundle; user-imported plugins live in the app's Documents directory
+//  and can be deleted.
+//
 
 import Foundation
 import Observation
@@ -16,8 +20,9 @@ public final class PluginManager {
 
     /// Where a plugin came from.
     public enum Source: Equatable, Sendable {
-        case native
+        /// Shipped inside the app bundle. Read-only: can be enabled or disabled, not deleted.
         case bundled
+        /// Imported by the user into Documents. Can be enabled, disabled, or deleted.
         case imported
     }
 
@@ -29,12 +34,14 @@ public final class PluginManager {
         public let source: Source
         public var isEnabled: Bool
         public var loadError: String?
+
+        /// Only user-imported plugins can be removed; bundled ones live in the read-only app bundle.
+        public var isRemovable: Bool { source == .imported }
     }
 
     public private(set) var plugins: [PluginState] = []
     public private(set) var registry: ParserRegistry
 
-    private let nativeParsers: [any ParserPlugin]
     private var wasmPlugins: [PluginID: WasmParserPlugin] = [:]
     private var order: [PluginID] = []
     private var enabled: [PluginID: Bool] = [:]
@@ -43,77 +50,26 @@ public final class PluginManager {
     private var displayNames: [PluginID: String] = [:]
     private var versions: [PluginID: String] = [:]
 
-    public static var defaultNativeParsers: [any ParserPlugin] {
-        [NativeIBeaconParser(), NativeWellKnownCharacteristicParser()]
-    }
-
-    public init(nativeParsers: [any ParserPlugin] = PluginManager.defaultNativeParsers) {
-        self.nativeParsers = nativeParsers
-        self.registry = ParserRegistry(plugins: nativeParsers)
-        for parser in nativeParsers {
-            order.append(parser.id)
-            enabled[parser.id] = true
-            sources[parser.id] = .native
-            displayNames[parser.id] = parser.name
-        }
-        rebuild()
+    public init() {
+        self.registry = ParserRegistry(plugins: [])
     }
 
     // MARK: Loading
 
-    /// Where installed plugins live on disk, once `loadInstalledPlugins()` has run.
+    /// Where imported plugins live on disk, once `loadInstalledPlugins()` has run.
     public private(set) var directory: PluginDirectory?
 
-    /// Install bundled plugins into Documents on first launch, then load everything from there.
+    /// Load bundled plugins from the app bundle and imported plugins from Documents.
     ///
-    /// This is the normal startup path: bundled and imported plugins end up in the same directory,
-    /// so there is a single load path and the user can see and manage every plugin in one place.
+    /// Bundled plugins are referenced directly from `Bundle.module` — they are not copied anywhere.
+    /// Only user-imported plugins are stored on disk, under `Documents/Plugins`.
     public func loadInstalledPlugins() {
-        do {
-            let directory = try PluginDirectory.default()
+        loadBundledPlugins(from: PluginEngineResources.bundle)
+        if let directory = try? PluginDirectory.default() {
             self.directory = directory
-            let freshlyInstalled = Set(try directory.installBundledPlugins(from: PluginEngineResources.bundle))
-            load(from: directory, bundledIdentifiers: freshlyInstalled)
-        } catch {
-            // Falling back to the read-only bundle keeps parsing working even if Documents is
-            // unavailable; the user just cannot manage plugins this session.
-            loadBundledPlugins(from: PluginEngineResources.bundle)
-        }
-    }
-
-    private func load(from directory: PluginDirectory, bundledIdentifiers: Set<String>) {
-        for manifestURL in directory.installedManifestURLs() {
-            do {
-                let loaded = try PluginLoader.load(manifestURL: manifestURL, verifyHash: true)
-                // Anything installed from the app bundle is "bundled", whether it landed this
-                // launch or a previous one; the install record is the source of truth.
-                let source: Source = bundledIdentifiers.contains(loaded.manifest.identifier)
-                    || bundledManifestIdentifiers.contains(loaded.manifest.identifier)
-                    ? .bundled : .imported
-                register(loaded.plugin, manifest: loaded.manifest, source: source)
-            } catch let failure as PluginLoadFailure {
-                recordFailure(failure, source: .imported)
-            } catch {
-                recordFailure(PluginLoadFailure(manifestName: manifestURL.lastPathComponent,
-                                                underlying: nil, message: "\(error)"), source: .imported)
-            }
+            loadImportedPlugins(from: directory)
         }
         rebuild()
-    }
-
-    /// Identifiers shipped inside the app bundle, used to label a plugin's origin in the UI.
-    private var bundledManifestIdentifiers: Set<String> {
-        let urls = PluginEngineResources.bundle.urls(
-            forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
-        var identifiers = Set<String>()
-        for url in urls.map({ $0 as URL })
-        where url.lastPathComponent.hasSuffix(PluginDirectory.manifestSuffix) {
-            guard let data = try? Data(contentsOf: url),
-                  let manifest = try? JSONDecoder().decode(PluginManifest.self, from: data)
-            else { continue }
-            identifiers.insert(manifest.identifier)
-        }
-        return identifiers
     }
 
     /// Scan a bundle's `Plugins/` directory for `*.bleplugin.json` manifests and load each.
@@ -123,9 +79,23 @@ public final class PluginManager {
             register(loaded.plugin, manifest: loaded.manifest, source: .bundled)
         }
         for failure in result.failures {
-            recordFailure(failure)
+            recordFailure(failure, source: .bundled)
         }
         rebuild()
+    }
+
+    private func loadImportedPlugins(from directory: PluginDirectory) {
+        for manifestURL in directory.installedManifestURLs() {
+            do {
+                let loaded = try PluginLoader.load(manifestURL: manifestURL, verifyHash: true)
+                register(loaded.plugin, manifest: loaded.manifest, source: .imported)
+            } catch let failure as PluginLoadFailure {
+                recordFailure(failure, source: .imported)
+            } catch {
+                recordFailure(PluginLoadFailure(manifestName: manifestURL.lastPathComponent,
+                                                underlying: nil, message: "\(error)"), source: .imported)
+            }
+        }
     }
 
     // MARK: Importing
@@ -164,27 +134,7 @@ public final class PluginManager {
         }
     }
 
-    /// Load a single plugin from a manifest URL. `verifyHash` enforces the manifest `sha256`.
-    @discardableResult
-    public func loadPlugin(manifestURL: URL, source: Source, verifyHash: Bool) -> PluginID? {
-        do {
-            let loaded = try PluginLoader.load(manifestURL: manifestURL, verifyHash: verifyHash)
-            register(loaded.plugin, manifest: loaded.manifest, source: source)
-            rebuild()
-            return loaded.plugin.id
-        } catch let failure as PluginLoadFailure {
-            recordFailure(failure, source: source)
-            rebuild()
-            return nil
-        } catch {
-            recordFailure(PluginLoadFailure(manifestName: manifestURL.lastPathComponent,
-                                            underlying: nil, message: "\(error)"), source: source)
-            rebuild()
-            return nil
-        }
-    }
-
-    private func recordFailure(_ failure: PluginLoadFailure, source: Source = .bundled) {
+    private func recordFailure(_ failure: PluginLoadFailure, source: Source) {
         let syntheticID = PluginID(failure.manifestName)
         if order.contains(syntheticID) == false { order.append(syntheticID) }
         sources[syntheticID] = source
@@ -204,7 +154,7 @@ public final class PluginManager {
         loadErrors[id] = nil
     }
 
-    // MARK: Enable / disable / reload
+    // MARK: Enable / disable / delete
 
     public func setEnabled(_ isEnabled: Bool, id: PluginID) {
         enabled[id] = isEnabled
@@ -212,11 +162,12 @@ public final class PluginManager {
         rebuild()
     }
 
-    /// Remove a plugin from the registry and delete it from the plugin directory.
+    /// Delete an imported plugin, removing it from the registry and from the Documents directory.
     ///
-    /// A deleted bundled plugin is not reinstalled on the next launch: the install record still
-    /// lists it, so `installBundledPlugins` considers it already handled.
+    /// Bundled plugins cannot be deleted — they live in the read-only app bundle — so this is a
+    /// no-op for them. Use `setEnabled(false:)` to turn a bundled plugin off instead.
     public func removePlugin(id: PluginID) {
+        guard sources[id] == .imported else { return }
         if let directory {
             try? directory.remove(identifier: id.rawValue)
         }
@@ -244,9 +195,6 @@ public final class PluginManager {
 
     private func rebuild() {
         var activePlugins = [any ParserPlugin]()
-        for parser in nativeParsers where enabled[parser.id] == true {
-            activePlugins.append(parser)
-        }
         for id in order {
             guard enabled[id] == true, let plugin = wasmPlugins[id] else { continue }
             activePlugins.append(plugin)

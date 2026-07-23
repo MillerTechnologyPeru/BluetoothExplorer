@@ -94,56 +94,42 @@ struct MicroCBORTests {
     }
 }
 
-@Suite("Native parsers")
-struct NativeParserTests {
-
-    @Test("iBeacon decode")
-    func iBeacon() async throws {
-        // type 0x02, len 0x15, uuid(16), major 0x0001, minor 0x0002, rssi 0xC5 (-59)
-        var payload: [UInt8] = [0x02, 0x15]
-        payload += (0..<16).map { UInt8($0 + 1) }
-        payload += [0x00, 0x01, 0x00, 0x02, 0xC5]
-        let request = ParseRequest(kind: .manufacturerData, companyID: 0x004C, payload: Data(payload))
-        let result = try #require(await NativeIBeaconParser().parse(request))
-        #expect(result.title == "iBeacon")
-        #expect(result.fields.first(where: { $0.key == "major" })?.value == .uint(1))
-        #expect(result.fields.first(where: { $0.key == "minor" })?.value == .uint(2))
-        #expect(result.fields.first(where: { $0.key == "tx_power" })?.value == .int(-59))
-    }
-
-    @Test("Non-Apple company is ignored")
-    func iBeaconWrongCompany() async {
-        let request = ParseRequest(kind: .manufacturerData, companyID: 0x0075, payload: Data([0x02, 0x15]))
-        #expect(await NativeIBeaconParser().parse(request) == nil)
-    }
-
-    @Test("Battery level and string characteristics")
-    func wellKnown() async throws {
-        let parser = NativeWellKnownCharacteristicParser()
-        let battery = try #require(await parser.parse(
-            ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([99]))))
-        #expect(battery.fields.first?.value == .uint(99))
-        #expect(battery.fields.first?.unit == "%")
-
-        let name = try #require(await parser.parse(
-            ParseRequest(kind: .characteristic, uuid: .bit16(0x2A29), payload: Data("Acme".utf8))))
-        #expect(name.fields.first?.value == .string("Acme"))
-    }
-}
-
 @Suite("Registry routing")
 struct RegistryTests {
 
+    /// A trivial in-test parser so routing can be exercised without loading a wasm module.
+    private struct StubParser: ParserPlugin {
+        let id: PluginID
+        let name = "Stub"
+        let routingKeys: RoutingKeys
+        func parse(_ request: ParseRequest) async -> DecodedResult? {
+            DecodedResult(pluginID: id, title: "Stub",
+                          fields: [DecodedField(key: "value", label: "Value",
+                                                value: .uint(UInt64(request.payload.first ?? 0)))])
+        }
+    }
+
     @Test("Routes to matching plugin only")
     func routing() async {
-        let registry = ParserRegistry(plugins: [NativeIBeaconParser(), NativeWellKnownCharacteristicParser()])
-        // No plugin claims company 0x0075 → empty.
-        let none = await registry.decodeAll(ParseRequest(kind: .manufacturerData, companyID: 0x0075, payload: Data()))
+        let battery = StubParser(
+            id: PluginID("test.battery"),
+            routingKeys: RoutingKeys(characteristicUUIDs: [.bit16(0x2A19)]))
+        let registry = ParserRegistry(plugins: [battery])
+
+        // No plugin claims characteristic 0x2A37 → empty.
+        let none = await registry.decodeAll(
+            ParseRequest(kind: .characteristic, uuid: .bit16(0x2A37), payload: Data()))
         #expect(none.isEmpty)
-        // Battery routes to the well-known parser.
-        let battery = await registry.decodeFirst(
+
+        // A different kind (manufacturer data) with the same number does not route here either.
+        let wrongKind = await registry.decodeAll(
+            ParseRequest(kind: .manufacturerData, companyID: 0x2A19, payload: Data()))
+        #expect(wrongKind.isEmpty)
+
+        // Battery routes to the registered parser.
+        let hit = await registry.decodeFirst(
             ParseRequest(kind: .characteristic, uuid: .bit16(0x2A19), payload: Data([50])))
-        #expect(battery?.fields.first?.value == .uint(50))
+        #expect(hit?.fields.first?.value == .uint(50))
     }
 }
 

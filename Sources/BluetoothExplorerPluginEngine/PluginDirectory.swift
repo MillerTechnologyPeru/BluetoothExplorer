@@ -2,29 +2,25 @@
 //  PluginDirectory.swift
 //  BluetoothExplorerPluginEngine
 //
-//  On-disk plugin storage under the app's Documents directory.
+//  On-disk storage for user-imported plugins, under the app's Documents directory.
 //
-//  Every plugin — bundled or user-imported — lives here, so there is one code path for loading and
-//  one place a user can inspect. Bundled plugins are copied in on first launch and refreshed when a
-//  new app build ships a different module; a bundled plugin the user deletes stays deleted, because
-//  the install record remembers that it was already handled once.
+//  Bundled plugins are NOT stored here — they are referenced read-only from the app bundle. This
+//  directory holds only plugins the user imported, one sub-directory per plugin, so they can be
+//  listed, loaded, and deleted.
 //
 //  Layout:
 //      Documents/Plugins/
 //          <plugin-id>/
 //              <name>.bleplugin.json
 //              <name>.wasm
-//          .installed-bundled.json
 //
 
 import Foundation
 
 public struct PluginDirectory: Sendable {
 
-    /// Root of the plugin store, e.g. `Documents/Plugins`.
+    /// Root of the imported-plugin store, e.g. `Documents/Plugins`.
     public let url: URL
-
-    private static let recordName = ".installed-bundled.json"
 
     public init(url: URL) {
         self.url = url
@@ -43,9 +39,11 @@ public struct PluginDirectory: Sendable {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
     }
 
+    public static let manifestSuffix = ".bleplugin.json"
+
     // MARK: Listing
 
-    /// Manifest URLs for every installed plugin, one per plugin sub-directory.
+    /// Manifest URLs for every imported plugin, one per plugin sub-directory.
     public func installedManifestURLs() -> [URL] {
         let contents = (try? FileManager.default.contentsOfDirectory(
             at: url, includingPropertiesForKeys: nil)) ?? []
@@ -62,50 +60,6 @@ public struct PluginDirectory: Sendable {
             }
         }
         return manifests.sorted { $0.path < $1.path }
-    }
-
-    public static let manifestSuffix = ".bleplugin.json"
-
-    // MARK: Installing bundled plugins
-
-    /// Copy bundled plugins into the store.
-    ///
-    /// A plugin is installed when it has never been installed before (first launch), or when the
-    /// bundled module's hash differs from the one recorded (a new app build shipped an update).
-    /// Plugins the user deleted are not resurrected.
-    /// - Returns: the identifiers that were installed or refreshed.
-    @discardableResult
-    public func installBundledPlugins(from bundle: Bundle) throws -> [String] {
-        try createIfNeeded()
-        var record = installRecord()
-        var installed = [String]()
-
-        let discovered = bundle.urls(forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
-        for manifestURL in discovered.map({ $0 as URL })
-        where manifestURL.lastPathComponent.hasSuffix(PluginDirectory.manifestSuffix) {
-            guard let data = try? Data(contentsOf: manifestURL),
-                  let manifest = try? JSONDecoder().decode(PluginManifest.self, from: data)
-            else { continue }
-
-            // The manifest's sha256 identifies this build of the module. Absent one, fall back to
-            // the version string so a plugin without a hash still refreshes across releases.
-            let stamp = manifest.sha256 ?? manifest.version
-            if record[manifest.identifier] == stamp { continue }
-
-            let moduleURL = manifestURL.deletingLastPathComponent()
-                .appendingPathComponent(manifest.module)
-            try install(manifestURL: manifestURL, moduleURL: moduleURL, identifier: manifest.identifier)
-            record[manifest.identifier] = stamp
-            installed.append(manifest.identifier)
-        }
-
-        try write(record: record)
-        return installed
-    }
-
-    /// True when no bundled plugin has ever been installed — i.e. this is a first launch.
-    public var isFirstLaunch: Bool {
-        FileManager.default.fileExists(atPath: recordURL.path) == false
     }
 
     // MARK: Importing
@@ -128,7 +82,7 @@ public struct PluginDirectory: Sendable {
         return loaded.manifest
     }
 
-    /// Delete an installed plugin's directory.
+    /// Delete an imported plugin's directory.
     public func remove(identifier: String) throws {
         let directory = url.appendingPathComponent(Self.folderName(for: identifier), isDirectory: true)
         guard FileManager.default.fileExists(atPath: directory.path) else { return }
@@ -161,19 +115,5 @@ public struct PluginDirectory: Sendable {
             }
         }
         return name.isEmpty ? "plugin" : name
-    }
-
-    private var recordURL: URL { url.appendingPathComponent(PluginDirectory.recordName) }
-
-    private func installRecord() -> [String: String] {
-        guard let data = try? Data(contentsOf: recordURL),
-              let record = try? JSONDecoder().decode([String: String].self, from: data)
-        else { return [:] }
-        return record
-    }
-
-    private func write(record: [String: String]) throws {
-        let data = try JSONEncoder().encode(record)
-        try data.write(to: recordURL)
     }
 }

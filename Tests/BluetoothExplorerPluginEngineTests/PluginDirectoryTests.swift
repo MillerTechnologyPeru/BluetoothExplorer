@@ -2,10 +2,12 @@
 //  PluginDirectoryTests.swift
 //  BluetoothExplorerPluginEngineTests
 //
-//  Covers the Documents-backed plugin store: first-launch install of the bundled plugins,
-//  idempotence across launches, that a deleted bundled plugin stays deleted, and import validation.
+//  Covers the Documents-backed store for user-imported plugins: import validation, that a bad
+//  import writes nothing, deletion, and identifier-to-folder-name sanitising.
 //
-//  Every test runs against a temporary directory — never the real Documents folder.
+//  Bundled plugins are not stored here (they are referenced read-only from the app bundle), so
+//  these tests stage a bundled plugin's files into a scratch directory to stand in for a user's
+//  imported file. Every test runs against a temporary directory — never the real Documents folder.
 //
 
 import Foundation
@@ -23,76 +25,33 @@ struct PluginDirectoryTests {
         return directory
     }
 
-    private func bundledManifestCount() -> Int {
-        let urls = PluginEngineResources.bundle.urls(
-            forResourcesWithExtension: "json", subdirectory: "Plugins") ?? []
-        return urls.map { $0 as URL }
+    /// Copy one bundled plugin's manifest and module into a fresh scratch directory, standing in
+    /// for a file the user picked from outside the app. Returns the staged manifest URL.
+    private func stageBundledPlugin() throws -> URL {
+        let manifestURLs = (PluginEngineResources.bundle.urls(
+            forResourcesWithExtension: "json", subdirectory: "Plugins") ?? [])
+            .map { $0 as URL }
             .filter { $0.lastPathComponent.hasSuffix(PluginDirectory.manifestSuffix) }
-            .count
+        let manifestURL = try #require(manifestURLs.first)
+        let manifest = try JSONDecoder().decode(
+            PluginManifest.self, from: try Data(contentsOf: manifestURL))
+        let moduleURL = manifestURL.deletingLastPathComponent().appendingPathComponent(manifest.module)
+
+        let scratch = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("bleplug-stage-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+        let stagedManifest = scratch.appendingPathComponent(manifestURL.lastPathComponent)
+        try Data(contentsOf: manifestURL).write(to: stagedManifest)
+        try Data(contentsOf: moduleURL).write(to: scratch.appendingPathComponent(manifest.module))
+        return stagedManifest
     }
 
-    @Test("First launch installs every bundled plugin")
-    func firstLaunchInstalls() throws {
-        let directory = try makeTemporaryDirectory()
-        defer { try? FileManager.default.removeItem(at: directory.url) }
-
-        #expect(directory.isFirstLaunch)
-        let installed = try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-        #expect(installed.count == bundledManifestCount())
-        #expect(installed.isEmpty == false)
-        #expect(directory.isFirstLaunch == false)
-        #expect(directory.installedManifestURLs().count == installed.count)
-    }
-
-    @Test("Installed plugins load from the directory")
-    func installedPluginsLoad() throws {
-        let directory = try makeTemporaryDirectory()
-        defer { try? FileManager.default.removeItem(at: directory.url) }
-        try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-
-        for manifestURL in directory.installedManifestURLs() {
-            // Hash verification is on: a copy that lost bytes would fail here.
-            _ = try PluginLoader.load(manifestURL: manifestURL, verifyHash: true)
-        }
-    }
-
-    @Test("A second launch installs nothing new")
-    func secondLaunchIsIdempotent() throws {
-        let directory = try makeTemporaryDirectory()
-        defer { try? FileManager.default.removeItem(at: directory.url) }
-
-        let first = try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-        let second = try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-        #expect(second.isEmpty, "reinstalled on second launch: \(second)")
-        #expect(directory.installedManifestURLs().count == first.count)
-    }
-
-    @Test("A deleted bundled plugin is not resurrected on the next launch")
-    func deletedPluginStaysDeleted() throws {
-        let directory = try makeTemporaryDirectory()
-        defer { try? FileManager.default.removeItem(at: directory.url) }
-
-        let installed = try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-        let victim = try #require(installed.first)
-        try directory.remove(identifier: victim)
-        #expect(directory.installedManifestURLs().count == installed.count - 1)
-
-        let afterRelaunch = try directory.installBundledPlugins(from: PluginEngineResources.bundle)
-        #expect(afterRelaunch.isEmpty, "deleted plugin came back: \(afterRelaunch)")
-        #expect(directory.installedManifestURLs().count == installed.count - 1)
-    }
-
-    @Test("Importing a valid plugin copies it into the store")
+    @Test("Importing a valid plugin copies it into the store and loads")
     func importValidPlugin() throws {
-        let source = try makeTemporaryDirectory()
         let destination = try makeTemporaryDirectory()
-        defer {
-            try? FileManager.default.removeItem(at: source.url)
-            try? FileManager.default.removeItem(at: destination.url)
-        }
-        // Stage a plugin outside the store, the way a user's file would arrive.
-        try source.installBundledPlugins(from: PluginEngineResources.bundle)
-        let staged = try #require(source.installedManifestURLs().first)
+        defer { try? FileManager.default.removeItem(at: destination.url) }
+        let staged = try stageBundledPlugin()
+        defer { try? FileManager.default.removeItem(at: staged.deletingLastPathComponent()) }
 
         let manifest = try destination.importPlugin(manifestURL: staged)
         #expect(destination.installedManifestURLs().count == 1)
@@ -104,14 +63,10 @@ struct PluginDirectoryTests {
 
     @Test("Importing a plugin with a wrong hash fails and writes nothing")
     func importRejectsBadHash() throws {
-        let source = try makeTemporaryDirectory()
         let destination = try makeTemporaryDirectory()
-        defer {
-            try? FileManager.default.removeItem(at: source.url)
-            try? FileManager.default.removeItem(at: destination.url)
-        }
-        try source.installBundledPlugins(from: PluginEngineResources.bundle)
-        let staged = try #require(source.installedManifestURLs().first)
+        defer { try? FileManager.default.removeItem(at: destination.url) }
+        let staged = try stageBundledPlugin()
+        defer { try? FileManager.default.removeItem(at: staged.deletingLastPathComponent()) }
 
         // Corrupt the manifest's hash in place.
         let data = try Data(contentsOf: staged)
@@ -124,6 +79,22 @@ struct PluginDirectoryTests {
         }
         // Validation happens before anything is written, so the store stays empty.
         #expect(destination.installedManifestURLs().isEmpty)
+    }
+
+    @Test("An imported plugin can be removed")
+    func removeImportedPlugin() throws {
+        let destination = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: destination.url) }
+        let staged = try stageBundledPlugin()
+        defer { try? FileManager.default.removeItem(at: staged.deletingLastPathComponent()) }
+
+        let manifest = try destination.importPlugin(manifestURL: staged)
+        #expect(destination.installedManifestURLs().count == 1)
+
+        try destination.remove(identifier: manifest.identifier)
+        #expect(destination.installedManifestURLs().isEmpty)
+        // Removing something that is not there is a no-op, not an error.
+        try destination.remove(identifier: manifest.identifier)
     }
 
     @Test("Identifiers map to filesystem-safe folder names")

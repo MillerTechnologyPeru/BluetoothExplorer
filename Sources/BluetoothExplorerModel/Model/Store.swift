@@ -67,6 +67,13 @@ public final class Store {
 
     public private(set) var isNotifying = [Characteristic: Bool]()
 
+    /// Negotiated ATT MTU per connected peripheral, once read.
+    public private(set) var maximumTransmissionUnit = [Peripheral: MaximumTransmissionUnit]()
+
+    /// Signal strength read from a *connected* peripheral, which is a different measurement from the
+    /// RSSI carried in an advertisement (that one lives in `scanResults`).
+    public private(set) var rssi = [Peripheral: RSSI]()
+
     /// Plugin-decoded advertisement results, keyed by peripheral.
     public internal(set) var decodedAdvertisements = [Peripheral: [DecodedResult]]()
 
@@ -220,6 +227,39 @@ public final class Store {
     
     public func disconnect(_ peripheral: Central.Peripheral) async {
         await central.disconnect(peripheral)
+        maximumTransmissionUnit[peripheral] = nil
+        rssi[peripheral] = nil
+    }
+
+    /// Disconnect every connected peripheral.
+    public func disconnectAll() async {
+        await central.disconnectAll()
+        maximumTransmissionUnit.removeAll(keepingCapacity: true)
+        rssi.removeAll(keepingCapacity: true)
+    }
+
+    /// Read the negotiated ATT MTU for a connected peripheral.
+    @discardableResult
+    public func maximumTransmissionUnit(
+        for peripheral: Central.Peripheral
+    ) async throws -> MaximumTransmissionUnit {
+        activity[peripheral] = true
+        defer { activity[peripheral] = false }
+        let mtu = try await central.maximumTransmissionUnit(for: peripheral)
+        assert(Thread.isMainThread)
+        self.maximumTransmissionUnit[peripheral] = mtu
+        return mtu
+    }
+
+    /// Read the current signal strength of a connected peripheral.
+    @discardableResult
+    public func rssi(for peripheral: Central.Peripheral) async throws -> RSSI {
+        activity[peripheral] = true
+        defer { activity[peripheral] = false }
+        let rssi = try await central.rssi(for: peripheral)
+        assert(Thread.isMainThread)
+        self.rssi[peripheral] = rssi
+        return rssi
     }
     
     public func discoverServices(for peripheral: Central.Peripheral) async throws {

@@ -214,7 +214,11 @@ public final class MockCentral: CentralManager, @unchecked Sendable {
     
     // Read RSSI
     public func rssi(for peripheral: Peripheral) async throws -> RSSI {
-        return .init(rawValue: 127)!
+        guard state.connected.contains(peripheral) else {
+            throw CentralError.disconnected
+        }
+        // `RSSI` only accepts -127...20 dBm, so this has to be a value in that range.
+        return RSSI(rawValue: -60) ?? RSSI(rawValue: 0)!
     }
 }
 

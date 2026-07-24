@@ -13,11 +13,6 @@ import GATT
 import BluetoothExplorerPluginEngine
 #if canImport(DarwinGATT)
 import DarwinGATT
-#elseif os(Android)
-import SwiftJava
-import AndroidOS
-import AndroidContent
-@preconcurrency import AndroidBluetooth
 #endif
 
 /// Store
@@ -96,16 +91,10 @@ public final class Store {
     // MARK: - Initialization
 
     public convenience init() {
-        #if canImport(Darwin)
+        // `Central` is `NativeCentral`, which resolves to the platform's real central on Apple and
+        // to `MockCentral` on Android for now (see NativeCentral.swift for why). `MockCentral` and
+        // `DarwinCentral` both have a no-argument initializer, so one call covers every platform.
         let central = Central()
-        #elseif os(Android)
-        let hostController = try! JavaClass<BluetoothAdapter>().getDefaultAdapter()!
-        let context = try! AndroidContent.Context.androidContext()!
-        let central = AndroidCentral(
-            hostController: hostController,
-            context: context
-        )
-        #endif
         self.init(central: central)
     }
     

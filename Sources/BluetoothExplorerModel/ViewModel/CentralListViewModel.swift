@@ -44,6 +44,15 @@ public final class CentralListViewModel {
     public var canToggleScan: Bool {
         scanToggleTask == nil && store.isEnabled
     }
+
+    /// Whether any peripheral is currently connected, so the UI can offer to drop them all.
+    public var hasConnectedPeripherals: Bool {
+        store.connected.isEmpty == false
+    }
+
+    public func disconnectAll() {
+        Task { await store.disconnectAll() }
+    }
     
     public func scanToggle() {
         scanToggleTask = Task {

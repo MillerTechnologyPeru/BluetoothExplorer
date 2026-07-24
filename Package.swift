@@ -113,6 +113,10 @@ let package = Package(
                 // BluetoothGATT's own parsers and the plugins must agree on accept/reject.
                 .product(name: "BluetoothGATT", package: "Bluetooth")
             ]
+        ),
+        .testTarget(
+            name: "BluetoothExplorerModelTests",
+            dependencies: ["BluetoothExplorerModel"]
         )
     ]
 )

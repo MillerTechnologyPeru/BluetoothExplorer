@@ -40,6 +40,11 @@ public struct CentralList: View {
                 .navigationTitle(Text("Central"))
                 .toolbar {
                     leftBarButtonItem
+                    if viewModel.hasConnectedPeripherals {
+                        Button(action: { viewModel.disconnectAll() }) {
+                            Text("Disconnect All")
+                        }
+                    }
                 }
         }
         

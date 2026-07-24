@@ -46,10 +46,11 @@ Every blocker recorded in `Documentation/DependencyState.md` traced back to that
 - the `swift-java` / `swift-syntax` 603-vs-602 conflict came in through the same graph;
 - `skip-fuse-ui` was the package that could not build against current `skip-ui`.
 
-Two `PureSwift` fixes are still required and are still open as PRs — `PureSwift/Android#43` and
-`PureSwift/AndroidBluetooth#4`. Until they merge, local SwiftPM mirrors pointing at fixed clones are
-needed; `AndroidBluetooth` otherwise fails with `product 'AndroidManifest' ... not found in package
-'Android'`.
+The two `PureSwift` fixes this once needed — `PureSwift/Android#43` and `PureSwift/AndroidBluetooth#4`
+(both "Declare Apple platform requirements and fix the `AndroidManifest` dependency") — **merged on
+2026-07-23**. So `AndroidBluetooth` no longer breaks Apple-platform resolution on its own. It is
+still *not* declared here, for a different reason discovered afterward — see
+[Why the Android build is still blocked](#why-the-android-build-is-still-blocked) below.
 
 ## What AndroidSwiftUI needed
 
@@ -94,30 +95,68 @@ device or emulator. Notable limitations, each documented in the source:
   into `Documents/Plugins/` on first launch and appear in the Plugins tab.
 
   Two things were needed to get there beyond removing Skip:
-  - The `AndroidBluetooth` package dependency is temporarily not declared. SwiftPM validates the
-    whole graph even for `.android`-conditional dependencies, so its `AndroidManifest` bug broke
-    Apple builds. Restore it with PureSwift/AndroidBluetooth#4.
+  - The `AndroidBluetooth` package dependency is not declared. Its old `AndroidManifest` bug (which
+    broke Apple resolution) is fixed now, but declaring it currently fails resolution for a new
+    reason — a Bluetooth version conflict — see below.
   - WasmKit is taken from a fork that drops `.treatAllWarnings(as: .error)`. Upstream's setting
     collides with the `-suppress-warnings` Xcode passes to package dependencies, which made the app
     unbuildable in Xcode; the override only works from the command line, so it could not be fixed
     from the xcconfig or project.
-- **Android** — the dependency wiring is in place, but the Android app build has not been verified
-  end to end. It additionally needs the two PureSwift PRs above, and the Kotlin JNI peers under
-  `Sources/BluetoothExplorer/Skip/` (`ScanCallback.kt`, `BluetoothGattCallback.kt`) rehomed into the
-  Android app project — they are peers for `AndroidBluetooth`, unrelated to Skip, and were only
-  living in that directory because skipstone collected them.
+- **Android** — **does not build**, blocked entirely upstream (see
+  [Why the Android build is still blocked](#why-the-android-build-is-still-blocked)). On Android the
+  app falls back to `MockCentral`: `NativeCentral` resolves to `MockCentral` there, and the
+  `AndroidBluetooth` import and `AndroidCentral` construction are removed from `NativeCentral.swift`
+  and `Store.swift` until the dependency can be resolved again. `MockCentral` and its `Mock*` peers
+  are compiled with `#if DEBUG || os(Android)` so the fallback is available in release too. The
+  Kotlin JNI peers under `Sources/BluetoothExplorer/Skip/` (`ScanCallback.kt`,
+  `BluetoothGattCallback.kt`) still belong in a real Android app project — they are peers for
+  `AndroidBluetooth`, unrelated to Skip, and were only living in that directory because skipstone
+  collected them.
+
+## Why the Android build is still blocked
+
+Both blockers are upstream packaging problems in the `PureSwift` dependency set, not anything in this
+app's Swift code. Each was verified by trying:
+
+1. **AndroidSwiftUI has no SwiftPM-consumable revision that also has the SwiftUI surface the app
+   uses.** The views need `LazyVStack`, `.refreshable`, `.disabled`, `ProgressViewStyle.circular`
+   and Observation's `@Environment(Store.self)`. Those shipped in AndroidSwiftUI **0.3.0**
+   (2026-07-23). But:
+   - `master` HEAD and the `0.3.0` tag both vend `AndroidSwiftUICore` as a `.package(path:)`
+     sub-package, and SwiftPM forbids a **revision-based** (branch or commit) dependency from
+     depending on a local package — so the app cannot pin AndroidSwiftUI by branch/revision.
+   - `0.3.0` (a version tag) itself depends on `PureSwift/Android` by **branch**, and SwiftPM
+     forbids a **version-pinned** package from depending on a branch ("package is required using a
+     stable-version but depends on an unstable-version package") — so the app cannot pin it by
+     version either.
+   - The one branch-consumable revision, `ff646f48` (2026-07-16, the last commit before the
+     sub-package split — and what `Package.resolved` currently pins), predates the features, so the
+     views produce ~220 compile errors against it.
+
+   The fix is upstream: either inline `AndroidSwiftUICore` back into a single target (so branch
+   pinning works), or have AndroidSwiftUI depend on a *tagged* `Android` release (so the app can
+   version-pin AndroidSwiftUI, which is allowed to carry a path sub-package). This is the same
+   local-sub-package limitation noted for `BLEPluginSDK` consumers.
+
+2. **`AndroidBluetooth` and `GATT` disagree on Bluetooth.** With #1 set aside, re-declaring
+   `AndroidBluetooth` fails resolution because `AndroidBluetooth`'s `master` requires
+   `Bluetooth 7.2.0..<8.0.0` while `GATT`'s `master` has moved to `Bluetooth 8.0.0..<9.0.0`. It
+   resolves only by holding `GATT` at an older revision, which the app does not currently do.
+   `AndroidBluetooth` needs a `master` that adopts Bluetooth 8.x.
+
+Because of #1 the Android app cannot compile even with `MockCentral`, so the `.so` cannot be
+produced yet. When AndroidSwiftUI becomes consumable, the app compiles for Android on `MockCentral`
+with no further Swift changes; restoring real Bluetooth then additionally needs #2.
 
 ## Building an Android app archive
 
 CI (`.github/workflows/ci.yml`) archives the iOS app but does **not** produce an Android `.aab`.
-Three things block it, each verified by trying:
+Several things block it, each verified by trying:
 
-1. **The app does not cross-compile for Android.** `swift build --swift-sdk … --target BluetoothExplorer`
-   fails inside `AndroidBluetooth`: its `@JavaImplementation` macro generates invalid Swift for
-   `LowEnergyScanCallback.swiftOnScanFailed(error:)` — the parameter named `error` is emitted into a
-   context where it parses as a keyword, producing
-   `declaration name '…' is not covered by macro 'JavaImplementation'`. This is an upstream
-   swift-java/AndroidBluetooth bug.
+1. **The app does not cross-compile for Android**, because AndroidSwiftUI is not consumable at a
+   featureful revision and `AndroidBluetooth` cannot be resolved alongside `GATT` — both detailed in
+   [Why the Android build is still blocked](#why-the-android-build-is-still-blocked). These are the
+   gating blockers; the ones below only matter once these are resolved.
 2. **A whole-package Android build additionally fails in WasmKit's `SystemExtras`**: it does
    `st_mode & S_IFMT`, but `st_mode` is `UInt32` in the Android sysroot while swift-system's
    `CInterop.Mode` is `UInt16`. This target is not reachable from the app, so building specific

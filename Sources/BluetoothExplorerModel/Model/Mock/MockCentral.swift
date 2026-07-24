@@ -5,7 +5,7 @@
 //  Created by Alsey Coleman Miller on 22/12/21.
 //
 
-#if DEBUG
+#if DEBUG || os(Android)
 import Foundation
 import Bluetooth
 import GATT

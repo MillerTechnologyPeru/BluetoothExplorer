@@ -58,6 +58,29 @@ struct PeripheralView: View {
                     Text("Decoded")
                 })
             }
+            if isConnected {
+                Section(content: {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(verbatim: mtuText)
+                        Text("Maximum Transmission Unit")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(verbatim: connectedRSSIText)
+                        Text("Signal Strength")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    Button(action: {
+                        Task { await readConnectionInfo() }
+                    }) {
+                        Text("Refresh")
+                    }
+                }, header: {
+                    Text("Connection")
+                })
+            }
             if services.isEmpty == false {
                 Section(content: {
                     ForEach(services) { service in
@@ -103,6 +126,15 @@ extension PeripheralView {
     
     var services: [Store.Service] {
         store.services[peripheral] ?? []
+    }
+
+    var mtuText: String {
+        store.maximumTransmissionUnit[peripheral].map { $0.rawValue.description } ?? "—"
+    }
+
+    /// Read from the connected peripheral, unlike the RSSI carried in an advertisement.
+    var connectedRSSIText: String {
+        store.rssi[peripheral].map { "\($0.rawValue) dBm" } ?? "—"
     }
     
     var showActivity: Bool {
@@ -157,5 +189,20 @@ extension PeripheralView {
             try await store.discoverServices(for: peripheral)
         }
         catch { print("Unable to load services", error) }
+        await readConnectionInfo()
+    }
+
+    /// Read the MTU and signal strength of the live connection. Best-effort: a peripheral that
+    /// drops out mid-read should not blank out the services already discovered.
+    ///
+    /// Deliberately not gated on `isConnected`: that flag is refreshed asynchronously, so it still
+    /// reads false right after `connect()` returns. The central throws `.disconnected` if the link
+    /// really is down, which is caught below.
+    func readConnectionInfo() async {
+        do {
+            try await store.maximumTransmissionUnit(for: peripheral)
+            try await store.rssi(for: peripheral)
+        }
+        catch { print("Unable to read connection info", error) }
     }
 }

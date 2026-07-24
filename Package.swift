@@ -15,13 +15,12 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/PureSwift/GATT.git", branch: "master"),
-        // AndroidBluetooth is temporarily not declared. It requests the `AndroidManifest` product
-        // from `Android`, but that product moved to `swift-android-native`
-        // (PureSwift/Android#40), and SwiftPM validates the whole package graph even for
-        // dependencies conditional on `.android` — so simply declaring it breaks Apple-platform
-        // builds. Restore this together with the `AndroidBluetooth` target dependency below once
-        // PureSwift/AndroidBluetooth#4 is merged. The Swift sources still guard their use of it
-        // with `#if os(Android)`, so nothing else has to change.
+        // AndroidBluetooth is not declared. Its old `AndroidManifest` problem is fixed
+        // (PureSwift/AndroidBluetooth#4, PureSwift/Android#43, both merged 2026-07-23), but declaring
+        // it now fails resolution differently: AndroidBluetooth's `master` pins Bluetooth 7.2.x while
+        // GATT's `master` moved to Bluetooth 8.x. On Android the app falls back to `MockCentral`
+        // instead of `AndroidCentral` for now — see Documentation/AndroidSwiftUIMigration.md. Restore
+        // this and the `AndroidBluetooth` target dependency once AndroidBluetooth adopts Bluetooth 8.
         .package(url: "https://github.com/PureSwift/Bluetooth.git", from: "7.2.0"),
         // SwiftUI for Android. Apple platforms use the system SwiftUI instead, so this is only
         // linked for .android — see the conditional target dependencies below.

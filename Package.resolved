@@ -168,7 +168,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MillerTechnologyPeru/WasmKit.git",
       "state" : {
-        "revision" : "ba06b7c64b5bc692c19c301ba2ef843c8d0f37c2"
+        "revision" : "80990b79f7d8aaf222cf806afa6252733acfa603"
       }
     }
   ],

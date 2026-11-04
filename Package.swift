@@ -26,15 +26,20 @@ let package = Package(
         // SwiftUI for Android. Apple platforms use the system SwiftUI instead, so this is only
         // linked for .android — see the conditional target dependencies below.
         .package(url: "https://github.com/PureSwift/AndroidSwiftUI.git", branch: "master"),
-        // Fork of WasmKit 0.3.1 with one change: upstream declares
-        // `.treatAllWarnings(as: .error)` for Apple platforms, which collides with the
-        // `-suppress-warnings` Xcode passes to package dependencies and makes the app fail to build
-        // in Xcode ("Conflicting options '-warnings-as-errors' and '-suppress-warnings'"). That
-        // setting only reaches package targets from the command line, so it cannot be overridden
-        // from the xcconfig or the project. Track upstream and drop the fork once it is fixed there.
+        // Fork of WasmKit 0.3.1 with two changes:
+        // - Upstream declares `.treatAllWarnings(as: .error)` for Apple platforms, which collides
+        //   with the `-suppress-warnings` Xcode passes to package dependencies and makes the app
+        //   fail to build in Xcode ("Conflicting options '-warnings-as-errors' and
+        //   '-suppress-warnings'"). That setting only reaches package targets from the command
+        //   line, so it cannot be overridden from the xcconfig or the project.
+        // - `wasmkit_tc_start` is defined in C rather than inline. Inlined into Swift, the call to
+        //   the first direct-threaded handler assumed the handlers keep x22, which they do not, and
+        //   every call into a plugin crashed in optimized builds when memory bounds are checked in
+        //   software, as they are on iOS.
+        // Track upstream and drop the fork once both are fixed there.
         .package(
             url: "https://github.com/MillerTechnologyPeru/WasmKit.git",
-            revision: "ba06b7c64b5bc692c19c301ba2ef843c8d0f37c2"
+            revision: "80990b79f7d8aaf222cf806afa6252733acfa603"
         )
     ],
     targets: [
